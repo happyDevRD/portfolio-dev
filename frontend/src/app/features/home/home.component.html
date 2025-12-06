@@ -1,1 +1,32 @@
-<p>home works!</p>
+<section class="hero-section">
+    <div class="hero-content">
+        <div class="greeting">{{ 'HOME_GREETING' | translate }}</div>
+        <h1 class="title">
+            Eleazar Garcia<br>
+            <span class="gradient-text">{{ 'HOME_ROLE' | translate }}</span>
+        </h1>
+        <p class="bio">
+            {{ 'HOME_BIO' | translate }}
+        </p>
+        <div class="cta-buttons">
+            <a routerLink="/projects" class="btn btn-primary">{{ 'BTN_VIEW_PROJECTS' | translate }}</a>
+            <a routerLink="/contact" class="btn btn-outline">{{ 'BTN_CONTACT_ME' | translate }}</a>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="circle-bg"></div>
+        <app-terminal></app-terminal>
+    </div>
+</section>
+
+<section class="featured-skills">
+    <h2>{{ 'HOME_TECH_STACK' | translate }}</h2>
+    <div class="skills-ticker">
+        <span>🍃 Spring Boot 3</span>
+        <span>🅰️ Angular 17</span>
+        <span>☕ Java 17</span>
+        <span>🐳 Docker</span>
+        <span>📊 JasperReports</span>
+        <span>🗄️ Oracle PL/SQL</span>
+    </div>
+</section>

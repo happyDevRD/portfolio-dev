@@ -1,0 +1,20 @@
+<div class="terminal-window">
+    <div class="terminal-header">
+        <div class="buttons">
+            <span class="close"></span>
+            <span class="minimize"></span>
+            <span class="maximize"></span>
+        </div>
+        <div class="title">user&#64;eleazar-portfolio: ~</div>
+    </div>
+    <div class="terminal-body" #terminalBody>
+        <div *ngFor="let line of lines" [class]="line.type">
+            <span class="prompt" *ngIf="line.type === 'input'">➜ ~</span>
+            <span class="content" [innerHTML]="line.content"></span>
+        </div>
+        <div class="typing-area" *ngIf="isTyping">
+            <span class="prompt">➜ ~</span>
+            <span class="typing-text">{{ currentText }}</span><span class="cursor">█</span>
+        </div>
+    </div>
+</div>

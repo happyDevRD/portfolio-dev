@@ -1,0 +1,30 @@
+.skill-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: white;
+    border-radius: 999px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+    border: 1px solid transparent;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary-color);
+    }
+
+    .skill-icon {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+    }
+
+    .skill-name {
+        font-weight: 500;
+        font-size: 0.875rem;
+        color: var(--text-color);
+    }
+}

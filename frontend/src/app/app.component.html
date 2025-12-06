@@ -1,17 +1,35 @@
+<!-- Top Navbar (Restored & Enhanced) -->
 <header class="header">
   <nav class="navbar">
-    <div class="logo">My Portfolio</div>
+    <div class="logo">
+      <span class="symbol">&lt;/&gt;</span> Eleazar Garcia
+    </div>
+
     <ul class="nav-links">
-      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
-      <li><a routerLink="/projects" routerLinkActive="active">Projects</a></li>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">{{ 'NAV_HOME' |
+          translate }}</a></li>
+      <li><a routerLink="/projects" routerLinkActive="active">{{ 'NAV_PROJECTS' | translate }}</a></li>
+      <li><a routerLink="/blog" routerLinkActive="active">Blog</a></li>
+      <li><a routerLink="/resume" routerLinkActive="active">{{ 'NAV_RESUME' | translate }}</a></li>
+      <li><a routerLink="/contact" routerLinkActive="active">{{ 'NAV_CONTACT' | translate }}</a></li>
     </ul>
+
+    <div class="controls">
+      <button class="lang-toggle" (click)="translationService.toggleLanguage()">
+        {{ translationService.currentLanguage === 'en' ? 'ES' : 'EN' }}
+      </button>
+      <button class="theme-toggle" (click)="toggleTheme()"
+        [attr.aria-label]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+        <span *ngIf="!isDarkMode">🌙</span>
+        <span *ngIf="isDarkMode">☀️</span>
+      </button>
+    </div>
   </nav>
 </header>
 
-<main class="main-content">
-  <router-outlet></router-outlet>
+<!-- Main Content with Animation -->
+<main class="main-content" [@routeAnimations]="o && o.isActivated ? o.activatedRouteData['animation'] : -1">
+  <router-outlet #o="outlet"></router-outlet>
 </main>
 
-<footer class="footer">
-  <p>&copy; 2024 My Portfolio. Built with Spring Boot & Angular.</p>
-</footer>
+<app-footer></app-footer>

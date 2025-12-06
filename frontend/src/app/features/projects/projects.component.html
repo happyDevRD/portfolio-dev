@@ -1,6 +1,18 @@
 <section class="projects-section">
     <h1>My Projects</h1>
+
+    <div class="filters">
+        <button *ngFor="let cat of categories" class="filter-btn" [class.active]="(filter$ | async) === cat"
+            (click)="setFilter(cat)">
+            {{ cat }}
+        </button>
+    </div>
+
     <div class="projects-grid">
-        <app-project-card *ngFor="let project of projects$ | async" [project]="project"></app-project-card>
+        <app-project-card *ngFor="let project of filteredProjects$ | async" [project]="project"></app-project-card>
+    </div>
+
+    <div *ngIf="(filteredProjects$ | async)?.length === 0" class="no-results">
+        No projects found for this category.
     </div>
 </section>

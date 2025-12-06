@@ -1,1 +1,4 @@
-<p>skill-tag works!</p>
+<div class="skill-tag" [title]="skill.name + ': ' + skill.proficiency + '%'">
+    <img *ngIf="skill.iconUrl" [src]="skill.iconUrl" [alt]="skill.name" class="skill-icon">
+    <span class="skill-name">{{ skill.name }}</span>
+</div>

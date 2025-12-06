@@ -1,0 +1,23 @@
+<article class="post-container" *ngIf="article$ | async as article">
+    <header class="post-header">
+        <a routerLink="/blog" class="back-link">← Back to Journal</a>
+        <div class="tags">
+            <span *ngFor="let tag of article.tags">#{{ tag }}</span>
+        </div>
+        <h1>{{ article.title }}</h1>
+        <div class="meta">
+            <span>{{ article.publishedAt | date:'longDate' }}</span>
+            <span class="dot">·</span>
+            <span>{{ article.readingTimeMinutes }} min read</span>
+        </div>
+    </header>
+
+    <div class="post-content">
+        <p class="summary">{{ article.summary }}</p>
+        <hr>
+        <!-- In a real app, use a Markdown renderer component here -->
+        <div class="markdown-body">
+            {{ article.content }}
+        </div>
+    </div>
+</article>
