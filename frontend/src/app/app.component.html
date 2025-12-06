@@ -1,0 +1,17 @@
+<header class="header">
+  <nav class="navbar">
+    <div class="logo">My Portfolio</div>
+    <ul class="nav-links">
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+      <li><a routerLink="/projects" routerLinkActive="active">Projects</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="footer">
+  <p>&copy; 2024 My Portfolio. Built with Spring Boot & Angular.</p>
+</footer>
