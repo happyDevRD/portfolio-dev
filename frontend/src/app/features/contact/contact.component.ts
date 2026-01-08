@@ -25,6 +25,7 @@ export class ContactComponent {
     this.contactForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
+      subject: ['', Validators.required],
       message: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
@@ -36,13 +37,20 @@ export class ContactComponent {
     this.successMessage = '';
     this.errorMessage = '';
 
-    // Simulate backend call
-    // In a real app: this.http.post('/api/contact', this.contactForm.value)
-    setTimeout(() => {
-      console.warn('Form submitted:', this.contactForm.value);
-      this.isSubmitting = false;
-      this.successMessage = 'Message sent successfully! (Simulation)';
-      this.contactForm.reset();
-    }, 1500);
+    const url = 'http://localhost:8080/api/contact';
+
+    this.http.post(url, this.contactForm.value).subscribe({
+      next: (response) => {
+        console.log('Form submitted:', response);
+        this.isSubmitting = false;
+        this.successMessage = 'Message sent successfully!';
+        this.contactForm.reset();
+      },
+      error: (error) => {
+        console.error('Error submitting form:', error);
+        this.isSubmitting = false;
+        this.errorMessage = 'Failed to send message. Please try again later.';
+      }
+    });
   }
 }

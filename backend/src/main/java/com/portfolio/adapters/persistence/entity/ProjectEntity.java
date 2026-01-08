@@ -28,4 +28,16 @@ public class ProjectEntity {
     private String projectUrl;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    @ElementCollection
+    private java.util.List<String> tags;
+
+    @Column(length = 2000)
+    private String challenge;
+
+    @Column(length = 2000)
+    private String solution;
+
+    @ElementCollection
+    private java.util.List<String> features;
 }

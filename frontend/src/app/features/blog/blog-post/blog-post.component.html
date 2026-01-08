@@ -1,6 +1,6 @@
 <article class="post-container" *ngIf="article$ | async as article">
     <header class="post-header">
-        <a routerLink="/blog" class="back-link">← Back to Journal</a>
+        <a routerLink="/blog" class="back-link">← {{ 'BTN_BACK' | translate }}</a>
         <div class="tags">
             <span *ngFor="let tag of article.tags">#{{ tag }}</span>
         </div>
@@ -16,8 +16,9 @@
         <p class="summary">{{ article.summary }}</p>
         <hr>
         <!-- In a real app, use a Markdown renderer component here -->
+        <!-- In a real app, use a Markdown renderer component here -->
         <div class="markdown-body">
-            {{ article.content }}
+            <markdown [data]="article.content"></markdown>
         </div>
     </div>
 </article>

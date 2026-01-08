@@ -3,14 +3,16 @@ export const EN = {
     'NAV_HOME': 'Home',
     'NAV_PROJECTS': 'Projects',
     'NAV_RESUME': 'Resume',
+    'NAV_BLOG': 'Journal',
     'NAV_CONTACT': 'Contact',
 
     // Home
-    'HOME_GREETING': 'Hello, I\'m',
-    'HOME_ROLE': 'Senior Full Stack Java Developer',
-    'HOME_BIO': 'Specialized in building robust microservices with Spring Boot and modern interfaces with Angular. Passionate about Clean Architecture and DevOps.',
+    'HOME_GREETING': 'Hello, I am',
+    'HOME_ROLE': 'Full Stack Developer',
+    'HOME_BIO': 'Passionate about building scalable web applications with Spring Boot and Angular. I love solving complex problems and learning new technologies.',
     'BTN_VIEW_PROJECTS': 'View Projects',
     'BTN_CONTACT_ME': 'Contact Me',
+    'BTN_BACK': 'Back',
 
     // Footer
     'FOOTER_COPYRIGHT': 'Built with Java Spring Boot & Angular 17.',
@@ -44,6 +46,10 @@ export const EN = {
     'SKILL_BACKEND': 'Backend',
     'SKILL_FRONTEND': 'Frontend',
     'SKILL_TOOLS': 'Tools',
+    'SKILL_DEVOPS': 'DevOps',
+    'SKILL_DATABASE': 'Databases',
+    'SKILL_REPORTING': 'Reporting',
+    'SKILL_QUALITY': 'Quality Assurance',
 
     // Blog
     'BLOG_TITLE_PREFIX': 'Engineering',
@@ -55,8 +61,6 @@ export const EN = {
     'CONTACT_SUBTITLE': 'Have a project in mind or just want to say hi?',
     'CONTACT_SENDING': 'Sending...',
 
-    // Home
-    'HOME_TECH_STACK': 'Tech Stack'
 };
 
 export const ES = {
@@ -64,14 +68,19 @@ export const ES = {
     'NAV_HOME': 'Inicio',
     'NAV_PROJECTS': 'Proyectos',
     'NAV_RESUME': 'CV / Resume',
+    'NAV_BLOG': 'Blog',
     'NAV_CONTACT': 'Contacto',
 
     // Home
     'HOME_GREETING': 'Hola, soy',
-    'HOME_ROLE': 'Desarrollador Java Full Stack Senior',
-    'HOME_BIO': 'Especializado en construir microservicios robustos con Spring Boot e interfaces modernas con Angular. Apasionado por la Arquitectura Limpia y DevOps.',
+    'HOME_ROLE': 'Desarrollador Full Stack',
+    'HOME_BIO': 'Apasionado por crear aplicaciones web escalables con Spring Boot y Angular. Me encanta resolver problemas complejos y aprender nuevas tecnologías.',
+    'HOME_TECH_STACK': 'Tecnologías',
+    'HOME_SERVICES_TITLE': 'Mis Servicios',
+    'HOME_TESTIMONIALS_TITLE': 'Testimonios',
     'BTN_VIEW_PROJECTS': 'Ver Proyectos',
     'BTN_CONTACT_ME': 'Contactar',
+    'BTN_BACK': 'Volver',
 
     // Footer
     'FOOTER_COPYRIGHT': 'Construido con Java Spring Boot y Angular 17.',
@@ -105,6 +114,10 @@ export const ES = {
     'SKILL_BACKEND': 'Backend',
     'SKILL_FRONTEND': 'Frontend',
     'SKILL_TOOLS': 'Herramientas',
+    'SKILL_DEVOPS': 'DevOps',
+    'SKILL_DATABASE': 'Base de Datos',
+    'SKILL_REPORTING': 'Reportes',
+    'SKILL_QUALITY': 'Calidad de Software',
 
     // Blog
     'BLOG_TITLE_PREFIX': 'Bitácora',
@@ -116,6 +129,4 @@ export const ES = {
     'CONTACT_SUBTITLE': '¿Tienes un proyecto en mente o solo quieres saludar?',
     'CONTACT_SENDING': 'Enviando...',
 
-    // Home
-    'HOME_TECH_STACK': 'Tecnologías'
 };

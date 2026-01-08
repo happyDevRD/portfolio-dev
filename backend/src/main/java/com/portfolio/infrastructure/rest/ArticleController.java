@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/articles")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+
 public class ArticleController {
 
     private final ArticleService articleService;

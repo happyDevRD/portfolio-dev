@@ -26,6 +26,8 @@ public class ExperiencePersistenceAdapter implements ExperienceRepository {
 
     @Override
     public Optional<Experience> findById(Long id) {
+        if (id == null)
+            return Optional.empty();
         return jpaExperienceRepository.findById(id)
                 .map(experienceMapper::toDomain);
     }
@@ -33,12 +35,17 @@ public class ExperiencePersistenceAdapter implements ExperienceRepository {
     @Override
     public Experience save(Experience experience) {
         var entity = experienceMapper.toEntity(experience);
+        if (entity == null) {
+            throw new IllegalArgumentException("Experience cannot be null");
+        }
         var savedEntity = jpaExperienceRepository.save(entity);
         return experienceMapper.toDomain(savedEntity);
     }
 
     @Override
     public void deleteById(Long id) {
-        jpaExperienceRepository.deleteById(id);
+        if (id != null) {
+            jpaExperienceRepository.deleteById(id);
+        }
     }
 }

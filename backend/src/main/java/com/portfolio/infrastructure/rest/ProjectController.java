@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/projects")
 @Tag(name = "Projects", description = "Endpoints for managing portfolio projects")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*") // Allow all for simplicity in portfolio, restrict in prod
+
 public class ProjectController {
     private final ProjectService projectService;
 

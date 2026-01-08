@@ -17,6 +17,10 @@ public class ProjectMapper {
                 .projectUrl(entity.getProjectUrl())
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
+                .tags(entity.getTags())
+                .challenge(entity.getChallenge())
+                .solution(entity.getSolution())
+                .features(entity.getFeatures())
                 .build();
     }
 
@@ -31,6 +35,10 @@ public class ProjectMapper {
                 .projectUrl(domain.getProjectUrl())
                 .startDate(domain.getStartDate())
                 .endDate(domain.getEndDate())
+                .tags(domain.getTags())
+                .challenge(domain.getChallenge())
+                .solution(domain.getSolution())
+                .features(domain.getFeatures())
                 .build();
     }
 }

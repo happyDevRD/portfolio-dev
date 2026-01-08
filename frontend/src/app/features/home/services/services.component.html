@@ -1,0 +1,13 @@
+<section class="services-section">
+    <h2>{{ 'HOME_SERVICES_TITLE' | translate }}</h2>
+    <div class="services-grid">
+        <div class="service-card" *ngFor="let service of services$ | async">
+            <div class="icon-wrapper">
+                <!-- Placeholder for dynamic icons, using emojis or simple divs for now -->
+                <div class="icon-circle">⚡</div>
+            </div>
+            <h3>{{ service.title }}</h3>
+            <p>{{ service.description }}</p>
+        </div>
+    </div>
+</section>

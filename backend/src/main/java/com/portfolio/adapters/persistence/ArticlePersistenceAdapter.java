@@ -1,5 +1,6 @@
 package com.portfolio.adapters.persistence;
 
+import com.portfolio.adapters.persistence.entity.ArticleEntity;
 import com.portfolio.adapters.persistence.mapper.ArticleMapper;
 import com.portfolio.adapters.persistence.repository.JpaArticleRepository;
 import com.portfolio.core.domain.model.Article;
@@ -33,7 +34,10 @@ public class ArticlePersistenceAdapter implements ArticleRepository {
 
     @Override
     public Article save(Article article) {
-        return mapper.toDomain(
-                jpaRepository.save(mapper.toEntity(article)));
+        ArticleEntity entity = mapper.toEntity(article);
+        if (entity == null) {
+            throw new IllegalArgumentException("Article cannot be null");
+        }
+        return mapper.toDomain(jpaRepository.save(entity));
     }
 }

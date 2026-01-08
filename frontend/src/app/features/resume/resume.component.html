@@ -17,13 +17,14 @@
             <!-- Left Column: Summary & Experience -->
             <div class="main-col">
                 <section class="summary-card animate-up" style="--delay: 0.1s">
-                    <h2><span class="icon">👤</span> {{ 'RESUME_SUMMARY_TITLE' | translate }}</h2>
+                    <h2><span class="icon"><i class="fas fa-user-circle"></i></span> {{ 'RESUME_SUMMARY_TITLE' |
+                        translate }}</h2>
                     <p>{{ 'HOME_BIO' | translate }}</p>
                 </section>
 
                 <section class="timeline-section">
-                    <h2 class="animate-up" style="--delay: 0.2s"><span class="icon">💼</span> {{ 'RESUME_EXP_TITLE' |
-                        translate }}</h2>
+                    <h2 class="animate-up" style="--delay: 0.2s"><span class="icon"><i
+                                class="fas fa-briefcase"></i></span> {{ 'RESUME_EXP_TITLE' | translate }}</h2>
                     <div class="timeline">
                         <div class="timeline-item animate-up" *ngFor="let job of (experiences$ | async); let i = index"
                             [style.--delay]="(0.3 + i*0.1) + 's'">
@@ -48,32 +49,20 @@
             <!-- Right Column: Skills & Education -->
             <aside class="side-col">
                 <section class="skills-card animate-up" style="--delay: 0.2s">
-                    <h2><span class="icon">🛠</span> {{ 'RESUME_SKILLS_TITLE' | translate }}</h2>
+                    <h2><span class="icon"><i class="fas fa-tools"></i></span> {{ 'RESUME_SKILLS_TITLE' | translate }}
+                    </h2>
 
-                    <div class="skill-category">
-                        <h3>{{ 'SKILL_BACKEND' | translate }}</h3>
+                    <div class="skill-category" *ngFor="let group of skillGroups$ | async">
+                        <h3>{{ ('SKILL_' + group.category | uppercase) | translate }}</h3>
                         <div class="tags">
-                            <span>Java 17</span><span>Spring Boot 3</span><span>JPA</span><span>PL/SQL</span>
-                        </div>
-                    </div>
-
-                    <div class="skill-category">
-                        <h3>{{ 'SKILL_FRONTEND' | translate }}</h3>
-                        <div class="tags">
-                            <span>Angular 17</span><span>TypeScript</span><span>SCSS</span><span>RxJS</span>
-                        </div>
-                    </div>
-
-                    <div class="skill-category">
-                        <h3>{{ 'SKILL_TOOLS' | translate }}</h3>
-                        <div class="tags">
-                            <span>Docker</span><span>Git</span><span>Jenkins</span><span>SonarQube</span>
+                            <span *ngFor="let skill of group.items">{{ skill.name }}</span>
                         </div>
                     </div>
                 </section>
 
                 <section class="education-card animate-up" style="--delay: 0.3s">
-                    <h2><span class="icon">🎓</span> {{ 'RESUME_EDUCATION' | translate }}</h2>
+                    <h2><span class="icon"><i class="fas fa-graduation-cap"></i></span> {{ 'RESUME_EDUCATION' |
+                        translate }}</h2>
                     <div class="edu-item">
                         <h4>{{ 'RESUME_DEGREE' | translate }}</h4>
                         <p class="school">Universidad Dominicana O&M</p>

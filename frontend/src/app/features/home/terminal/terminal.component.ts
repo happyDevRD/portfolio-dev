@@ -21,7 +21,7 @@ export class TerminalComponent implements OnInit, AfterViewChecked {
   currentText = '';
 
   private commands = [
-    { cmd: 'whoami', output: 'Eleazar Garcia - Senior Java Full Stack Developer' },
+    { cmd: 'whoami', output: 'Eleazar Garcia - Desarrollador Full Stack Java' },
     {
       cmd: 'cat skills.json', output: `
 {
@@ -29,7 +29,7 @@ export class TerminalComponent implements OnInit, AfterViewChecked {
   "frontend": ["Angular 17", "TypeScript", "SCSS"],
   "cloud": ["Docker", "AWS", "Jenkins"]
 }` },
-    { cmd: './load-experience.sh', output: 'Loading professional timeline... [DONE]' }
+    { cmd: './load-experience.sh', output: 'Cargando línea de tiempo profesional... [HECHO]' }
   ];
 
   ngOnInit() {

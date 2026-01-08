@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/experiences")
 @Tag(name = "Experiences", description = "Endpoints for managing experience entries")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+
 public class ExperienceController {
     private final ExperienceService experienceService;
 

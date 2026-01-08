@@ -7,4 +7,7 @@ export interface Project {
     startDate: string;
     endDate?: string;
     tags?: string[];
+    challenge?: string;
+    solution?: string;
+    features?: string[];
 }

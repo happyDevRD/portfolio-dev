@@ -26,6 +26,8 @@ public class SkillPersistenceAdapter implements SkillRepository {
 
     @Override
     public Optional<Skill> findById(Long id) {
+        if (id == null)
+            return Optional.empty();
         return jpaSkillRepository.findById(id)
                 .map(skillMapper::toDomain);
     }
@@ -33,12 +35,17 @@ public class SkillPersistenceAdapter implements SkillRepository {
     @Override
     public Skill save(Skill skill) {
         var entity = skillMapper.toEntity(skill);
+        if (entity == null) {
+            throw new IllegalArgumentException("Skill cannot be null");
+        }
         var savedEntity = jpaSkillRepository.save(entity);
         return skillMapper.toDomain(savedEntity);
     }
 
     @Override
     public void deleteById(Long id) {
-        jpaSkillRepository.deleteById(id);
+        if (id != null) {
+            jpaSkillRepository.deleteById(id);
+        }
     }
 }

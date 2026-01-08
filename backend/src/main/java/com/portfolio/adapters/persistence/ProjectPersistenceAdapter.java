@@ -26,6 +26,8 @@ public class ProjectPersistenceAdapter implements ProjectRepository {
 
     @Override
     public Optional<Project> findById(Long id) {
+        if (id == null)
+            return Optional.empty();
         return jpaProjectRepository.findById(id)
                 .map(projectMapper::toDomain);
     }
@@ -33,12 +35,17 @@ public class ProjectPersistenceAdapter implements ProjectRepository {
     @Override
     public Project save(Project project) {
         var entity = projectMapper.toEntity(project);
+        if (entity == null) {
+            throw new IllegalArgumentException("Project cannot be null");
+        }
         var savedEntity = jpaProjectRepository.save(entity);
         return projectMapper.toDomain(savedEntity);
     }
 
     @Override
     public void deleteById(Long id) {
-        jpaProjectRepository.deleteById(id);
+        if (id != null) {
+            jpaProjectRepository.deleteById(id);
+        }
     }
 }

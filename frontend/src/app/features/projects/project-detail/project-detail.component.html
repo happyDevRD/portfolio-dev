@@ -1,0 +1,82 @@
+<div class="project-detail-container" *ngIf="project() as p">
+    <!-- Hero Section -->
+    <header class="hero-section"
+        [style.backgroundImage]="'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(' + p.imageUrl + ')'">
+        <div class="hero-content">
+            <span class="project-category" *ngIf="p.tags">{{ p.tags[0] }}</span>
+            <h1 class="project-title">{{ p.title }}</h1>
+            <div class="project-links">
+                <a [href]="p.projectUrl" target="_blank" class="btn primary-btn">
+                    View Live <i class="fas fa-external-link-alt"></i>
+                </a>
+                <a href="#" class="btn secondary-btn">
+                    GitHub Repo <i class="fab fa-github"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+        <div class="grid-layout">
+
+            <!-- Challenge & Solution -->
+            <div class="main-column">
+                <section class="section-card challenge-section" *ngIf="p.challenge">
+                    <h2><i class="fas fa-exclamation-triangle"></i> The Challenge</h2>
+                    <p>{{ p.challenge }}</p>
+                </section>
+
+                <section class="section-card solution-section" *ngIf="p.solution">
+                    <h2><i class="fas fa-lightbulb"></i> The Solution</h2>
+                    <p>{{ p.solution }}</p>
+                </section>
+
+                <section class="section-card description-section">
+                    <h2><i class="fas fa-info-circle"></i> Overview</h2>
+                    <p>{{ p.description }}</p>
+                </section>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="sidebar-column">
+                <!-- Tech Stack -->
+                <div class="sidebar-widget">
+                    <h3>Tech Stack</h3>
+                    <div class="tags-container">
+                        <span class="tag" *ngFor="let tag of p.tags">{{ tag }}</span>
+                    </div>
+                </div>
+
+                <!-- Key Features -->
+                <div class="sidebar-widget" *ngIf="p.features && p.features.length > 0">
+                    <h3>Key Features</h3>
+                    <ul class="feature-list">
+                        <li *ngFor="let feature of p.features">
+                            <i class="fas fa-check-circle"></i> {{ feature }}
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Dates -->
+                <div class="sidebar-widget">
+                    <h3>Timeline</h3>
+                    <p class="timeline-date">
+                        <i class="far fa-calendar-alt"></i>
+                        {{ p.startDate | date:'MMM yyyy' }} -
+                        <span *ngIf="p.endDate">{{ p.endDate | date:'MMM yyyy' }}</span>
+                        <span *ngIf="!p.endDate">Present</span>
+                    </p>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation-footer">
+        <a routerLink="/projects" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Projects
+        </a>
+    </div>
+</div>

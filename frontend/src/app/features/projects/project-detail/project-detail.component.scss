@@ -1,0 +1,269 @@
+@import '../../../../styles.scss';
+
+.project-detail-container {
+    min-height: 100vh;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    animation: fadeIn 0.5s ease-out;
+}
+
+// Hero Section
+.hero-section {
+    height: 60vh;
+    min-height: 400px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    .hero-content {
+        max-width: 800px;
+        padding: 2rem;
+        z-index: 2;
+        animation: slideUp 0.8s ease-out;
+
+        .project-category {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(var(--accent-color-rgb), 0.2);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .project-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+            background: linear-gradient(to right, #fff, #ccc);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            @media (max-width: 768px) {
+                font-size: 2.5rem;
+            }
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+
+            .btn {
+                padding: 0.8rem 2rem;
+                border-radius: 8px;
+                text-decoration: none;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+
+                &.primary-btn {
+                    background: var(--accent-color);
+                    color: white;
+                    box-shadow: 0 4px 15px rgba(var(--accent-color-rgb), 0.4);
+
+                    &:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 6px 20px rgba(var(--accent-color-rgb), 0.6);
+                    }
+                }
+
+                &.secondary-btn {
+                    background: rgba(255, 255, 255, 0.1);
+                    color: white;
+                    backdrop-filter: blur(5px);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+
+                    &:hover {
+                        background: rgba(255, 255, 255, 0.2);
+                        transform: translateY(-2px);
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Content Layout
+.content-wrapper {
+    max-width: 1200px;
+    margin: -4rem auto 2rem;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 10;
+
+    .grid-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+
+        @media (max-width: 900px) {
+            grid-template-columns: 1fr;
+        }
+    }
+}
+
+// Cards
+.section-card {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        color: var(--text-primary);
+
+        i {
+            color: var(--accent-color);
+        }
+    }
+
+    p {
+        color: var(--text-secondary);
+        line-height: 1.8;
+        font-size: 1.05rem;
+    }
+}
+
+.challenge-section {
+    border-left: 4px solid #ff6b6b;
+
+    h2 i {
+        color: #ff6b6b;
+    }
+}
+
+.solution-section {
+    border-left: 4px solid #4ecdc4;
+
+    h2 i {
+        color: #4ecdc4;
+    }
+}
+
+// Sidebar Widgets
+.sidebar-widget {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+
+    h3 {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        color: var(--text-primary);
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 0.5rem;
+        display: inline-block;
+    }
+
+    .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+        .tag {
+            background: rgba(var(--accent-color-rgb), 0.1);
+            color: var(--accent-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+
+            &:hover {
+                background: rgba(var(--accent-color-rgb), 0.2);
+            }
+        }
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+
+        li {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            display: flex;
+            gap: 0.8rem;
+
+            i {
+                color: var(--accent-color);
+                margin-top: 4px;
+            }
+        }
+    }
+
+    .timeline-date {
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        i {
+            color: var(--accent-color);
+        }
+    }
+}
+
+// Navigation
+.navigation-footer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+
+    .back-link {
+        color: var(--text-secondary);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 500;
+        transition: color 0.2s;
+
+        &:hover {
+            color: var(--accent-color);
+        }
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

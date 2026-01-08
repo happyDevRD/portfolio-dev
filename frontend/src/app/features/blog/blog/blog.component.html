@@ -7,7 +7,8 @@
 
     <div class="bento-grid" *ngIf="articles$ | async as articles">
         <!-- Featured (Index 0) - Spans 2 cols, 2 rows -->
-        <article class="bento-card featured" *ngIf="articles[0]" [routerLink]="['/blog', articles[0].slug]">
+        <article class="bento-card featured animate-fade-in" *ngIf="articles[0]"
+            [routerLink]="['/blog', articles[0].slug]">
             <div class="card-content">
                 <div class="tags">
                     <span *ngFor="let tag of articles[0].tags">{{ tag }}</span>
@@ -38,8 +39,9 @@
         </article>
 
         <!-- The Rest (Grid items) -->
-        <ng-container *ngFor="let article of articles.slice(2)">
-            <article class="bento-card standard" [routerLink]="['/blog', article.slug]">
+        <ng-container *ngFor="let article of articles.slice(2); let i = index">
+            <article class="bento-card standard animate-fade-in" [routerLink]="['/blog', article.slug]"
+                [style.animation-delay]="((i + 2) * 100) + 'ms'">
                 <div class="card-content">
                     <div class="tags">
                         <span *ngFor="let tag of article.tags">{{ tag }}</span>

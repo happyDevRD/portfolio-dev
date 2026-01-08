@@ -9,6 +9,7 @@ import { BlogPostComponent } from './features/blog/blog-post/blog-post.component
 export const routes: Routes = [
     { path: '', component: HomeComponent, data: { animation: 0 } },
     { path: 'projects', component: ProjectsComponent, data: { animation: 1 } },
+    { path: 'projects/:id', loadComponent: () => import('./features/projects/project-detail/project-detail.component').then(m => m.ProjectDetailComponent), data: { animation: 6 } },
     { path: 'blog', component: BlogComponent, data: { animation: 2 } },
     { path: 'blog/:slug', component: BlogPostComponent, data: { animation: 3 } },
     { path: 'resume', component: ResumeComponent, data: { animation: 4 } },

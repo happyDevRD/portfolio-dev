@@ -4,8 +4,6 @@ import com.portfolio.adapters.persistence.entity.ArticleEntity;
 import com.portfolio.core.domain.model.Article;
 import org.springframework.stereotype.Component;
 
-import java.util.stream.Collectors;
-
 @Component
 public class ArticleMapper {
 

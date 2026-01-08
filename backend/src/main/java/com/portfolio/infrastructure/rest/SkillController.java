@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/skills")
 @Tag(name = "Skills", description = "Endpoints for managing skills")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+
 public class SkillController {
     private final SkillService skillService;
 

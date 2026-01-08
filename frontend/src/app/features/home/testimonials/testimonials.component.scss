@@ -1,0 +1,83 @@
+.testimonials-section {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 4rem;
+        background: linear-gradient(to right, var(--secondary), var(--accent));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2.5rem;
+    }
+
+    .testimonial-card {
+        background: var(--surface);
+        border-radius: 20px;
+        padding: 2.5rem;
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+
+        .quote-icon {
+            font-size: 5rem;
+            color: rgba(255, 255, 255, 0.05);
+            position: absolute;
+            top: 1rem;
+            left: 2rem;
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .content {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            .avatar {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid var(--secondary);
+            }
+
+            .author-info {
+                h4 {
+                    margin: 0;
+                    font-size: 1rem;
+                    color: var(--text-primary);
+                }
+
+                span {
+                    font-size: 0.85rem;
+                    color: var(--text-secondary);
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+}

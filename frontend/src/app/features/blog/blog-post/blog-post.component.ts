@@ -5,10 +5,14 @@ import { BlogService } from '../../../core/services/blog.service';
 import { Article } from '../../../core/models/article.model';
 import { Observable, switchMap } from 'rxjs';
 
+import { MarkdownModule } from 'ngx-markdown';
+
+import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+
 @Component({
   selector: 'app-blog-post',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, MarkdownModule, TranslatePipe],
   templateUrl: './blog-post.component.html',
   styleUrl: './blog-post.component.scss'
 })

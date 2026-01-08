@@ -1,7 +1,13 @@
 /* WEB VIEW (Default) */
+.resume-wrapper {
+    padding: 6rem 0;
+    background: transparent;
+}
+
 .web-resume {
-    max-width: 1200px;
+    max-width: var(--container-width);
     margin: 0 auto;
+    padding: 0 2rem;
 }
 
 .print-resume {
@@ -13,22 +19,31 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+
+    @media(max-width: 768px) {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+    }
 
     .hero-left {
         h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin: 0;
-            color: var(--secondary-color);
+            color: var(--text-primary);
             font-weight: 800;
+            line-height: 1;
+            letter-spacing: -0.03em;
         }
 
         p {
             font-size: 1.1rem;
-            color: #64748b;
-            margin: 0.25rem 0 0;
+            color: var(--text-secondary);
+            margin: 0.5rem 0 0;
+            font-family: 'JetBrains Mono', monospace;
         }
     }
 
@@ -36,19 +51,25 @@
         background-color: var(--primary-color);
         color: white;
         border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
+        padding: 0.8rem 1.5rem;
+        border-radius: 6px;
         font-weight: 600;
         cursor: pointer;
         display: flex;
         align-items: center;
         gap: 0.5rem;
         transition: all 0.2s;
-        box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+        /* Brutalist shadow */
+        box-shadow: 3px 3px 0px 0px #000;
+        border: 1px solid var(--primary-color);
 
         &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px 0px #000;
+        }
+
+        .icon {
+            font-size: 1.1rem;
         }
     }
 }
@@ -57,9 +78,9 @@
 .resume-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 2rem;
+    gap: 3rem;
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
         grid-template-columns: 1fr;
     }
 
@@ -68,12 +89,21 @@
     .skills-card,
     .education-card,
     .job-card {
-        background: var(--card-bg);
+        background: var(--surface-color);
         border-radius: 12px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        border: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        border: 1px solid var(--border-color);
         margin-bottom: 2rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.08);
+            /* Deeper shadow */
+            border-color: rgba(234, 40, 49, 0.3);
+            /* Subtle red tint */
+        }
     }
 
     .main-col {
@@ -82,91 +112,121 @@
                 margin-top: 0;
                 display: flex;
                 align-items: center;
-                gap: 0.5rem;
-                color: var(--secondary-color);
-                font-size: 1.3rem;
+                gap: 0.8rem;
+                color: var(--text-primary);
+                font-size: 1.5rem;
+                font-weight: 700;
+                margin-bottom: 1rem;
+
+                .icon {
+                    color: var(--primary-color);
+                }
             }
 
             p {
                 line-height: 1.7;
-                color: var(--text-color);
+                color: var(--text-secondary);
                 margin-bottom: 0;
+                font-size: 1.05rem;
             }
         }
 
         .timeline-section {
             h2 {
-                color: var(--secondary-color);
-                margin-bottom: 1.5rem;
+                color: var(--text-primary);
+                margin-bottom: 2rem;
                 display: flex;
                 align-items: center;
-                gap: 0.5rem;
+                gap: 0.8rem;
+                font-size: 1.5rem;
+                font-weight: 700;
+
+                .icon {
+                    color: var(--primary-color);
+                }
             }
 
             .timeline {
-                border-left: 2px solid #e2e8f0;
-                padding-left: 1.5rem;
+                border-left: 2px solid #e5e7eb;
+                padding-left: 2.5rem;
+                /* More breathing room */
                 position: relative;
+
+                @media(max-width: 768px) {
+                    padding-left: 1.5rem;
+                }
             }
 
             .timeline-item {
                 position: relative;
-                margin-bottom: 2rem;
+                margin-bottom: 3.5rem;
+                /* Proper separation */
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
 
                 .time-marker {
                     position: absolute;
-                    left: -2.05rem;
-                    /* center on line */
+                    left: -2.9rem;
+                    /* Perfectly aligned to cover line */
                     top: 1.5rem;
                     width: 12px;
                     height: 12px;
                     background: var(--primary-color);
                     border-radius: 50%;
-                    border: 3px solid var(--bg-color);
+                    box-shadow: 0 0 0 4px white;
+                    /* White halo to cut the line visual */
+                    z-index: 2;
+
+                    @media(max-width: 768px) {
+                        left: -1.9rem;
+                        /* Adjust for reduced padding */
+                    }
                 }
 
                 .job-card {
-                    transition: transform 0.2s;
-
-                    &:hover {
-                        transform: translateX(5px);
-                    }
+                    margin-bottom: 0;
 
                     .job-header {
                         display: flex;
                         justify-content: space-between;
-                        align-items: baseline;
-                        margin-bottom: 0.25rem;
+                        align-items: center;
+                        margin-bottom: 0.75rem;
                         flex-wrap: wrap;
                         gap: 0.5rem;
 
                         h3 {
                             margin: 0;
-                            font-size: 1.1rem;
-                            color: var(--secondary-color);
+                            font-size: 1.25rem;
+                            color: var(--text-primary);
+                            font-weight: 700;
                         }
 
                         .date-badge {
-                            background: rgba(59, 130, 246, 0.1);
-                            color: var(--primary-color);
-                            padding: 0.2rem 0.6rem;
-                            border-radius: 4px;
+                            background: #f3f4f6;
+                            color: var(--text-secondary);
+                            padding: 0.35rem 0.8rem;
+                            border-radius: 50px;
                             font-size: 0.8rem;
                             font-weight: 600;
+                            border: 1px solid var(--border-color);
+                            font-family: 'JetBrains Mono', monospace;
                         }
                     }
 
                     .company {
+                        display: inline-block;
                         margin: 0 0 1rem;
-                        color: #64748b;
-                        font-weight: 500;
-                        font-size: 0.95rem;
+                        color: var(--primary-color);
+                        font-weight: 600;
+                        font-size: 1rem;
                     }
 
                     p {
                         margin: 0;
-                        font-size: 0.95rem;
-                        color: var(--text-color);
+                        font-size: 1rem;
+                        color: var(--text-secondary);
                         line-height: 1.6;
                     }
                 }
@@ -178,58 +238,83 @@
         h2 {
             margin-top: 0;
             margin-bottom: 1.5rem;
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            color: var(--secondary-color);
+            gap: 0.8rem;
+            color: var(--text-primary);
+            font-weight: 700;
+
+            .icon {
+                color: var(--primary-color);
+            }
         }
 
         .skill-category {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2.5rem;
 
             h3 {
-                font-size: 0.9rem;
+                font-size: 0.75rem;
                 text-transform: uppercase;
-                color: #94a3b8;
-                margin-bottom: 0.5rem;
-                letter-spacing: 0.5px;
+                color: #9ca3af;
+                margin-bottom: 1rem;
+                letter-spacing: 0.1em;
+                font-weight: 700;
             }
 
             .tags {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 0.5rem;
+                gap: 0.6rem;
 
                 span {
-                    background: var(--bg-color);
-                    color: var(--text-color);
-                    border: 1px solid rgba(0, 0, 0, 0.1);
-                    padding: 0.3rem 0.8rem;
-                    border-radius: 6px;
+                    background: #f9fafb;
+                    color: var(--text-primary);
+                    border: 1px solid var(--border-color);
+                    padding: 0.4rem 1rem;
+                    border-radius: 50px;
+                    /* Pill shape */
                     font-size: 0.85rem;
                     font-weight: 500;
+                    transition: all 0.2s;
+                    cursor: default;
+
+                    &:hover {
+                        border-color: var(--primary-color);
+                        color: var(--primary-color);
+                        background: white;
+                        transform: translateY(-2px);
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                    }
                 }
             }
         }
 
         .edu-item {
+            position: relative;
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--primary-color);
+            margin-bottom: 1.5rem;
+
             h4 {
                 margin: 0;
-                color: var(--secondary-color);
+                color: var(--text-primary);
+                font-size: 1.1rem;
+                font-weight: 700;
             }
 
             .school {
-                margin: 0.25rem 0;
-                color: var(--primary-color);
+                margin: 0.5rem 0;
+                color: var(--text-secondary);
                 font-weight: 500;
-                font-size: 0.9rem;
+                font-size: 0.95rem;
             }
 
             .year {
                 margin: 0;
-                color: #94a3b8;
-                font-size: 0.8rem;
+                color: #9ca3af;
+                font-size: 0.85rem;
+                font-family: 'JetBrains Mono', monospace;
             }
         }
     }

@@ -15,44 +15,79 @@ import { map } from 'rxjs/operators';
 })
 export class ProjectsComponent implements OnInit {
   projects$ = new BehaviorSubject<Project[]>([]);
-  filter$ = new BehaviorSubject<string>('All');
+  filter$ = new BehaviorSubject<string>('Todos');
 
-  categories = ['All', 'Backend', 'Frontend', 'DevOps'];
+  itemsPerPage = 6;
+  currentPage$ = new BehaviorSubject<number>(1);
+  totalPages$ = new BehaviorSubject<number>(1);
+
+  categories = ['Todos', 'Backend', 'Frontend', 'DevOps'];
+  currentCategory = 'Todos';
 
   filteredProjects$: Observable<Project[]>;
+  paginatedProjects$: Observable<Project[]>;
 
   constructor(private portfolioService: PortfolioService) {
+    // 1. Filter Projects
     this.filteredProjects$ = combineLatest([
       this.projects$,
       this.filter$
     ]).pipe(
       map(([projects, filter]) => {
-        if (filter === 'All') return projects;
-        // Simple heuristic filtering based on description or title for this demo
-        // Ideally projects would have a 'category' or 'technologies' list
-        return projects.filter(p =>
-          p.description.toLowerCase().includes(filter.toLowerCase()) ||
-          p.title.toLowerCase().includes(filter.toLowerCase())
+        const filtered = filter === 'Todos' ? projects : projects.filter(p =>
+          p.tags && p.tags.some(tag => tag.toLowerCase() === filter.toLowerCase())
         );
+
+        // Reset to page 1 on filter change
+        this.currentPage$.next(1);
+
+        // Calculate total pages
+        const total = Math.ceil(filtered.length / this.itemsPerPage);
+        this.totalPages$.next(total || 1);
+
+        return filtered;
+      })
+    );
+
+    // 2. Paginate Filtered Projects
+    this.paginatedProjects$ = combineLatest([
+      this.filteredProjects$,
+      this.currentPage$
+    ]).pipe(
+      map(([projects, page]) => {
+        const startIndex = (page - 1) * this.itemsPerPage;
+        return projects.slice(startIndex, startIndex + this.itemsPerPage);
       })
     );
   }
 
   ngOnInit(): void {
-    this.portfolioService.getProjects().pipe(
-      map(projects => projects.map(p => ({
-        ...p,
-        tags: this.generateTags(p.description)
-      })))
-    ).subscribe(p => this.projects$.next(p));
-  }
-
-  private generateTags(description: string): string[] {
-    const keywords = ['Angular', 'Spring Boot', 'Java', 'Docker', 'SQL', 'Oracle', 'Jasper', 'IBM', 'SOAP', 'REST'];
-    return keywords.filter(k => description.includes(k));
+    this.portfolioService.getProjects().subscribe(p => this.projects$.next(p));
   }
 
   setFilter(category: string): void {
+    this.currentCategory = category;
     this.filter$.next(category);
+  }
+
+  nextPage(): void {
+    if (this.currentPage$.value < this.totalPages$.value) {
+      this.currentPage$.next(this.currentPage$.value + 1);
+      this.scrollToTop();
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage$.value > 1) {
+      this.currentPage$.next(this.currentPage$.value - 1);
+      this.scrollToTop();
+    }
+  }
+
+  private scrollToTop(): void {
+    const element = document.querySelector('.projects-section');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }

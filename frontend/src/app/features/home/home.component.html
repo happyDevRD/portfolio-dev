@@ -1,32 +1,107 @@
-<section class="hero-section">
-    <div class="hero-content">
-        <div class="greeting">{{ 'HOME_GREETING' | translate }}</div>
-        <h1 class="title">
-            Eleazar Garcia<br>
-            <span class="gradient-text">{{ 'HOME_ROLE' | translate }}</span>
-        </h1>
-        <p class="bio">
-            {{ 'HOME_BIO' | translate }}
-        </p>
-        <div class="cta-buttons">
-            <a routerLink="/projects" class="btn btn-primary">{{ 'BTN_VIEW_PROJECTS' | translate }}</a>
-            <a routerLink="/contact" class="btn btn-outline">{{ 'BTN_CONTACT_ME' | translate }}</a>
+<section class="home-section" id="home">
+    <!-- Background Glow Blob -->
+    <div class="glow-blob"></div>
+
+    <div class="container">
+        <div class="hero-text">
+            <!-- Greeting Badge -->
+            <div class="greeting-badge animate-slide-up">
+                <span class="pulse-dot"></span>
+                Hola, Soy
+            </div>
+
+            <!-- Main Title -->
+            <h1 class="main-title animate-slide-up delay-100">
+                Eleazar Garcia<br />
+                <span class="gradient-text">Desarrollador</span><br />
+                Full Stack
+            </h1>
+
+            <!-- Bio -->
+            <p class="bio-text animate-slide-up delay-100">
+                Guiando proyectos a través de todo el ciclo de vida full-stack, desde la vibrante interfaz de
+                <span class="highlight-angular">Angular</span> hasta la robusta lógica de negocio con
+                <span class="highlight-java">Java</span>.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="cta-group animate-slide-up delay-200">
+                <a class="btn btn-primary" routerLink="/projects">
+                    Ver Proyectos
+                </a>
+                <a class="btn btn-outline" routerLink="/contact">
+                    Contactar <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
         </div>
-    </div>
-    <div class="hero-visual">
-        <div class="circle-bg"></div>
-        <app-terminal></app-terminal>
+
+        <!-- Journey Nodes Section -->
+        <div class="journey-container">
+            <div class="journey-path"></div>
+
+            <!-- Node: Angular -->
+            <div class="journey-node angular shadow-lg animate-fade-in delay-300">
+                <i class="fab fa-angular icon"></i>
+                <h3>Frontend Mastery</h3>
+                <p>Construcción de interfaces interactivas y dinámicas con Angular.</p>
+            </div>
+
+            <!-- Node: API -->
+            <div class="journey-node common shadow-lg animate-fade-in delay-400">
+                <i class="fas fa-server icon-indigo"></i>
+                <h3 class="text-indigo">API Integration</h3>
+                <p>Comunicación eficiente y segura entre frontend y backend.</p>
+            </div>
+
+            <!-- Node: Data -->
+            <div class="journey-node common shadow-lg animate-fade-in delay-500">
+                <i class="fas fa-database icon-green"></i>
+                <h3 class="text-green">Data Management</h3>
+                <p>Diseño y optimización de bases de datos relacionales y no-SQL.</p>
+            </div>
+
+            <!-- Node: Java -->
+            <div class="journey-node java shadow-lg animate-fade-in delay-600">
+                <i class="fab fa-java icon"></i>
+                <h3>Backend Power</h3>
+                <p>Desarrollo de lógica de negocio robusta y escalable con Java.</p>
+            </div>
+        </div>
     </div>
 </section>
 
-<section class="featured-skills">
-    <h2>{{ 'HOME_TECH_STACK' | translate }}</h2>
-    <div class="skills-ticker">
-        <span>🍃 Spring Boot 3</span>
-        <span>🅰️ Angular 17</span>
-        <span>☕ Java 17</span>
-        <span>🐳 Docker</span>
-        <span>📊 JasperReports</span>
-        <span>🗄️ Oracle PL/SQL</span>
+<!-- Featured Skills / Technologies Section -->
+<section class="tech-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>
+                Tecnologías
+                <span class="underline-decoration"></span>
+            </h2>
+            <p>Herramientas y frameworks que utilizo para construir soluciones robustas y eficientes.</p>
+        </div>
+
+        <div class="tech-grid">
+            <!-- Java -->
+            <div class="tech-card animate-slide-up delay-100">
+                <div class="icon-box"><i class="fab fa-java"></i></div>
+                <span>Java</span>
+            </div>
+            <!-- Spring -->
+            <div class="tech-card animate-slide-up delay-200">
+                <div class="icon-box"><i class="fas fa-leaf"></i></div>
+                <span>Spring Boot</span>
+            </div>
+            <!-- Angular -->
+            <div class="tech-card animate-slide-up delay-300">
+                <div class="icon-box"><i class="fab fa-angular"></i></div>
+                <span>Angular</span>
+            </div>
+            <!-- Docker -->
+            <div class="tech-card animate-slide-up delay-400">
+                <div class="icon-box"><i class="fab fa-docker"></i></div>
+                <span>Docker</span>
+            </div>
+        </div>
     </div>
 </section>

@@ -1,5 +1,8 @@
 <section class="projects-section">
-    <h1>My Projects</h1>
+    <h1>
+        Mis Proyectos
+        <span class="underline"></span>
+    </h1>
 
     <div class="filters">
         <button *ngFor="let cat of categories" class="filter-btn" [class.active]="(filter$ | async) === cat"
@@ -8,11 +11,29 @@
         </button>
     </div>
 
+    <!-- Grid of Projects -->
     <div class="projects-grid">
-        <app-project-card *ngFor="let project of filteredProjects$ | async" [project]="project"></app-project-card>
+        <app-project-card *ngFor="let project of (paginatedProjects$ | async); let i = index" [project]="project"
+            class="animate-slide-up" [style.animation-delay]="(i * 100) + 'ms'">
+        </app-project-card>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-controls" *ngIf="(totalPages$ | async)! > 1">
+        <button class="page-btn" (click)="prevPage()" [disabled]="(currentPage$ | async) === 1">
+            <i class="fas fa-chevron-left"></i> Anterior
+        </button>
+
+        <span class="page-info">
+            Página {{ currentPage$ | async }} de {{ totalPages$ | async }}
+        </span>
+
+        <button class="page-btn" (click)="nextPage()" [disabled]="(currentPage$ | async) === (totalPages$ | async)">
+            Siguiente <i class="fas fa-chevron-right"></i>
+        </button>
     </div>
 
     <div *ngIf="(filteredProjects$ | async)?.length === 0" class="no-results">
-        No projects found for this category.
+        No se encontraron proyectos en esta categoría.
     </div>
 </section>

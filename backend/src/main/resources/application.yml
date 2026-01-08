@@ -1,6 +1,13 @@
 spring:
   application:
     name: portfolio-backend
+  output:
+    ansi:
+      enabled: ALWAYS
+logging:
+  level:
+    org.springframework.web: DEBUG
+    com.portfolio: DEBUG
   datasource:
     url: jdbc:h2:mem:portfolio
     driverClassName: org.h2.Driver

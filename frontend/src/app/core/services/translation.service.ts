@@ -7,26 +7,19 @@ type Language = 'en' | 'es';
   providedIn: 'root'
 })
 export class TranslationService {
-  private currentLang = signal<Language>('es'); // Default to Spanish as requested? Or check browser? Let's default ES for now as user speaks Spanish
+  private currentLanguage: Language = 'es'; // Default to Spanish as requested? Or check browser? Let's default ES for now as user speaks Spanish
 
   constructor() {
-    // Optional: detect browser language
-    const browserLang = navigator.language.split('-')[0];
-    if (browserLang === 'en') {
-      this.currentLang.set('en');
-    }
-  }
-
-  get currentLanguage() {
-    return this.currentLang();
+    this.currentLanguage = 'es';
   }
 
   toggleLanguage() {
-    this.currentLang.update(lang => lang === 'en' ? 'es' : 'en');
+    // Disabled as per user request to keep site in Spanish only
+    this.currentLanguage = 'es';
   }
 
   translate(key: string): string {
-    const dict = this.currentLang() === 'en' ? EN : ES;
-    return (dict as any)[key] || key;
+    const translation = this.currentLanguage === 'en' ? EN[key as keyof typeof EN] : ES[key as keyof typeof ES];
+    return translation || key;
   }
 }

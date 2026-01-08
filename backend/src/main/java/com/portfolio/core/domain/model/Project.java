@@ -19,4 +19,8 @@ public class Project {
     private String projectUrl;
     private LocalDate startDate;
     private LocalDate endDate;
+    private java.util.List<String> tags;
+    private String challenge;
+    private String solution;
+    private java.util.List<String> features;
 }

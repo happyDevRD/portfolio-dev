@@ -1,0 +1,16 @@
+<section class="testimonials-section">
+    <h2>{{ 'HOME_TESTIMONIALS_TITLE' | translate }}</h2>
+    <div class="testimonials-grid">
+        <div class="testimonial-card" *ngFor="let item of testimonials$ | async">
+            <div class="quote-icon">“</div>
+            <p class="content">{{ item.content }}</p>
+            <div class="author">
+                <img [src]="item.avatarUrl" alt="{{ item.authorName }}" class="avatar">
+                <div class="author-info">
+                    <h4>{{ item.authorName }}</h4>
+                    <span>{{ item.authorRole }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
