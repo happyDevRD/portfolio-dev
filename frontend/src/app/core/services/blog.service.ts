@@ -7,7 +7,7 @@ import { Article } from '../models/article.model';
     providedIn: 'root'
 })
 export class BlogService {
-    private apiUrl = 'http://localhost:8080/api/v1/articles';
+    private apiUrl = 'https://portfolio-dev-jora.onrender.com/api/v1/articles';
 
     constructor(private http: HttpClient) { }
 
