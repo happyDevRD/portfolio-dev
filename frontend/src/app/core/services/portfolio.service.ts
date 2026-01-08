@@ -11,7 +11,7 @@ import { Testimonial } from '../models/testimonial.model';
     providedIn: 'root'
 })
 export class PortfolioService {
-    private apiUrl = 'http://localhost:8080/api';
+    private apiUrl = 'https://portfolio-dev-jora.onrender.com/api';
 
     constructor(private http: HttpClient) { }
 
