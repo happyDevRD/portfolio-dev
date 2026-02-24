@@ -1,7 +1,10 @@
 package com.portfolio.infrastructure.rest;
 
+import com.portfolio.core.domain.model.Contact;
+import com.portfolio.core.usecase.ContactService;
 import com.portfolio.infrastructure.rest.dto.ContactRequest;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,18 +17,15 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/contact")
+@RequiredArgsConstructor
 @Slf4j
 public class ContactController {
 
-    private final com.portfolio.core.usecase.ContactService contactService;
-
-    public ContactController(com.portfolio.core.usecase.ContactService contactService) {
-        this.contactService = contactService;
-    }
+    private final ContactService contactService;
 
     @PostMapping
     public ResponseEntity<Map<String, String>> sendMessage(@Valid @RequestBody ContactRequest request) {
-        com.portfolio.core.domain.model.Contact contact = com.portfolio.core.domain.model.Contact.builder()
+        Contact contact = Contact.builder()
                 .name(request.getName())
                 .email(request.getEmail())
                 .message(request.getMessage())
@@ -34,6 +34,6 @@ public class ContactController {
         contactService.sendContactMessage(contact);
         log.info("Saved contact message from: {}", request.getEmail());
 
-        return ResponseEntity.ok(Collections.singletonMap("message", "Message sent successfully"));
+        return ResponseEntity.ok(Collections.singletonMap("message", "Mensaje enviado exitosamente"));
     }
 }

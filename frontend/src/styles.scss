@@ -1,13 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  /* "Clean Tech" Theme */
+  /* === SINGLE SOURCE OF TRUTH — "Clean Tech" Theme === */
+
+  /* Brand */
   --primary-color: #EA2831;
+  --secondary-color: #1e293b;
+
+  /* Backgrounds */
   --bg-color: #f8f6f6;
   --surface-color: #ffffff;
+  --surface-light: #f1f5f9;
+  --card-bg: #ffffff;
+
+  /* Text */
   --text-primary: #111827;
   --text-secondary: #4b5563;
+  --text-color: #334155;
+
+  /* Borders & Accents */
   --border-color: #e5e7eb;
+  --accent-color: #EA2831;
+  --accent-color-rgb: 234, 40, 49;
 
   /* Tech Colors */
   --angular-blue: #007ACC;
@@ -22,6 +36,7 @@
   /* Glass Tokens */
   --glass-bg: rgba(255, 255, 255, 0.85);
   --glass-blur: blur(12px);
+  --nav-blur-bg: rgba(255, 255, 255, 0.85);
 }
 
 html {

@@ -34,14 +34,17 @@ public class DataLoader implements CommandLineRunner {
                 }
 
                 // --- SERVICES ---
-                createService("API Development",
-                                "High-performance RESTful APIs using Spring Boot 3 and Clean Architecture.",
+                createService("Desarrollo de APIs",
+                                "APIs RESTful de alto rendimiento con Spring Boot 3 y Clean Architecture.",
                                 "api-icon");
-                createService("Frontend Architecture", "Scalable SPAs with Angular 17, Signals, and reactive patterns.",
+                createService("Arquitectura Frontend",
+                                "SPAs escalables con Angular 17, Signals y patrones reactivos.",
                                 "web-icon");
-                createService("Legacy Modernization", "Expertise in migrating Java EE monoliths to microservices.",
+                createService("Modernización Legacy",
+                                "Especializado en migrar monolitos Java EE a microservicios modernos.",
                                 "migration-icon");
-                createService("Reporting & Data", "Complex reporting solutions with JasperReports and Oracle PL/SQL.",
+                createService("Reportería y Datos",
+                                "Soluciones de reportes complejos con JasperReports y Oracle PL/SQL.",
                                 "report-icon");
 
                 // --- TESTIMONIALS ---
@@ -126,22 +129,6 @@ public class DataLoader implements CommandLineRunner {
                                 .solution("Applied Clean Architecture, Domain-Driven Design, and a fully automated CI/CD pipeline.")
                                 .features(List.of("Clean Architecture", "Automated CI/CD", "Responsive Modern UI"))
                                 .build());
-
-                // Seed Extra Projects for Pagination Testing
-                for (int i = 1; i <= 8; i++) {
-                        projectService.createProject(Project.builder()
-                                        .title("Proyecto Demo " + i)
-                                        .description("Proyecto de demostración para probar la paginación y el grid responsive. Incluye tecnologías modernas.")
-                                        .imageUrl("https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop")
-                                        .projectUrl("#")
-                                        .startDate(LocalDate.now().minusMonths(i * 2))
-                                        .endDate(LocalDate.now().minusMonths(i))
-                                        .tags(List.of(i % 2 == 0 ? "Backend" : "Frontend", "Demo", "Full Stack"))
-                                        .challenge("Demonstrating scalability.")
-                                        .solution("Implemented scalable patterns.")
-                                        .features(List.of("Feature A", "Feature B"))
-                                        .build());
-                }
 
                 // Seed Articles
                 Article a1 = Article.builder()

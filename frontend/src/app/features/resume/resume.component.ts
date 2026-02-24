@@ -3,15 +3,12 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { PortfolioService } from '../../core/services/portfolio.service';
 import { Observable } from 'rxjs';
 import { Experience } from '../../core/models/experience.model';
-import { Project } from '../../core/models/project.model';
 import { SkillTagComponent } from '../../shared/components/skill-tag/skill-tag.component';
 import { Skill } from '../../core/models/skill.model';
+import { SkillGroup } from '../../core/models/skill-group.model';
 import { map } from 'rxjs/operators';
 
-interface SkillGroup {
-  category: string;
-  items: Skill[];
-}
+const CATEGORY_ORDER = ['Backend', 'Frontend', 'DevOps', 'Database', 'Tools', 'Reporting', 'Quality'];
 
 @Component({
   selector: 'app-resume',
@@ -21,47 +18,31 @@ interface SkillGroup {
   styleUrl: './resume.component.scss'
 })
 export class ResumeComponent implements OnInit {
-  experiences$: Observable<Experience[]> | undefined;
-  projects$: Observable<Project[]> | undefined;
-  skillGroups$: Observable<SkillGroup[]> | undefined;
+  experiences$!: Observable<Experience[]>;
+  skillGroups$!: Observable<SkillGroup[]>;
 
   constructor(private portfolioService: PortfolioService) { }
 
   ngOnInit(): void {
     this.experiences$ = this.portfolioService.getExperiences();
-    this.projects$ = this.portfolioService.getProjects();
 
     this.skillGroups$ = this.portfolioService.getSkills().pipe(
       map(skills => {
-        const groups: { [key: string]: Skill[] } = {};
+        const groups: Record<string, Skill[]> = {};
         skills.forEach(skill => {
-          if (!groups[skill.category]) {
-            groups[skill.category] = [];
-          }
+          if (!groups[skill.category]) groups[skill.category] = [];
           groups[skill.category].push(skill);
         });
-
-        // Define order if desired, or just return keys
-        // Prioritize: Backend, Frontend, DevOps, Tools, then others
-        const order = ['Backend', 'Frontend', 'DevOps', 'Database', 'Tools', 'Reporting', 'Quality'];
-
         return Object.keys(groups)
           .sort((a, b) => {
-            const idxA = order.indexOf(a);
-            const idxB = order.indexOf(b);
-            // If both in order list, sort by index
-            if (idxA !== -1 && idxB !== -1) return idxA - idxB;
-            // If a is in list, it comes first
-            if (idxA !== -1) return -1;
-            // If b is in list, it comes first
-            if (idxB !== -1) return 1;
-            // Otherwise sort alphabetic
+            const ia = CATEGORY_ORDER.indexOf(a);
+            const ib = CATEGORY_ORDER.indexOf(b);
+            if (ia !== -1 && ib !== -1) return ia - ib;
+            if (ia !== -1) return -1;
+            if (ib !== -1) return 1;
             return a.localeCompare(b);
           })
-          .map(category => ({
-            category,
-            items: groups[category]
-          }));
+          .map(category => ({ category, items: groups[category] }));
       })
     );
   }

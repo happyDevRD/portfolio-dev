@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BlogService } from '../../../core/services/blog.service';
 import { Article } from '../../../core/models/article.model';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
 @Component({
   selector: 'app-blog',
   standalone: true,
@@ -12,11 +14,17 @@ import { Observable } from 'rxjs';
   styleUrl: './blog.component.scss'
 })
 export class BlogComponent implements OnInit {
-  articles$: Observable<Article[]> | undefined;
+  articles$!: Observable<Article[]>;
+  hasError = false;
 
   constructor(private blogService: BlogService) { }
 
   ngOnInit(): void {
-    this.articles$ = this.blogService.getArticles();
+    this.articles$ = this.blogService.getArticles().pipe(
+      catchError(() => {
+        this.hasError = true;
+        return of([]);
+      })
+    );
   }
 }

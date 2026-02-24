@@ -35,7 +35,7 @@
         font-size: 3rem;
         line-height: 1.2;
         margin-bottom: 1rem;
-        color: var(--secondary-color);
+        color: var(--text-primary);
     }
 
     .meta {
@@ -47,7 +47,7 @@
 .post-content {
     font-size: 1.25rem;
     line-height: 1.8;
-    color: var(--text-color);
+    color: var(--text-secondary);
 
     .summary {
         font-size: 1.4rem;
@@ -72,7 +72,7 @@
 
         h2 {
             margin-top: 2rem;
-            color: var(--secondary-color);
+            color: var(--text-primary);
             font-weight: 800;
         }
 

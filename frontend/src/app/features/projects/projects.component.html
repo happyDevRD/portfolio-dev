@@ -5,7 +5,7 @@
     </h1>
 
     <div class="filters">
-        <button *ngFor="let cat of categories" class="filter-btn" [class.active]="(filter$ | async) === cat"
+        <button *ngFor="let cat of (categories$ | async)" class="filter-btn" [class.active]="(filter$ | async) === cat"
             (click)="setFilter(cat)">
             {{ cat }}
         </button>

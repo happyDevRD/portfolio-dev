@@ -6,12 +6,13 @@ import { Skill } from '../models/skill.model';
 import { Experience } from '../models/experience.model';
 import { Service } from '../models/service.model';
 import { Testimonial } from '../models/testimonial.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PortfolioService {
-    private apiUrl = 'https://portfolio-dev-jora.onrender.com/api';
+    private apiUrl = environment.apiUrl;
 
     constructor(private http: HttpClient) { }
 

@@ -4,53 +4,76 @@
         <p>Pensamientos sobre arquitectura, código y café.</p>
     </header>
 
-    <div class="bento-grid" *ngIf="articles$ | async as articles">
-        <!-- Featured (Index 0) - Spans 2 cols, 2 rows -->
-        <article class="bento-card featured animate-fade-in" *ngIf="articles[0]"
-            [routerLink]="['/blog', articles[0].slug]">
-            <div class="card-content">
-                <div class="tags">
-                    <span *ngFor="let tag of articles[0].tags">{{ tag }}</span>
-                </div>
-                <h2>{{ articles[0].title }}</h2>
-                <p>{{ articles[0].summary }}</p>
-                <div class="meta">
-                    <span>{{ articles[0].publishedAt | date:'mediumDate' }}</span>
-                    <span>•</span>
-                    <span>{{ articles[0].readingTimeMinutes }} min de lectura</span>
-                </div>
-            </div>
-            <div class="card-bg-decoration"></div>
-        </article>
-
-        <!-- Secondary (Index 1) - Spans 1 col, 2 rows -->
-        <article class="bento-card tall" *ngIf="articles[1]" [routerLink]="['/blog', articles[1].slug]">
-            <div class="card-content">
-                <div class="tags">
-                    <span *ngFor="let tag of articles[1].tags">{{ tag }}</span>
-                </div>
-                <h3>{{ articles[1].title }}</h3>
-                <p>{{ articles[1].summary }}</p>
-                <div class="meta">
-                    <span>{{ articles[1].readingTimeMinutes }} min de lectura</span>
-                </div>
-            </div>
-        </article>
-
-        <!-- The Rest (Grid items) -->
-        <ng-container *ngFor="let article of articles.slice(2); let i = index">
-            <article class="bento-card standard animate-fade-in" [routerLink]="['/blog', article.slug]"
-                [style.animation-delay]="((i + 2) * 100) + 'ms'">
-                <div class="card-content">
-                    <div class="tags">
-                        <span *ngFor="let tag of article.tags">{{ tag }}</span>
-                    </div>
-                    <h3>{{ article.title }}</h3>
-                    <div class="meta">
-                        <span>{{ article.publishedAt | date:'MMM d' }}</span>
-                    </div>
-                </div>
-            </article>
-        </ng-container>
+    <!-- Error State -->
+    <div class="empty-state" *ngIf="hasError">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>No se pudieron cargar los artículos. Intenta más tarde.</p>
     </div>
+
+    <ng-container *ngIf="!hasError">
+        <ng-container *ngIf="articles$ | async as articles">
+
+            <!-- Empty State -->
+            <div class="empty-state" *ngIf="articles.length === 0">
+                <i class="fas fa-book-open"></i>
+                <p>No hay artículos publicados aún.</p>
+            </div>
+
+            <div class="bento-grid" *ngIf="articles.length > 0">
+                <!-- Featured (Index 0) - Spans 2 cols, 2 rows -->
+                <article class="bento-card featured animate-fade-in" *ngIf="articles[0]"
+                    [routerLink]="['/blog', articles[0].slug]">
+                    <div class="card-content">
+                        <div class="tags">
+                            <span *ngFor="let tag of articles[0].tags">{{ tag }}</span>
+                        </div>
+                        <h2>{{ articles[0].title }}</h2>
+                        <p>{{ articles[0].summary }}</p>
+                        <div class="meta">
+                            <span>{{ articles[0].publishedAt | date:'mediumDate' }}</span>
+                            <span>•</span>
+                            <span>{{ articles[0].readingTimeMinutes }} min de lectura</span>
+                        </div>
+                    </div>
+                    <div class="card-bg-decoration"></div>
+                </article>
+
+                <!-- Secondary (Index 1) - Spans 1 col, 2 rows -->
+                <article class="bento-card tall" *ngIf="articles[1]" [routerLink]="['/blog', articles[1].slug]">
+                    <div class="card-content">
+                        <div class="tags">
+                            <span *ngFor="let tag of articles[1].tags">{{ tag }}</span>
+                        </div>
+                        <h3>{{ articles[1].title }}</h3>
+                        <p>{{ articles[1].summary }}</p>
+                        <div class="meta">
+                            <span>{{ articles[1].publishedAt | date:'mediumDate' }}</span>
+                            <span>•</span>
+                            <span>{{ articles[1].readingTimeMinutes }} min de lectura</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- The Rest (Grid items) -->
+                <ng-container *ngFor="let article of articles.slice(2); let i = index">
+                    <article class="bento-card standard animate-fade-in" [routerLink]="['/blog', article.slug]"
+                        [style.animation-delay]="((i + 2) * 100) + 'ms'">
+                        <div class="card-content">
+                            <div class="tags">
+                                <span *ngFor="let tag of article.tags">{{ tag }}</span>
+                            </div>
+                            <h3>{{ article.title }}</h3>
+                            <p class="summary-text">{{ article.summary }}</p>
+                            <div class="meta">
+                                <span>{{ article.publishedAt | date:'d MMM' }}</span>
+                                <span>•</span>
+                                <span>{{ article.readingTimeMinutes }} min de lectura</span>
+                            </div>
+                        </div>
+                    </article>
+                </ng-container>
+            </div>
+
+        </ng-container>
+    </ng-container>
 </div>

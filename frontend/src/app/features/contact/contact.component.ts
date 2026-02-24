@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-contact',
@@ -16,7 +17,7 @@ export class ContactComponent {
   successMessage = '';
   errorMessage = '';
 
-  private readonly apiUrl = 'https://portfolio-dev-jora.onrender.com/api/contact';
+  private readonly apiUrl = `${environment.apiUrl}/contact`;
 
   constructor(
     private fb: FormBuilder,

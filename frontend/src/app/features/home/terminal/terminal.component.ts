@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subject, takeUntil } from 'rxjs';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { Skill } from '../../../core/models/skill.model';
 
@@ -15,30 +16,38 @@ interface TerminalLine {
   templateUrl: './terminal.component.html',
   styleUrl: './terminal.component.scss'
 })
-export class TerminalComponent implements OnInit, AfterViewChecked {
+export class TerminalComponent implements OnInit, OnDestroy {
   @ViewChild('terminalBody') terminalBody!: ElementRef;
 
   lines: TerminalLine[] = [];
   isTyping = false;
   currentText = '';
 
+  private destroyed$ = new Subject<void>();
+  private destroyed = false;
+
   constructor(private portfolioService: PortfolioService) {}
 
   ngOnInit() {
-    this.portfolioService.getSkills().subscribe({
-      next: (skills) => this.startSequence(skills),
-      error: () => this.startSequence([])
-    });
+    this.portfolioService.getSkills()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (skills) => this.startSequence(skills),
+        error: () => this.startSequence([])
+      });
   }
 
-  ngAfterViewChecked() {
-    this.scrollToBottom();
+  ngOnDestroy() {
+    this.destroyed = true;
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
-  scrollToBottom(): void {
+  private scrollToBottom(): void {
     try {
-      this.terminalBody.nativeElement.scrollTop = this.terminalBody.nativeElement.scrollHeight;
-    } catch (err) { }
+      const el = this.terminalBody?.nativeElement;
+      if (el) el.scrollTop = el.scrollHeight;
+    } catch { }
   }
 
   private buildSkillsJson(skills: Skill[]): string {
@@ -67,9 +76,12 @@ export class TerminalComponent implements OnInit, AfterViewChecked {
     await this.delay(1000);
 
     for (const item of commands) {
+      if (this.destroyed) return;
       await this.typeCommand(item.cmd);
+      if (this.destroyed) return;
       this.lines.push({ type: 'input', content: item.cmd });
       this.isTyping = false;
+      this.scrollToBottom();
       await this.delay(300);
 
       if (item.isJson) {
@@ -77,6 +89,7 @@ export class TerminalComponent implements OnInit, AfterViewChecked {
       } else {
         this.lines.push({ type: 'success', content: item.output });
       }
+      this.scrollToBottom();
       await this.delay(800);
     }
   }
@@ -85,12 +98,13 @@ export class TerminalComponent implements OnInit, AfterViewChecked {
     this.isTyping = true;
     this.currentText = '';
     for (const char of cmd) {
+      if (this.destroyed) return;
       this.currentText += char;
       await this.delay(50 + Math.random() * 50);
     }
   }
 
   delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise<void>(resolve => setTimeout(resolve, ms));
   }
 }

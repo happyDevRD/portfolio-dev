@@ -7,10 +7,20 @@
         text-align: center;
         font-size: 2.5rem;
         margin-bottom: 3rem;
-        background: linear-gradient(to right, var(--primary), var(--secondary));
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: var(--text-primary);
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
     }
 
     .services-grid {
@@ -20,18 +30,17 @@
     }
 
     .service-card {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
         border-radius: 16px;
         padding: 2rem;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         text-align: center;
 
         &:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary-color);
         }
 
         .icon-circle {
@@ -44,7 +53,12 @@
             justify-content: center;
             margin: 0 auto 1.5rem;
             font-size: 1.5rem;
-            border: 2px solid var(--primary);
+            border: 2px solid var(--border-color);
+            transition: border-color 0.3s ease;
+        }
+
+        &:hover .icon-circle {
+            border-color: var(--primary-color);
         }
 
         h3 {
