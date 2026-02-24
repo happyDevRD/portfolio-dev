@@ -1,70 +1,42 @@
 <section class="home-section" id="home">
-    <!-- Background Glow Blob -->
     <div class="glow-blob"></div>
 
     <div class="container">
-        <div class="hero-text">
-            <!-- Greeting Badge -->
-            <div class="greeting-badge animate-slide-up">
-                <span class="pulse-dot"></span>
-                Hola, Soy
+        <!-- Hero: 2 columnas — texto + terminal -->
+        <div class="hero-grid">
+
+            <!-- Columna izquierda: texto -->
+            <div class="hero-text animate-slide-up">
+                <div class="greeting-badge">
+                    <span class="pulse-dot"></span>
+                    Hola, Soy
+                </div>
+
+                <h1 class="main-title">
+                    Eleazar Garcia<br />
+                    <span class="gradient-text">Desarrollador</span><br />
+                    Full Stack
+                </h1>
+
+                <p class="bio-text">
+                    Guiando proyectos a través de todo el ciclo de vida full-stack, desde la vibrante interfaz de
+                    <span class="highlight-angular">Angular</span> hasta la robusta lógica de negocio con
+                    <span class="highlight-java">Java</span>.
+                </p>
+
+                <div class="cta-group">
+                    <a class="btn btn-primary" routerLink="/projects">
+                        Ver Proyectos
+                    </a>
+                    <a class="btn btn-outline" routerLink="/contact">
+                        Contactar <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
 
-            <!-- Main Title -->
-            <h1 class="main-title animate-slide-up delay-100">
-                Eleazar Garcia<br />
-                <span class="gradient-text">Desarrollador</span><br />
-                Full Stack
-            </h1>
-
-            <!-- Bio -->
-            <p class="bio-text animate-slide-up delay-100">
-                Guiando proyectos a través de todo el ciclo de vida full-stack, desde la vibrante interfaz de
-                <span class="highlight-angular">Angular</span> hasta la robusta lógica de negocio con
-                <span class="highlight-java">Java</span>.
-            </p>
-
-            <!-- CTA Buttons -->
-            <div class="cta-group animate-slide-up delay-200">
-                <a class="btn btn-primary" routerLink="/projects">
-                    Ver Proyectos
-                </a>
-                <a class="btn btn-outline" routerLink="/contact">
-                    Contactar <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- Journey Nodes Section -->
-        <div class="journey-container">
-            <div class="journey-path"></div>
-
-            <!-- Node: Angular -->
-            <div class="journey-node angular shadow-lg animate-fade-in delay-300">
-                <i class="fab fa-angular icon"></i>
-                <h3>Frontend Mastery</h3>
-                <p>Construcción de interfaces interactivas y dinámicas con Angular.</p>
-            </div>
-
-            <!-- Node: API -->
-            <div class="journey-node common shadow-lg animate-fade-in delay-400">
-                <i class="fas fa-server icon-indigo"></i>
-                <h3 class="text-indigo">API Integration</h3>
-                <p>Comunicación eficiente y segura entre frontend y backend.</p>
-            </div>
-
-            <!-- Node: Data -->
-            <div class="journey-node common shadow-lg animate-fade-in delay-500">
-                <i class="fas fa-database icon-green"></i>
-                <h3 class="text-green">Data Management</h3>
-                <p>Diseño y optimización de bases de datos relacionales y no-SQL.</p>
-            </div>
-
-            <!-- Node: Java -->
-            <div class="journey-node java shadow-lg animate-fade-in delay-600">
-                <i class="fab fa-java icon"></i>
-                <h3>Backend Power</h3>
-                <p>Desarrollo de lógica de negocio robusta y escalable con Java.</p>
+            <!-- Columna derecha: terminal -->
+            <div class="hero-terminal animate-fade-in delay-300">
+                <app-terminal></app-terminal>
             </div>
         </div>
     </div>
@@ -110,13 +82,6 @@
                 </div>
             </div>
         </ng-template>
-    </div>
-</section>
-
-<!-- Terminal Section -->
-<section class="terminal-section">
-    <div class="container">
-        <app-terminal></app-terminal>
     </div>
 </section>
 

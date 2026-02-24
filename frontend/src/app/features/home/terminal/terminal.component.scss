@@ -1,71 +1,60 @@
 .terminal-window {
-    background: #000;
-    backdrop-filter: none;
-    /* Solid black or maybe slight opacity */
-    border-radius: 4px;
-    /* Sharp */
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
-    /* single pixel border */
+    background: #0d0d0d;
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08);
     width: 100%;
-    max-width: 800px;
-    margin: 2rem auto;
-    font-family: 'Geist Mono', 'Fira Code', monospace;
+    max-width: 100%;
+    margin: 0;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
     overflow: hidden;
     position: relative;
-
-    /* Subtle Outer Glow - Removed for Prism */
-    &::before {
-        display: none;
-    }
 }
 
 .terminal-header {
-    background: #111;
-    padding: 0.5rem 1rem;
+    background: #1a1a1a;
+    padding: 0.65rem 1.2rem;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 
     .buttons {
         display: flex;
-        gap: 6px;
+        gap: 7px;
 
         span {
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             display: inline-block;
-            background-color: #333;
-            /* Grayscale buttons */
             transition: opacity 0.2s;
 
-            &:hover {
-                opacity: 0.8;
-            }
+            &:nth-child(1) { background-color: #ff5f57; }
+            &:nth-child(2) { background-color: #ffbd2e; }
+            &:nth-child(3) { background-color: #28c840; }
 
-            /* Hover colors could be subtle gray shades or kept minimal */
+            &:hover { opacity: 0.75; }
         }
     }
 
     .title {
-        color: #666;
-        font-size: 0.8rem;
+        color: #555;
+        font-size: 0.72rem;
         font-weight: 500;
-        margin-left: 1rem;
         flex-grow: 1;
         text-align: center;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
     }
 }
 
 .terminal-body {
-    padding: 1.5rem;
+    padding: 1.5rem 1.75rem;
     color: #e5e5e5;
-    height: 350px;
+    height: 320px;
     overflow-y: auto;
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 0.85rem;
+    line-height: 1.6;
 
     /* Scrollbar Styling */
     &::-webkit-scrollbar {
@@ -86,11 +75,9 @@
     }
 
     .prompt {
-        color: #fff;
-        /* White prompt */
+        color: #ea2831;
         margin-right: 0.5rem;
-        font-weight: 600;
-        text-shadow: none;
+        font-weight: 700;
     }
 
     .input {
@@ -99,27 +86,27 @@
     }
 
     .output {
-        color: #a3a3a3;
+        color: #8b949e;
         margin-bottom: 1rem;
 
         pre {
-            color: #d4d4d4;
+            color: #c9d1d9;
             font-family: inherit;
-            margin: 0;
-            background: #111;
-            padding: 1rem;
-            border-radius: 2px;
-            border: 1px solid #333;
+            margin: 0.25rem 0;
+            background: #161b22;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            white-space: pre-wrap;
         }
     }
 
     .success {
-        color: #fff;
-        /* White for success too, keep it clean */
+        color: #3fb950;
         margin-bottom: 0.5rem;
         font-weight: 500;
-        border-left: 2px solid #fff;
         padding-left: 0.5rem;
+        border-left: 2px solid #3fb950;
     }
 
     .typing-area {
@@ -129,13 +116,13 @@
 
     .cursor {
         animation: blink 1s step-end infinite;
-        color: #fff;
-        margin-left: 4px;
-        text-shadow: none;
-        background: #fff;
-        /* Block cursor */
+        color: #ea2831;
+        margin-left: 2px;
+        background: #ea2831;
         width: 8px;
-        height: 18px;
+        height: 16px;
+        display: inline-block;
+        vertical-align: text-bottom;
     }
 }
 

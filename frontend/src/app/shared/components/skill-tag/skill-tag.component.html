@@ -1,4 +1,9 @@
 <div class="skill-tag" [title]="skill.name + ': ' + skill.proficiency + '%'">
-    <img *ngIf="skill.iconUrl" [src]="skill.iconUrl" [alt]="skill.name" class="skill-icon">
+    <ng-container *ngIf="skill.iconUrl && !imgError; else faFallback">
+        <img [src]="skill.iconUrl" [alt]="skill.name" class="skill-icon" (error)="onImgError()">
+    </ng-container>
+    <ng-template #faFallback>
+        <i [class]="faIcon + ' skill-fa-icon'"></i>
+    </ng-template>
     <span class="skill-name">{{ skill.name }}</span>
 </div>
