@@ -4,7 +4,7 @@ import { PortfolioService } from '../../core/services/portfolio.service';
 import { Observable } from 'rxjs';
 import { Experience } from '../../core/models/experience.model';
 import { Project } from '../../core/models/project.model';
-import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+import { SkillTagComponent } from '../../shared/components/skill-tag/skill-tag.component';
 import { Skill } from '../../core/models/skill.model';
 import { map } from 'rxjs/operators';
 
@@ -16,7 +16,7 @@ interface SkillGroup {
 @Component({
   selector: 'app-resume',
   standalone: true,
-  imports: [CommonModule, DatePipe, TranslatePipe],
+  imports: [CommonModule, DatePipe, SkillTagComponent],
   templateUrl: './resume.component.html',
   styleUrl: './resume.component.scss'
 })

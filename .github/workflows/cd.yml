@@ -1,0 +1,34 @@
+name: CD — Deploy to Render
+
+on:
+  workflow_run:
+    workflows: ["CI — Build & Test"]
+    types: [completed]
+    branches: [master, main]
+  workflow_dispatch:  # permite dispararlo manualmente desde GitHub
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Solo despliega si el CI pasó exitosamente
+  # ─────────────────────────────────────────────
+  deploy-backend:
+    name: Deploy Backend → Render
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Trigger Render Deploy (Backend)
+        run: |
+          curl -s -X POST "${{ secrets.RENDER_BACKEND_DEPLOY_HOOK }}" \
+            -H "Content-Type: application/json"
+
+  deploy-frontend:
+    name: Deploy Frontend → Render
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Trigger Render Deploy (Frontend)
+        run: |
+          curl -s -X POST "${{ secrets.RENDER_FRONTEND_DEPLOY_HOOK }}" \
+            -H "Content-Type: application/json"

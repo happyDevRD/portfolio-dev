@@ -40,6 +40,14 @@ public class ProjectController {
                 .body(projectService.createProject(project));
     }
 
+    @PutMapping("/{id}")
+    @Operation(summary = "Update a project")
+    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project project) {
+        return projectService.updateProject(id, project)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a project")
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {

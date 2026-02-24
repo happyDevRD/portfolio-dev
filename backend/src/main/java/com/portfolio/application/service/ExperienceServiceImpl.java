@@ -33,6 +33,15 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     @Transactional
+    public Optional<Experience> updateExperience(Long id, Experience updated) {
+        return experienceRepository.findById(id).map(existing -> {
+            updated.setId(existing.getId());
+            return experienceRepository.save(updated);
+        });
+    }
+
+    @Override
+    @Transactional
     public void deleteExperience(Long id) {
         experienceRepository.deleteById(id);
     }

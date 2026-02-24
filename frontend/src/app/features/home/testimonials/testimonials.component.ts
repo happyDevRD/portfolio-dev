@@ -3,12 +3,10 @@ import { CommonModule } from '@angular/common';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { Testimonial } from '../../../core/models/testimonial.model';
 import { Observable } from 'rxjs';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-
 @Component({
     selector: 'app-testimonials',
     standalone: true,
-    imports: [CommonModule, TranslatePipe],
+    imports: [CommonModule],
     templateUrl: './testimonials.component.html',
     styleUrl: './testimonials.component.scss'
 })

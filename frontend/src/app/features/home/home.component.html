@@ -81,27 +81,47 @@
             <p>Herramientas y frameworks que utilizo para construir soluciones robustas y eficientes.</p>
         </div>
 
-        <div class="tech-grid">
-            <!-- Java -->
-            <div class="tech-card animate-slide-up delay-100">
-                <div class="icon-box"><i class="fab fa-java"></i></div>
-                <span>Java</span>
+        <ng-container *ngIf="skillGroups$ | async as groups; else techLoading">
+            <div *ngFor="let group of groups" class="skill-group animate-slide-up">
+                <h3 class="skill-category-title">{{ group.category }}</h3>
+                <div class="skill-tags-row">
+                    <app-skill-tag *ngFor="let skill of group.items" [skill]="skill"></app-skill-tag>
+                </div>
             </div>
-            <!-- Spring -->
-            <div class="tech-card animate-slide-up delay-200">
-                <div class="icon-box"><i class="fas fa-leaf"></i></div>
-                <span>Spring Boot</span>
+        </ng-container>
+
+        <ng-template #techLoading>
+            <div class="tech-grid">
+                <div class="tech-card animate-slide-up delay-100">
+                    <div class="icon-box"><i class="fab fa-java"></i></div>
+                    <span>Java</span>
+                </div>
+                <div class="tech-card animate-slide-up delay-200">
+                    <div class="icon-box"><i class="fas fa-leaf"></i></div>
+                    <span>Spring Boot</span>
+                </div>
+                <div class="tech-card animate-slide-up delay-300">
+                    <div class="icon-box"><i class="fab fa-angular"></i></div>
+                    <span>Angular</span>
+                </div>
+                <div class="tech-card animate-slide-up delay-400">
+                    <div class="icon-box"><i class="fab fa-docker"></i></div>
+                    <span>Docker</span>
+                </div>
             </div>
-            <!-- Angular -->
-            <div class="tech-card animate-slide-up delay-300">
-                <div class="icon-box"><i class="fab fa-angular"></i></div>
-                <span>Angular</span>
-            </div>
-            <!-- Docker -->
-            <div class="tech-card animate-slide-up delay-400">
-                <div class="icon-box"><i class="fab fa-docker"></i></div>
-                <span>Docker</span>
-            </div>
-        </div>
+        </ng-template>
     </div>
 </section>
+
+<!-- Terminal Section -->
+<section class="terminal-section">
+    <div class="container">
+        <app-terminal></app-terminal>
+    </div>
+</section>
+
+<!-- Services Section -->
+<app-services></app-services>
+
+<!-- Testimonials Section -->
+<app-testimonials></app-testimonials>

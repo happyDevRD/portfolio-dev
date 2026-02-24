@@ -1,6 +1,6 @@
 <article class="post-container" *ngIf="article$ | async as article">
     <header class="post-header">
-        <a routerLink="/blog" class="back-link">← {{ 'BTN_BACK' | translate }}</a>
+        <a routerLink="/blog" class="back-link">← Volver</a>
         <div class="tags">
             <span *ngFor="let tag of article.tags">#{{ tag }}</span>
         </div>
@@ -8,7 +8,7 @@
         <div class="meta">
             <span>{{ article.publishedAt | date:'longDate' }}</span>
             <span class="dot">·</span>
-            <span>{{ article.readingTimeMinutes }} min read</span>
+            <span>{{ article.readingTimeMinutes }} min de lectura</span>
         </div>
     </header>
 

@@ -11,5 +11,7 @@ public interface ProjectService {
 
     Project createProject(Project project);
 
+    Optional<Project> updateProject(Long id, Project project);
+
     void deleteProject(Long id);
 }

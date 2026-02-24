@@ -6,6 +6,7 @@ import com.portfolio.core.usecase.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,8 +18,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Article> getAllArticles() {
-        // In real app, we would sort by date desc here
-        return articleRepository.findAll();
+        return articleRepository.findAll().stream()
+                .sorted(Comparator.comparing(Article::getPublishedAt).reversed())
+                .toList();
     }
 
     @Override

@@ -3,12 +3,10 @@ import { CommonModule } from '@angular/common';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { Service } from '../../../core/models/service.model';
 import { Observable } from 'rxjs';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-
 @Component({
     selector: 'app-services',
     standalone: true,
-    imports: [CommonModule, TranslatePipe],
+    imports: [CommonModule],
     templateUrl: './services.component.html',
     styleUrl: './services.component.scss'
 })

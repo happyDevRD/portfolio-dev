@@ -4,12 +4,10 @@ import { RouterModule } from '@angular/router';
 import { BlogService } from '../../../core/services/blog.service';
 import { Article } from '../../../core/models/article.model';
 import { Observable } from 'rxjs';
-import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
-
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslatePipe],
+  imports: [CommonModule, RouterModule],
   templateUrl: './blog.component.html',
   styleUrl: './blog.component.scss'
 })

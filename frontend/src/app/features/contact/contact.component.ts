@@ -3,12 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
-import { TranslatePipe } from '../../shared/pipes/translate.pipe';
-
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss'
 })
@@ -18,6 +16,8 @@ export class ContactComponent {
   successMessage = '';
   errorMessage = '';
 
+  private readonly apiUrl = 'https://portfolio-dev-jora.onrender.com/api/contact';
+
   constructor(
     private fb: FormBuilder,
     private http: HttpClient
@@ -25,7 +25,6 @@ export class ContactComponent {
     this.contactForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      subject: ['', Validators.required],
       message: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
@@ -37,19 +36,15 @@ export class ContactComponent {
     this.successMessage = '';
     this.errorMessage = '';
 
-    const url = 'http://localhost:8080/api/contact';
-
-    this.http.post(url, this.contactForm.value).subscribe({
-      next: (response) => {
-        console.log('Form submitted:', response);
+    this.http.post(this.apiUrl, this.contactForm.value).subscribe({
+      next: () => {
         this.isSubmitting = false;
-        this.successMessage = 'Message sent successfully!';
+        this.successMessage = '¡Mensaje enviado correctamente!';
         this.contactForm.reset();
       },
-      error: (error) => {
-        console.error('Error submitting form:', error);
+      error: () => {
         this.isSubmitting = false;
-        this.errorMessage = 'Failed to send message. Please try again later.';
+        this.errorMessage = 'No se pudo enviar el mensaje. Por favor intenta más tarde.';
       }
     });
   }

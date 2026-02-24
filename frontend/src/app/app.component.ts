@@ -1,7 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
-import { TranslationService } from './core/services/translation.service';
-import { TranslatePipe } from './shared/pipes/translate.pipe';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { slideInAnimation } from './core/animations/route.animations';
@@ -10,14 +8,13 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, FooterComponent, TranslatePipe],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   animations: [slideInAnimation]
 })
 export class AppComponent implements OnInit {
   isDarkMode = false;
-  translationService = inject(TranslationService);
   private router = inject(Router);
 
   ngOnInit() {

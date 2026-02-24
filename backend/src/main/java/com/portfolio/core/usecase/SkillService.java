@@ -11,5 +11,7 @@ public interface SkillService {
 
     Skill createSkill(Skill skill);
 
+    Optional<Skill> updateSkill(Long id, Skill skill);
+
     void deleteSkill(Long id);
 }

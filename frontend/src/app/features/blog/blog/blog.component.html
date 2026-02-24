@@ -1,8 +1,7 @@
 <div class="blog-container">
     <header class="blog-header">
-        <h1>{{ 'BLOG_TITLE_PREFIX' | translate }} <span class="gradient-text">{{ 'BLOG_TITLE_SUFFIX' | translate
-                }}</span></h1>
-        <p>{{ 'BLOG_SUBTITLE' | translate }}</p>
+        <h1>Bitácora <span class="gradient-text">de Ingeniería</span></h1>
+        <p>Pensamientos sobre arquitectura, código y café.</p>
     </header>
 
     <div class="bento-grid" *ngIf="articles$ | async as articles">
@@ -18,7 +17,7 @@
                 <div class="meta">
                     <span>{{ articles[0].publishedAt | date:'mediumDate' }}</span>
                     <span>•</span>
-                    <span>{{ articles[0].readingTimeMinutes }} {{ 'BLOG_MIN_READ' | translate }}</span>
+                    <span>{{ articles[0].readingTimeMinutes }} min de lectura</span>
                 </div>
             </div>
             <div class="card-bg-decoration"></div>
@@ -33,7 +32,7 @@
                 <h3>{{ articles[1].title }}</h3>
                 <p>{{ articles[1].summary }}</p>
                 <div class="meta">
-                    <span>{{ articles[1].readingTimeMinutes }} {{ 'BLOG_MIN_READ' | translate }}</span>
+                    <span>{{ articles[1].readingTimeMinutes }} min de lectura</span>
                 </div>
             </div>
         </article>

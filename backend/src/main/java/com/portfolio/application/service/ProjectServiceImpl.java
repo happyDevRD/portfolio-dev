@@ -34,6 +34,15 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional
+    public Optional<Project> updateProject(Long id, Project updated) {
+        return projectRepository.findById(id).map(existing -> {
+            updated.setId(existing.getId());
+            return projectRepository.save(updated);
+        });
+    }
+
+    @Override
+    @Transactional
     public void deleteProject(Long id) {
         projectRepository.deleteById(id);
     }

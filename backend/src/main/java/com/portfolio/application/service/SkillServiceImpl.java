@@ -33,6 +33,15 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     @Transactional
+    public Optional<Skill> updateSkill(Long id, Skill updated) {
+        return skillRepository.findById(id).map(existing -> {
+            updated.setId(existing.getId());
+            return skillRepository.save(updated);
+        });
+    }
+
+    @Override
+    @Transactional
     public void deleteSkill(Long id) {
         skillRepository.deleteById(id);
     }

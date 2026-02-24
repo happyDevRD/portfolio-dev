@@ -7,15 +7,14 @@
         <p>{{ project.description }}</p>
         <div class="dates">
             <span>{{ project.startDate | date }}</span> -
-            <span>{{ project.endDate ? (project.endDate | date) : 'Present' }}</span>
+            <span>{{ project.endDate ? (project.endDate | date) : 'Presente' }}</span>
         </div>
         <div class="tags" *ngIf="project.tags && project.tags.length > 0">
             <span class="tag" *ngFor="let tag of project.tags">{{ tag }}</span>
         </div>
         <div class="card-actions">
-            <a [routerLink]="['/projects', project.id]" class="btn secondary-btn">View Case Study</a>
-            <a *ngIf="project.projectUrl" [href]="project.projectUrl" target="_blank" class="btn primary-btn">View
-                Live</a>
+            <a [routerLink]="['/projects', project.id]" class="btn secondary-btn">Ver Caso de Estudio</a>
+            <a *ngIf="project.projectUrl && project.projectUrl !== '#'" [href]="project.projectUrl" target="_blank" class="btn primary-btn">Ver en Vivo</a>
         </div>
     </div>
 </div>

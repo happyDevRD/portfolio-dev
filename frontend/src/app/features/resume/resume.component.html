@@ -3,12 +3,12 @@
     <div class="web-resume">
         <header class="resume-hero">
             <div class="hero-left">
-                <h1>{{ 'RESUME_TITLE' | translate }}</h1>
-                <p>{{ 'HOME_ROLE' | translate }}</p>
+                <h1>Curriculum Vitae</h1>
+                <p>Desarrollador Full Stack</p>
             </div>
             <div class="hero-right">
                 <button class="btn-download" (click)="downloadPDF()">
-                    <span class="icon">📄</span> {{ 'RESUME_DOWNLOAD_PDF' | translate }}
+                    <span class="icon">📄</span> Descargar PDF
                 </button>
             </div>
         </header>
@@ -17,14 +17,13 @@
             <!-- Left Column: Summary & Experience -->
             <div class="main-col">
                 <section class="summary-card animate-up" style="--delay: 0.1s">
-                    <h2><span class="icon"><i class="fas fa-user-circle"></i></span> {{ 'RESUME_SUMMARY_TITLE' |
-                        translate }}</h2>
-                    <p>{{ 'HOME_BIO' | translate }}</p>
+                    <h2><span class="icon"><i class="fas fa-user-circle"></i></span> Resumen Profesional</h2>
+                    <p>Apasionado por crear aplicaciones web escalables con Spring Boot y Angular. Me encanta resolver problemas complejos y aprender nuevas tecnologías.</p>
                 </section>
 
                 <section class="timeline-section">
                     <h2 class="animate-up" style="--delay: 0.2s"><span class="icon"><i
-                                class="fas fa-briefcase"></i></span> {{ 'RESUME_EXP_TITLE' | translate }}</h2>
+                                class="fas fa-briefcase"></i></span> Experiencia Profesional</h2>
                     <div class="timeline">
                         <div class="timeline-item animate-up" *ngFor="let job of (experiences$ | async); let i = index"
                             [style.--delay]="(0.3 + i*0.1) + 's'">
@@ -33,9 +32,8 @@
                                 <div class="job-header">
                                     <h3>{{ job.role }}</h3>
                                     <span class="date-badge">
-                                        {{ job.startDate | date:'MMM y' }} -
-                                        {{ job.currentInfo ? ('RESUME_PRESENT' | translate) : (job.endDate | date:'MMM
-                                        y') }}
+                        {{ job.startDate | date:'MMM y' }} -
+                        {{ job.currentInfo ? 'Presente' : (job.endDate | date:'MMM y') }}
                                     </span>
                                 </div>
                                 <h4 class="company">{{ job.company }}</h4>
@@ -49,22 +47,20 @@
             <!-- Right Column: Skills & Education -->
             <aside class="side-col">
                 <section class="skills-card animate-up" style="--delay: 0.2s">
-                    <h2><span class="icon"><i class="fas fa-tools"></i></span> {{ 'RESUME_SKILLS_TITLE' | translate }}
-                    </h2>
+                    <h2><span class="icon"><i class="fas fa-tools"></i></span> Habilidades Técnicas</h2>
 
                     <div class="skill-category" *ngFor="let group of skillGroups$ | async">
-                        <h3>{{ ('SKILL_' + group.category | uppercase) | translate }}</h3>
+                        <h3>{{ group.category }}</h3>
                         <div class="tags">
-                            <span *ngFor="let skill of group.items">{{ skill.name }}</span>
+                            <app-skill-tag *ngFor="let skill of group.items" [skill]="skill"></app-skill-tag>
                         </div>
                     </div>
                 </section>
 
                 <section class="education-card animate-up" style="--delay: 0.3s">
-                    <h2><span class="icon"><i class="fas fa-graduation-cap"></i></span> {{ 'RESUME_EDUCATION' |
-                        translate }}</h2>
+                    <h2><span class="icon"><i class="fas fa-graduation-cap"></i></span> Educación</h2>
                     <div class="edu-item">
-                        <h4>{{ 'RESUME_DEGREE' | translate }}</h4>
+                        <h4>Ingeniería en Sistemas</h4>
                         <p class="school">Universidad Dominicana O&M</p>
                         <p class="year">2021</p>
                     </div>
@@ -78,29 +74,28 @@
         <header class="resume-header">
             <div class="header-left">
                 <h1>Eleazar Garcia</h1>
-                <h2>{{ 'HOME_ROLE' | translate }}</h2>
+                <h2>Desarrollador Full Stack</h2>
             </div>
             <div class="header-right">
                 <ul>
                     <li><span class="icon">📍</span> Punta Cana, DO</li>
-                    <li><span class="icon">✉️</span> ing.eleazargarcia98&#64;gmail.com</li>
-                    <li><span class="icon">🔗</span> linkedin.com/in/eleazargarcia</li>
+                    <li><span class="icon">✉️</span> contact&#64;eleazargarcia.com</li>
+                    <li><span class="icon">🔗</span> linkedin.com/in/eleazar-garcia</li>
                 </ul>
             </div>
         </header>
         <hr>
         <section class="section">
-            <h3>{{ 'RESUME_SUMMARY_TITLE' | translate }}</h3>
-            <p>{{ 'HOME_BIO' | translate }}</p>
+            <h3>Resumen Profesional</h3>
+            <p>Apasionado por crear aplicaciones web escalables con Spring Boot y Angular. Me encanta resolver problemas complejos y aprender nuevas tecnologías.</p>
         </section>
         <section class="section">
-            <h3>{{ 'RESUME_EXP_TITLE' | translate }}</h3>
+            <h3>Experiencia Profesional</h3>
             <div class="job-item" *ngFor="let job of (experiences$ | async)">
                 <div class="job-header">
                     <h4>{{ job.role }}</h4>
                     <span class="company">{{ job.company }}</span>
-                    <span>{{ job.startDate | date:'MMM yyyy' }} - {{ job.currentInfo ? 'Present' : (job.endDate |
-                        date:'MMM yyyy') }}</span>
+                    <span>{{ job.startDate | date:'MMM yyyy' }} - {{ job.currentInfo ? 'Presente' : (job.endDate | date:'MMM yyyy') }}</span>
                 </div>
                 <p>{{ job.description }}</p>
             </div>

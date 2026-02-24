@@ -40,6 +40,14 @@ public class ExperienceController {
                 .body(experienceService.createExperience(experience));
     }
 
+    @PutMapping("/{id}")
+    @Operation(summary = "Update an experience")
+    public ResponseEntity<Experience> updateExperience(@PathVariable Long id, @RequestBody Experience experience) {
+        return experienceService.updateExperience(id, experience)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete an experience")
     public ResponseEntity<Void> deleteExperience(@PathVariable Long id) {

@@ -40,6 +40,14 @@ public class SkillController {
                 .body(skillService.createSkill(skill));
     }
 
+    @PutMapping("/{id}")
+    @Operation(summary = "Update a skill")
+    public ResponseEntity<Skill> updateSkill(@PathVariable Long id, @RequestBody Skill skill) {
+        return skillService.updateSkill(id, skill)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a skill")
     public ResponseEntity<Void> deleteSkill(@PathVariable Long id) {
