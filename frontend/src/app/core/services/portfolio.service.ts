@@ -13,9 +13,8 @@ import { environment } from '../../../environments/environment';
 export class PortfolioService {
     private apiUrl = environment.apiUrl;
 
-    // Cached observables — se comparten entre suscriptores y no re-emiten llamadas HTTP
+    // Cached observables — se comparten entre suscriptores
     private skills$?: Observable<Skill[]>;
-    private services$?: Observable<Service[]>;
 
     constructor(private http: HttpClient) { }
 
@@ -46,12 +45,8 @@ export class PortfolioService {
     }
 
     getServices(): Observable<Service[]> {
-        if (!this.services$) {
-            this.services$ = this.http.get<Service[]>(`${this.apiUrl}/services`).pipe(
-                catchError(() => of([] as Service[])),
-                shareReplay(1)
-            );
-        }
-        return this.services$;
+        return this.http.get<Service[]>(`${this.apiUrl}/services`).pipe(
+            catchError(() => of([] as Service[]))
+        );
     }
 }
