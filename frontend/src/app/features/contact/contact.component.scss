@@ -35,10 +35,9 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(255, 120, 120, 0.15);
-    /* Light pink/red */
-    color: #e11d48;
-    /* Darker red text */
+    background: rgba(var(--accent-color-rgb), 0.1);
+    color: var(--primary-color);
+    border: 1px solid rgba(var(--accent-color-rgb), 0.2);
     padding: 0.35rem 1rem;
     border-radius: 50px;
     font-size: 0.75rem;
@@ -49,8 +48,9 @@
     .dot {
         width: 6px;
         height: 6px;
-        background: #e11d48;
+        background: var(--primary-color);
         border-radius: 50%;
+        animation: blink 1.5s infinite;
     }
 }
 
@@ -102,7 +102,7 @@
         .icon-box {
             width: 48px;
             height: 48px;
-            background: #f3f4f6;
+            background: var(--surface-light);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -117,7 +117,7 @@
 
             .label {
                 font-size: 0.85rem;
-                color: #9ca3af;
+                color: var(--text-secondary);
             }
 
             .value {
@@ -135,7 +135,7 @@
         display: block;
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.85rem;
-        color: #9ca3af;
+        color: var(--text-secondary);
         margin-bottom: 1rem;
     }
 
@@ -147,7 +147,7 @@
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            background: #f3f4f6;
+            background: var(--surface-light);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -246,20 +246,40 @@
         textarea {
             width: 100%;
             padding: 0.8rem 1rem;
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
+            background: var(--surface-light);
+            border: 1px solid var(--border-color);
             border-radius: 6px;
             font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             color: var(--text-primary);
             transition: all 0.2s;
+            box-sizing: border-box;
 
             &:focus {
                 outline: none;
                 border-color: var(--primary-color);
                 box-shadow: 0 0 0 3px rgba(234, 40, 49, 0.1);
-                background: white;
+                background: var(--surface-color);
             }
+
+            &.is-invalid {
+                border-color: #ef4444;
+                box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+            }
+
+            &.is-valid {
+                border-color: #10b981;
+                box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.08);
+            }
+        }
+
+        .field-error {
+            font-size: 0.78rem;
+            color: #ef4444;
+            margin-top: 0.15rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
         }
     }
 
@@ -291,8 +311,21 @@
     }
 
     .success-msg {
-        background: #ecfdf5;
+        background: rgba(16, 185, 129, 0.1);
         color: #059669;
+        border: 1px solid rgba(16, 185, 129, 0.25);
+        padding: 1rem;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+    }
+
+    .error-msg {
+        background: rgba(239, 68, 68, 0.08);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.2);
         padding: 1rem;
         border-radius: 6px;
         display: flex;

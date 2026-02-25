@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "experiences")
@@ -28,4 +29,9 @@ public class ExperienceEntity {
     private LocalDate startDate;
     private LocalDate endDate;
     private boolean currentInfo;
+
+    @ElementCollection
+    @CollectionTable(name = "experience_highlights", joinColumns = @JoinColumn(name = "experience_id"))
+    @Column(name = "highlight", length = 500)
+    private List<String> highlights;
 }

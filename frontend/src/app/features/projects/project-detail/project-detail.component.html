@@ -1,16 +1,39 @@
-<div class="project-detail-container" *ngIf="project() as p">
+<div class="page-scroll-wrapper">
+<!-- Skeleton loader -->
+<div class="skeleton-detail" *ngIf="isLoading">
+    <div class="skeleton-hero">
+        <app-skeleton height="60vh" radius="0"></app-skeleton>
+    </div>
+    <div class="skeleton-body">
+        <div class="skeleton-main">
+            <app-skeleton height="2rem" width="80%" radius="8px"></app-skeleton>
+            <app-skeleton height="1rem" radius="6px" style="margin-top:1rem"></app-skeleton>
+            <app-skeleton height="1rem" width="90%" radius="6px" style="margin-top:0.5rem"></app-skeleton>
+            <app-skeleton height="1rem" width="70%" radius="6px" style="margin-top:0.5rem"></app-skeleton>
+        </div>
+    </div>
+</div>
+
+<div class="project-detail-container" *ngIf="!isLoading && project() as p">
     <!-- Hero Section -->
     <header class="hero-section"
         [style.backgroundImage]="'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(' + p.imageUrl + ')'">
         <div class="hero-content">
-            <span class="project-category" *ngIf="p.tags">{{ p.tags[0] }}</span>
+            <a routerLink="/projects" class="breadcrumb-link">
+                <i class="fas fa-arrow-left"></i> Proyectos
+            </a>
+            <div class="tags-row" *ngIf="p.tags">
+                <span class="project-category" *ngFor="let tag of p.tags.slice(0,3)">{{ tag }}</span>
+            </div>
             <h1 class="project-title">{{ p.title }}</h1>
             <div class="project-links">
-                <a *ngIf="p.projectUrl && p.projectUrl !== '#'" [href]="p.projectUrl" target="_blank" class="btn primary-btn">
-                    Ver en Vivo <i class="fas fa-external-link-alt"></i>
+                <a *ngIf="p.projectUrl"
+                   [href]="p.projectUrl" target="_blank" rel="noopener" class="btn primary-btn">
+                    <i class="fas fa-external-link-alt" aria-hidden="true"></i> Ver en Vivo
                 </a>
-                <a href="https://github.com/eleazar-garcia" target="_blank" class="btn secondary-btn">
-                    GitHub <i class="fab fa-github"></i>
+                <a *ngIf="p.githubUrl"
+                   [href]="p.githubUrl" target="_blank" rel="noopener" class="btn secondary-btn">
+                    <i class="fab fa-github" aria-hidden="true"></i> GitHub
                 </a>
             </div>
         </div>
@@ -40,7 +63,6 @@
 
             <!-- Sidebar -->
             <aside class="sidebar-column">
-                <!-- Tech Stack -->
                 <div class="sidebar-widget">
                     <h3>Tecnologías</h3>
                     <div class="tags-container">
@@ -48,7 +70,6 @@
                     </div>
                 </div>
 
-                <!-- Key Features -->
                 <div class="sidebar-widget" *ngIf="p.features && p.features.length > 0">
                     <h3>Características</h3>
                     <ul class="feature-list">
@@ -58,12 +79,11 @@
                     </ul>
                 </div>
 
-                <!-- Dates -->
                 <div class="sidebar-widget">
                     <h3>Período</h3>
                     <p class="timeline-date">
                         <i class="far fa-calendar-alt"></i>
-                        {{ p.startDate | date:'MMM yyyy' }} -
+                        {{ p.startDate | date:'MMM yyyy' }} —
                         <span *ngIf="p.endDate">{{ p.endDate | date:'MMM yyyy' }}</span>
                         <span *ngIf="!p.endDate">Presente</span>
                     </p>
@@ -73,10 +93,30 @@
         </div>
     </div>
 
-    <!-- Navigation -->
+    <!-- Prev / Next navigation -->
+    <nav class="project-nav" *ngIf="prevProject || nextProject">
+        <a class="nav-card prev" *ngIf="prevProject" [routerLink]="['/projects', prevProject.id]">
+            <i class="fas fa-chevron-left"></i>
+            <div class="nav-info">
+                <span class="nav-label">Anterior</span>
+                <span class="nav-title">{{ prevProject.title }}</span>
+            </div>
+        </a>
+        <div class="nav-spacer" *ngIf="!prevProject"></div>
+        <a class="nav-card next" *ngIf="nextProject" [routerLink]="['/projects', nextProject.id]">
+            <div class="nav-info">
+                <span class="nav-label">Siguiente</span>
+                <span class="nav-title">{{ nextProject.title }}</span>
+            </div>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </nav>
+
+    <!-- Back link -->
     <div class="navigation-footer">
         <a routerLink="/projects" class="back-link">
-            <i class="fas fa-arrow-left"></i> Volver a Proyectos
+            <i class="fas fa-th-large"></i> Ver todos los proyectos
         </a>
     </div>
+</div>
 </div>

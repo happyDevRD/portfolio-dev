@@ -5,7 +5,7 @@ import { PortfolioService } from '../../../core/services/portfolio.service';
 import { Skill } from '../../../core/models/skill.model';
 
 interface TerminalLine {
-  type: 'input' | 'output' | 'success' | 'info';
+  type: 'input' | 'output' | 'success' | 'info' | 'warn';
   content: string;
 }
 
@@ -62,18 +62,44 @@ export class TerminalComponent implements OnInit, OnDestroy {
     return '{\n' + lines.join(',\n') + '\n}';
   }
 
+  private getSystemInfo(): string {
+    const now = new Date();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const date = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+    const time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return `System: portfolio-dev | Date: ${date} ${time} | TZ: ${tz}`;
+  }
+
   async startSequence(skills: Skill[]) {
     const skillsJson = skills.length > 0
       ? this.buildSkillsJson(skills)
       : `{\n  "backend": ["Java 17", "Spring Boot 3", "PL/SQL"],\n  "frontend": ["Angular 17", "TypeScript"],\n  "devops": ["Docker", "Jenkins"]\n}`;
 
-    const commands = [
-      { cmd: 'whoami', output: 'Eleazar Garcia - Desarrollador Full Stack Java', isJson: false },
-      { cmd: 'cat skills.json', output: skillsJson, isJson: true },
-      { cmd: './load-experience.sh', output: 'Cargando línea de tiempo profesional... [HECHO]', isJson: false }
+    const commands: { cmd: string; output: string; type: TerminalLine['type'] }[] = [
+      {
+        cmd: 'whoami',
+        output: 'eleazar.garcia — Senior Full Stack Developer',
+        type: 'success'
+      },
+      {
+        cmd: 'date && uname -s',
+        output: this.getSystemInfo(),
+        type: 'info'
+      },
+      {
+        cmd: 'cat skills.json',
+        output: skillsJson,
+        type: 'output'
+      },
+      {
+        cmd: './check-status.sh',
+        output: '✔  Disponible para proyectos freelance y posiciones remotas',
+        type: 'success'
+      }
     ];
 
-    await this.delay(1000);
+    await this.delay(800);
 
     for (const item of commands) {
       if (this.destroyed) return;
@@ -82,15 +108,21 @@ export class TerminalComponent implements OnInit, OnDestroy {
       this.lines.push({ type: 'input', content: item.cmd });
       this.isTyping = false;
       this.scrollToBottom();
-      await this.delay(300);
+      await this.delay(200);
 
-      if (item.isJson) {
+      if (item.type === 'output') {
         this.lines.push({ type: 'output', content: '<pre>' + item.output + '</pre>' });
       } else {
-        this.lines.push({ type: 'success', content: item.output });
+        this.lines.push({ type: item.type, content: item.output });
       }
       this.scrollToBottom();
-      await this.delay(800);
+      await this.delay(600);
+    }
+
+    // Idle blinking prompt after sequence completes
+    if (!this.destroyed) {
+      this.isTyping = true;
+      this.currentText = '';
     }
   }
 
@@ -100,7 +132,7 @@ export class TerminalComponent implements OnInit, OnDestroy {
     for (const char of cmd) {
       if (this.destroyed) return;
       this.currentText += char;
-      await this.delay(50 + Math.random() * 50);
+      await this.delay(45 + Math.random() * 55);
     }
   }
 

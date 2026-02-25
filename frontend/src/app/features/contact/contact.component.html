@@ -1,3 +1,4 @@
+<div class="page-scroll-wrapper">
 <section class="contact-section">
     <div class="contact-container">
 
@@ -53,33 +54,59 @@
 
         <!-- Right Side: Form Card -->
         <div class="contact-form-wrapper animate-fade-in-right">
-            <!-- Background Glow Effect behind card -->
             <div class="glow-orb"></div>
 
             <div class="form-card">
                 <h2>Envíame un mensaje</h2>
 
-                <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+                <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form" novalidate>
                     <div class="form-row">
                         <div class="form-group half">
                             <label for="name">Nombre</label>
-                            <input id="name" type="text" formControlName="name" placeholder="Tu nombre">
+                            <input
+                                id="name" type="text" formControlName="name" placeholder="Tu nombre"
+                                [class.is-invalid]="isInvalid('name')"
+                                [class.is-valid]="isValid('name')">
+                            <span class="field-error" *ngIf="isInvalid('name') && contactForm.get('name')?.errors?.['required']">
+                                El nombre es obligatorio.
+                            </span>
+                            <span class="field-error" *ngIf="isInvalid('name') && contactForm.get('name')?.errors?.['minlength']">
+                                Mínimo 3 caracteres.
+                            </span>
                         </div>
                         <div class="form-group half">
                             <label for="email">Correo</label>
-                            <input id="email" type="email" formControlName="email" placeholder="hola@ejemplo.com">
+                            <input
+                                id="email" type="email" formControlName="email" placeholder="hola@ejemplo.com"
+                                [class.is-invalid]="isInvalid('email')"
+                                [class.is-valid]="isValid('email')">
+                            <span class="field-error" *ngIf="isInvalid('email') && contactForm.get('email')?.errors?.['required']">
+                                El correo es obligatorio.
+                            </span>
+                            <span class="field-error" *ngIf="isInvalid('email') && contactForm.get('email')?.errors?.['email']">
+                                Ingresa un correo válido.
+                            </span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="message">Mensaje</label>
-                        <textarea id="message" formControlName="message" rows="4"
-                            placeholder="Cuéntame sobre tu proyecto..."></textarea>
+                        <textarea
+                            id="message" formControlName="message" rows="4"
+                            placeholder="Cuéntame sobre tu proyecto..."
+                            [class.is-invalid]="isInvalid('message')"
+                            [class.is-valid]="isValid('message')"></textarea>
+                        <span class="field-error" *ngIf="isInvalid('message') && contactForm.get('message')?.errors?.['required']">
+                            El mensaje es obligatorio.
+                        </span>
+                        <span class="field-error" *ngIf="isInvalid('message') && contactForm.get('message')?.errors?.['minlength']">
+                            Mínimo 10 caracteres.
+                        </span>
                     </div>
 
                     <button type="submit" [disabled]="contactForm.invalid || isSubmitting" class="btn-submit">
                         <span *ngIf="!isSubmitting">Enviar Mensaje <i class="fas fa-paper-plane"></i></span>
-                        <span *ngIf="isSubmitting">Enviando...</span>
+                        <span *ngIf="isSubmitting"><i class="fas fa-circle-notch fa-spin"></i> Enviando...</span>
                     </button>
 
                     <div class="success-msg" *ngIf="successMessage">
@@ -94,3 +121,4 @@
 
     </div>
 </section>
+</div>

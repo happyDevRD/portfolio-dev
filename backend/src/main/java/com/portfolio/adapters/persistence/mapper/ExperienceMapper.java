@@ -17,6 +17,7 @@ public class ExperienceMapper {
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
                 .currentInfo(entity.isCurrentInfo())
+                .highlights(entity.getHighlights())
                 .build();
     }
 
@@ -31,6 +32,7 @@ public class ExperienceMapper {
                 .startDate(domain.getStartDate())
                 .endDate(domain.getEndDate())
                 .currentInfo(domain.isCurrentInfo())
+                .highlights(domain.getHighlights())
                 .build();
     }
 }

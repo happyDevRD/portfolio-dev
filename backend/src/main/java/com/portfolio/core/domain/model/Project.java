@@ -17,6 +17,7 @@ public class Project {
     private String description;
     private String imageUrl;
     private String projectUrl;
+    private String githubUrl;
     private LocalDate startDate;
     private LocalDate endDate;
     private java.util.List<String> tags;

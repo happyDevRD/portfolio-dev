@@ -25,7 +25,6 @@ public class DataLoader implements CommandLineRunner {
         private final ExperienceService experienceService;
         private final ArticleRepository articleRepository;
         private final com.portfolio.core.usecase.GetServicesUseCase getServicesUseCase;
-        private final com.portfolio.core.usecase.GetTestimonialsUseCase getTestimonialsUseCase;
 
         @Override
         public void run(String... args) throws Exception {
@@ -47,13 +46,6 @@ public class DataLoader implements CommandLineRunner {
                                 "Soluciones de reportes complejos con JasperReports y Oracle PL/SQL.",
                                 "report-icon");
 
-                // --- TESTIMONIALS ---
-                createTestimonial("John Doe", "Project Manager",
-                                "Eleazar transformed our reporting system. The migration to JasperReports saved us hours of daily work.",
-                                "https://ui-avatars.com/api/?name=John+Doe");
-                createTestimonial("Jane Smith", "Tech Lead",
-                                "His understanding of Clean Architecture made our codebase scalable and maintainable. Highly recommended!",
-                                "https://ui-avatars.com/api/?name=Jane+Smith");
 
                 // --- SKILLS ---
                 // Backend
@@ -80,7 +72,8 @@ public class DataLoader implements CommandLineRunner {
                                 .title("Modernización de Reportes - Min. Hacienda")
                                 .description("Lideré la migración crítica de más de 200 reportes de Oracle Reports a Jasper Reports. Technologies: Oracle Forms, PL/SQL, JasperSoft.")
                                 .imageUrl("https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop")
-                                .projectUrl("#")
+                                .projectUrl(null)
+                                .githubUrl(null)
                                 .startDate(LocalDate.of(2022, 1, 1))
                                 .endDate(LocalDate.of(2024, 1, 1))
                                 .tags(List.of("Oracle", "PL/SQL", "Jasper Reports", "Migration", "Backend"))
@@ -94,7 +87,8 @@ public class DataLoader implements CommandLineRunner {
                                 .title("Integración Core Bancario")
                                 .description("Lideré la integración técnica entre el core bancario y una plataforma móvil. Servicios SOAP y REST con IBM Cloud.")
                                 .imageUrl("https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1000&auto=format&fit=crop")
-                                .projectUrl("#")
+                                .projectUrl(null)
+                                .githubUrl(null)
                                 .startDate(LocalDate.of(2024, 6, 1))
                                 .endDate(LocalDate.of(2024, 10, 1))
                                 .tags(List.of("Java", "SOAP", "REST", "IBM Cloud", "Backend", "Integration"))
@@ -108,7 +102,8 @@ public class DataLoader implements CommandLineRunner {
                                 .title("Enterprise API Gateway")
                                 .description("A high-performance custom API Gateway designed to handle traffic spikes during Black Friday sales.")
                                 .imageUrl("https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1000&auto=format&fit=crop")
-                                .projectUrl("#")
+                                .projectUrl(null)
+                                .githubUrl(null)
                                 .startDate(LocalDate.of(2023, 11, 1))
                                 .endDate(LocalDate.of(2024, 2, 1))
                                 .tags(List.of("Java", "Spring Cloud", "Redis", "Resilience4j", "DevOps"))
@@ -122,7 +117,8 @@ public class DataLoader implements CommandLineRunner {
                                 .title("Full Stack Portfolio")
                                 .description("Este portafolio. Construido con Clean Architecture, Spring Boot 3, Angular 17 y Docker.")
                                 .imageUrl("https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=1000&auto=format&fit=crop")
-                                .projectUrl("https://github.com/eleazar-garcia/portfolio")
+                                .projectUrl("https://portfolio-dev.onrender.com")
+                                .githubUrl("https://github.com/happyDevRD/portfolio-dev")
                                 .startDate(LocalDate.now().minusMonths(1))
                                 .tags(List.of("Spring Boot", "Angular", "Docker", "DevOps", "Full Stack"))
                                 .challenge("Creating a portfolio that stands out while demonstrating proper software engineering principles.")
@@ -193,11 +189,15 @@ public class DataLoader implements CommandLineRunner {
                                 .company("MayBlue, Caribe")
                                 .role("Senior Full Stack Java Developer")
                                 .description("Desarrollo de aplicaciones web empresariales Full Stack (Java Spring Boot + Angular). "
-                                                +
-                                                "Diseño de APIs RESTful siguiendo Clean Architecture. " +
-                                                "Colaboración en modernización de sistemas heredados (Jakarta EE) a microservicios.")
+                                                + "Diseño de APIs RESTful siguiendo Clean Architecture. "
+                                                + "Colaboración en modernización de sistemas heredados (Jakarta EE) a microservicios.")
                                 .startDate(LocalDate.of(2024, 1, 1))
                                 .currentInfo(true)
+                                .highlights(List.of(
+                                        "Reducción del 40% en tiempo de respuesta de APIs críticas mediante caching con Redis",
+                                        "Migración de 3 módulos monolíticos a microservicios con Spring Boot 3 y Clean Architecture",
+                                        "Implementación de CI/CD con GitHub Actions, reduciendo el tiempo de despliegue de 2h a 15min"
+                                ))
                                 .build());
 
                 // 2. Integrations Specialist (Contract)
@@ -208,18 +208,28 @@ public class DataLoader implements CommandLineRunner {
                                 .startDate(LocalDate.of(2024, 6, 1))
                                 .endDate(LocalDate.of(2024, 10, 30))
                                 .currentInfo(false)
+                                .highlights(List.of(
+                                        "Integración exitosa en producción con latencia p99 < 300ms",
+                                        "Diseño de capa de orquestación SOAP/REST atendiendo 50k+ transacciones/día",
+                                        "Zero downtime durante migración de sistema de pagos crítico"
+                                ))
                                 .build());
 
                 // 3. Min Hacienda
                 experienceService.createExperience(Experience.builder()
                                 .company("Ministerio de Hacienda de la Rep. Dominicana")
                                 .role("Java Software Developer")
-                                .description("Lideré la migración de 200+ reportes (Oracle -> Jasper). " +
-                                                "Traslado de lógica de negocio compleja (PL/SQL). " +
-                                                "Mantenimiento de aplicaciones del Sistema de Administración Financiera (Java/Jakarta EE).")
+                                .description("Lideré la migración de 200+ reportes (Oracle -> Jasper). "
+                                                + "Traslado de lógica de negocio compleja (PL/SQL). "
+                                                + "Mantenimiento de aplicaciones del Sistema de Administración Financiera (Java/Jakarta EE).")
                                 .startDate(LocalDate.of(2020, 1, 1))
                                 .endDate(LocalDate.of(2024, 1, 1))
                                 .currentInfo(false)
+                                .highlights(List.of(
+                                        "Migración de 200+ reportes Oracle a JasperReports con validación pixel-perfect automatizada",
+                                        "Reducción del 60% en tiempo de generación de reportes PDF críticos",
+                                        "Mantenimiento de sistema financiero con disponibilidad 99.9% para 400+ usuarios"
+                                ))
                                 .build());
 
                 // 4. ASES Manufacturing
@@ -230,6 +240,10 @@ public class DataLoader implements CommandLineRunner {
                                 .startDate(LocalDate.of(2020, 5, 1))
                                 .endDate(LocalDate.of(2021, 11, 30))
                                 .currentInfo(false)
+                                .highlights(List.of(
+                                        "Automatización de procesos manuales reduciendo tiempo operativo en 30%",
+                                        "Gestión de infraestructura IT para 50+ usuarios sin interrupciones críticas"
+                                ))
                                 .build());
         }
 
@@ -271,12 +285,4 @@ public class DataLoader implements CommandLineRunner {
                                 .build());
         }
 
-        private void createTestimonial(String authorName, String authorRole, String content, String avatarUrl) {
-                getTestimonialsUseCase.createTestimonial(com.portfolio.core.domain.model.Testimonial.builder()
-                                .authorName(authorName)
-                                .authorRole(authorRole)
-                                .content(content)
-                                .avatarUrl(avatarUrl)
-                                .build());
-        }
 }

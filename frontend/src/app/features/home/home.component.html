@@ -1,92 +1,179 @@
-<section class="home-section" id="home">
-    <div class="glow-blob"></div>
+<!-- Scroll-snap container -->
+<div class="snap-container" #snapContainer (scroll)="onScroll($event)">
 
-    <div class="container">
-        <!-- Hero: 2 columnas — texto + terminal -->
-        <div class="hero-grid">
-
-            <!-- Columna izquierda: texto -->
-            <div class="hero-text animate-slide-up">
-                <div class="greeting-badge">
-                    <span class="pulse-dot"></span>
-                    Hola, Soy
+    <!-- ① HERO -->
+    <section class="snap-section home-section" id="snap-hero">
+        <div class="glow-blob"></div>
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-text animate-slide-up">
+                    <div class="greeting-badge">
+                        <span class="pulse-dot"></span>
+                        Hola, Soy
+                    </div>
+                    <h1 class="main-title">
+                        Eleazar Garcia<br />
+                        <span class="gradient-text">Desarrollador</span><br />
+                        Full Stack
+                    </h1>
+                    <p class="bio-text">
+                        Guiando proyectos a través de todo el ciclo de vida full-stack, desde la vibrante interfaz de
+                        <span class="highlight-angular">Angular</span> hasta la robusta lógica de negocio con
+                        <span class="highlight-java">Java</span>.
+                    </p>
+                    <div class="cta-group">
+                        <a class="btn btn-primary" routerLink="/projects">Ver Proyectos</a>
+                        <a class="btn btn-outline" routerLink="/contact">Contactar <i class="fas fa-arrow-right"></i></a>
+                    </div>
                 </div>
-
-                <h1 class="main-title">
-                    Eleazar Garcia<br />
-                    <span class="gradient-text">Desarrollador</span><br />
-                    Full Stack
-                </h1>
-
-                <p class="bio-text">
-                    Guiando proyectos a través de todo el ciclo de vida full-stack, desde la vibrante interfaz de
-                    <span class="highlight-angular">Angular</span> hasta la robusta lógica de negocio con
-                    <span class="highlight-java">Java</span>.
-                </p>
-
-                <div class="cta-group">
-                    <a class="btn btn-primary" routerLink="/projects">
-                        Ver Proyectos
-                    </a>
-                    <a class="btn btn-outline" routerLink="/contact">
-                        Contactar <i class="fas fa-arrow-right"></i>
-                    </a>
+                <div class="hero-terminal animate-fade-in delay-300">
+                    <app-terminal></app-terminal>
                 </div>
-            </div>
-
-            <!-- Columna derecha: terminal -->
-            <div class="hero-terminal animate-fade-in delay-300">
-                <app-terminal></app-terminal>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Featured Skills / Technologies Section -->
-<section class="tech-section">
-    <div class="container">
-        <div class="section-header">
-            <h2>
-                Tecnologías
-                <span class="underline-decoration"></span>
-            </h2>
-            <p>Herramientas y frameworks que utilizo para construir soluciones robustas y eficientes.</p>
+    <!-- ② TECH STACK -->
+    <section class="snap-section tech-section" id="snap-tech">
+        <div class="container">
+
+            <!-- Encabezado -->
+            <div class="tech-header">
+                <div class="section-badge">Stack</div>
+                <h2 class="tech-title">Tecnologías que <span class="gradient-text">domino</span></h2>
+                <p class="tech-subtitle">Herramientas con las que construyo soluciones robustas de extremo a extremo.</p>
+            </div>
+
+            <!-- Grid de skills por categoría -->
+            <ng-container *ngIf="skillGroups$ | async as groups; else techSkeleton">
+                <div class="tech-categories">
+                    <div class="tech-category" *ngFor="let group of groups; let gi = index"
+                         [style.--gi]="gi">
+                        <div class="category-label">
+                            <span class="cat-dot" [ngClass]="'cat-' + group.category.toLowerCase()"></span>
+                            {{ group.category }}
+                        </div>
+                        <div class="tech-cards">
+                            <div class="tech-card"
+                                 *ngFor="let skill of group.items; let i = index"
+                                 [ngClass]="getLevelClass(skill.proficiency)"
+                                 [style.--delay]="((gi * 4 + i) * 0.05) + 's'">
+                                <div class="card-icon">
+                                    <i [class]="getFaIcon(skill.name)" aria-hidden="true"></i>
+                                </div>
+                                <span class="card-name">{{ skill.name }}</span>
+                                <span class="card-level-badge">{{ getLevelText(skill.proficiency) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-template #techSkeleton>
+                <div class="tech-categories">
+                    <div class="tech-category sk-cat" *ngFor="let i of [1,2,3,4]">
+                        <div class="sk-line cat-sk-label"></div>
+                        <div class="tech-cards">
+                            <div class="tech-card sk" *ngFor="let j of [1,2,3]">
+                                <div class="sk-icon-box"></div>
+                                <div class="sk-line short"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+
         </div>
+    </section>
 
-        <ng-container *ngIf="skillGroups$ | async as groups; else techLoading">
-            <div *ngFor="let group of groups" class="skill-group animate-slide-up">
-                <h3 class="skill-category-title">{{ group.category }}</h3>
-                <div class="skill-tags-row">
-                    <app-skill-tag *ngFor="let skill of group.items" [skill]="skill"></app-skill-tag>
+    <!-- ③ SERVICES -->
+    <section class="snap-section services-snap-section" id="snap-services">
+        <app-services></app-services>
+    </section>
+
+    <!-- ④ ABOUT -->
+    <section class="snap-section about-section" id="snap-about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <div class="section-badge">Sobre mí</div>
+                    <h2 class="about-title">Desarrollador con pasión por la <span class="gradient-text">arquitectura limpia</span></h2>
+                    <p class="about-body">
+                        Soy Eleazar Garcia, desarrollador Full Stack con sede en Punta Cana, República Dominicana.
+                        Me especializo en construir aplicaciones web escalables y de alto rendimiento usando
+                        <strong>Spring Boot</strong> en el backend y <strong>Angular</strong> en el frontend.
+                    </p>
+                    <p class="about-body">
+                        Me apasiona el software bien diseñado: APIs RESTful robustas, interfaces reactivas
+                        e intuitivas, y pipelines de CI/CD que permiten entregas continuas con confianza.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" [appCountUp]="3">0+</span>
+                            <span class="stat-label">Años de experiencia</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" [appCountUp]="10">0+</span>
+                            <span class="stat-label">Proyectos entregados</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" [appCountUp]="200">0+</span>
+                            <span class="stat-label">Reportes migrados</span>
+                        </div>
+                    </div>
+                    <a routerLink="/resume" class="btn btn-outline">
+                        Ver Currículum <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+                <div class="about-visual">
+                    <div class="code-card">
+                        <div class="code-card-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <span class="filename">about.json</span>
+                        </div>
+                        <pre class="code-body"><code>&#123;
+  <span class="key">"nombre"</span>: <span class="str">"Eleazar Garcia"</span>,
+  <span class="key">"rol"</span>: <span class="str">"Full Stack Developer"</span>,
+  <span class="key">"ubicacion"</span>: <span class="str">"Punta Cana, DO"</span>,
+  <span class="key">"backend"</span>: [
+    <span class="str">"Java"</span>, <span class="str">"Spring Boot"</span>,
+    <span class="str">"PostgreSQL"</span>
+  ],
+  <span class="key">"frontend"</span>: [
+    <span class="str">"Angular"</span>, <span class="str">"TypeScript"</span>,
+    <span class="str">"SCSS"</span>
+  ],
+  <span class="key">"devops"</span>: [
+    <span class="str">"Docker"</span>, <span class="str">"GitHub Actions"</span>
+  ],
+  <span class="key">"disponible"</span>: <span class="bool">true</span>
+&#125;</code></pre>
+                    </div>
                 </div>
             </div>
-        </ng-container>
+        </div>
+    </section>
 
-        <ng-template #techLoading>
-            <div class="tech-grid">
-                <div class="tech-card animate-slide-up delay-100">
-                    <div class="icon-box"><i class="fab fa-java"></i></div>
-                    <span>Java</span>
-                </div>
-                <div class="tech-card animate-slide-up delay-200">
-                    <div class="icon-box"><i class="fas fa-leaf"></i></div>
-                    <span>Spring Boot</span>
-                </div>
-                <div class="tech-card animate-slide-up delay-300">
-                    <div class="icon-box"><i class="fab fa-angular"></i></div>
-                    <span>Angular</span>
-                </div>
-                <div class="tech-card animate-slide-up delay-400">
-                    <div class="icon-box"><i class="fab fa-docker"></i></div>
-                    <span>Docker</span>
-                </div>
-            </div>
-        </ng-template>
-    </div>
-</section>
+</div>
 
-<!-- Services Section -->
-<app-services></app-services>
+<!-- ─── Navegación lateral: dots con label ─────── -->
+<nav class="snap-nav" aria-label="Navegación de secciones">
+    <button *ngFor="let s of snapSections; let i = index"
+        class="snap-dot"
+        [class.active]="activeSection === i"
+        (click)="snapTo(i)"
+        [attr.aria-label]="'Ir a ' + s.label">
+        <span class="dot-label">{{ s.label }}</span>
+        <span class="dot-pip"></span>
+    </button>
+</nav>
 
-<!-- Testimonials Section -->
-<app-testimonials></app-testimonials>
+<!-- ─── Flecha de navegación central inferior ──── -->
+<button class="section-arrow"
+    [class.up]="activeSection === snapSections.length - 1"
+    (click)="activeSection === snapSections.length - 1 ? snapTo(0) : snapTo(activeSection + 1)"
+    [attr.aria-label]="activeSection === snapSections.length - 1 ? 'Volver al inicio' : 'Sección siguiente'">
+    <i class="fas" [ngClass]="activeSection === snapSections.length - 1 ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+</button>

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -19,4 +20,5 @@ public class Experience {
     private LocalDate startDate;
     private LocalDate endDate;
     private boolean currentInfo;
+    private List<String> highlights;
 }

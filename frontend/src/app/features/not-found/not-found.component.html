@@ -1,18 +1,38 @@
+<div class="page-scroll-wrapper">
 <div class="not-found-container">
     <div class="not-found-content">
         <div class="code-block">
-            <span class="comment">// Error inesperado</span>
-            <span class="keyword">throw new</span> <span class="class-name">NotFoundException</span><span class="paren">(</span>
+            <span class="comment">// Error inesperado en el servidor</span>
+            <span><span class="keyword">throw new</span> <span class="class-name">NotFoundException</span><span class="paren">(</span></span>
             <span class="string">&nbsp;&nbsp;"La ruta que buscas no existe"</span>
             <span class="paren">);</span>
         </div>
 
         <h1 class="error-code">404</h1>
         <p class="error-msg">Página no encontrada</p>
-        <p class="error-desc">La URL que intentaste visitar no existe o fue movida.</p>
+        <p class="error-desc">La URL que intentaste visitar no existe o fue movida.<br>Aquí tienes algunas rutas que sí existen:</p>
+
+        <div class="quick-links">
+            <a routerLink="/" class="quick-link">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <a routerLink="/projects" class="quick-link">
+                <i class="fas fa-code"></i> Proyectos
+            </a>
+            <a routerLink="/blog" class="quick-link">
+                <i class="fas fa-pen-nib"></i> Blog
+            </a>
+            <a routerLink="/resume" class="quick-link">
+                <i class="fas fa-file-alt"></i> Currículum
+            </a>
+            <a routerLink="/contact" class="quick-link">
+                <i class="fas fa-envelope"></i> Contacto
+            </a>
+        </div>
 
         <a routerLink="/" class="btn-home">
             <i class="fas fa-arrow-left"></i> Volver al inicio
         </a>
     </div>
+</div>
 </div>

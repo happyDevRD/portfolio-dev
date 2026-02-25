@@ -1,3 +1,4 @@
+<div class="page-scroll-wrapper">
 <div class="resume-wrapper">
     <!-- WEB VIEW (Modern Timeline) -->
     <div class="web-resume">
@@ -38,6 +39,11 @@
                                 </div>
                                 <h4 class="company">{{ job.company }}</h4>
                                 <p>{{ job.description }}</p>
+                                <ul class="highlights" *ngIf="job.highlights?.length">
+                                    <li *ngFor="let h of job.highlights">
+                                        <i class="fas fa-chart-line"></i> {{ h }}
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -51,8 +57,19 @@
 
                     <div class="skill-category" *ngFor="let group of skillGroups$ | async">
                         <h3>{{ group.category }}</h3>
-                        <div class="tags">
-                            <app-skill-tag *ngFor="let skill of group.items" [skill]="skill"></app-skill-tag>
+                        <div class="skill-bars">
+                            <div class="skill-bar-item" *ngFor="let skill of group.items">
+                                <div class="skill-bar-header">
+                                    <div class="skill-name">
+                                        <img *ngIf="skill.iconUrl" [src]="skill.iconUrl" [alt]="skill.name" class="skill-icon-sm" onerror="this.style.display='none'">
+                                        <span>{{ skill.name }}</span>
+                                    </div>
+                                    <span class="skill-pct">{{ skill.proficiency }}%</span>
+                                </div>
+                                <div class="skill-track">
+                                    <div class="skill-fill" [style.width.%]="skill.proficiency"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -60,9 +77,24 @@
                 <section class="education-card animate-up" style="--delay: 0.3s">
                     <h2><span class="icon"><i class="fas fa-graduation-cap"></i></span> Educación</h2>
                     <div class="edu-item">
-                        <h4>Ingeniería en Sistemas</h4>
-                        <p class="school">Universidad Dominicana O&M</p>
-                        <p class="year">2021</p>
+                        <div class="edu-badge"><i class="fas fa-university"></i></div>
+                        <div class="edu-info">
+                            <h4>Ingeniería en Sistemas</h4>
+                            <p class="school">Universidad Dominicana O&M</p>
+                            <p class="year"><i class="far fa-calendar-alt"></i> 2021</p>
+                        </div>
+                    </div>
+                    <div class="edu-item" style="margin-top: 1.5rem">
+                        <div class="edu-badge"><i class="fas fa-certificate"></i></div>
+                        <div class="edu-info">
+                            <h4>Certificaciones</h4>
+                            <p class="school">Spring Boot · Angular · Docker · Clean Architecture</p>
+                            <p class="year cert-tags">
+                                <span class="cert-tag">Udemy</span>
+                                <span class="cert-tag">Platzi</span>
+                                <span class="cert-tag">YouTube</span>
+                            </p>
+                        </div>
                     </div>
                 </section>
             </aside>
@@ -78,28 +110,41 @@
             </div>
             <div class="header-right">
                 <ul>
-                    <li><span class="icon">📍</span> Punta Cana, DO</li>
-                    <li><span class="icon">✉️</span> contact&#64;eleazargarcia.com</li>
-                    <li><span class="icon">🔗</span> linkedin.com/in/eleazar-garcia</li>
+                    <li>Punta Cana, República Dominicana</li>
+                    <li>contact&#64;eleazargarcia.com</li>
+                    <li>linkedin.com/in/eleazar-garcia</li>
+                    <li>github.com/eleazar-garcia</li>
                 </ul>
             </div>
         </header>
         <hr>
         <section class="section">
             <h3>Resumen Profesional</h3>
-            <p>Apasionado por crear aplicaciones web escalables con Spring Boot y Angular. Me encanta resolver problemas complejos y aprender nuevas tecnologías.</p>
+            <p>Desarrollador Full Stack con más de 3 años de experiencia construyendo aplicaciones web empresariales con Spring Boot y Angular. Especializado en Clean Architecture, APIs RESTful y modernización de sistemas legacy.</p>
         </section>
         <section class="section">
             <h3>Experiencia Profesional</h3>
             <div class="job-item" *ngFor="let job of (experiences$ | async)">
                 <div class="job-header">
-                    <h4>{{ job.role }}</h4>
-                    <span class="company">{{ job.company }}</span>
-                    <span>{{ job.startDate | date:'MMM yyyy' }} - {{ job.currentInfo ? 'Presente' : (job.endDate | date:'MMM yyyy') }}</span>
+                    <strong>{{ job.role }}</strong>
+                    <span class="company"> — {{ job.company }}</span>
+                    <span class="dates">
+                        {{ job.startDate | date:'MMM yyyy' }} – {{ job.currentInfo ? 'Presente' : (job.endDate | date:'MMM yyyy') }}
+                    </span>
                 </div>
                 <p>{{ job.description }}</p>
+                <ul class="print-highlights" *ngIf="job.highlights?.length">
+                    <li *ngFor="let h of job.highlights">{{ h }}</li>
+                </ul>
+            </div>
+        </section>
+        <section class="section">
+            <h3>Educación</h3>
+            <div class="edu-print">
+                <strong>Ingeniería en Sistemas</strong> — Universidad Dominicana O&M · 2021
             </div>
         </section>
     </div>
 
+</div>
 </div>

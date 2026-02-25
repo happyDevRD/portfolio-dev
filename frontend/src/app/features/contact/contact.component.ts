@@ -30,7 +30,18 @@ export class ContactComponent {
     });
   }
 
+  isInvalid(field: string): boolean {
+    const ctrl = this.contactForm.get(field);
+    return !!(ctrl && ctrl.invalid && (ctrl.dirty || ctrl.touched));
+  }
+
+  isValid(field: string): boolean {
+    const ctrl = this.contactForm.get(field);
+    return !!(ctrl && ctrl.valid && (ctrl.dirty || ctrl.touched));
+  }
+
   onSubmit() {
+    this.contactForm.markAllAsTouched();
     if (this.contactForm.invalid) return;
 
     this.isSubmitting = true;

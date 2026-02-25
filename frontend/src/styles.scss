@@ -41,15 +41,17 @@
 
 html {
   scroll-behavior: smooth;
+  height: 100%;
 }
 
 body {
   margin: 0;
+  height: 100%;
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-primary);
-  min-height: 100vh;
   position: relative;
+  overflow: hidden; /* el shell maneja el scroll */
 
   /* Font Rendering Polish */
   text-rendering: optimizeLegibility;
@@ -245,12 +247,37 @@ body {
           padding: 0.5rem 1.1rem;
           border-radius: 50px;
           transition: all 0.2s;
-          display: block;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          position: relative;
 
-          &:hover,
-          &.active {
+          /* Punto rojo indicador cuando está activa */
+          &::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            opacity: 0;
+            transform: scale(0);
+            transition: opacity 0.2s, transform 0.2s;
+          }
+
+          &:hover {
             color: var(--text-primary);
             background: #f3f4f6;
+          }
+
+          &.active {
+            color: var(--primary-color);
+            font-weight: 600;
+            background: rgba(var(--accent-color-rgb), 0.08);
+
+            &::before {
+              opacity: 1;
+              transform: scale(1);
+            }
           }
         }
       }
@@ -262,7 +289,10 @@ body {
     }
 
     .controls {
-      display: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-shrink: 0;
     }
   }
 }
@@ -347,25 +377,222 @@ body {
   }
 }
 
-/* 
-   SINGLE UNIFIED THEME
-   We are removing the 'body.dark-mode' block because the user wants ONE 
-   interesting, novel tonality, not a switch between standard light/dark.
-   This 'Deep Nebula' theme is the sole identity of the site now.
-*/
+/* === Dark Mode === */
+body.dark-mode {
+  --primary-color: #f87171;
+  --secondary-color: #e2e8f0;
+  --bg-color: #0f172a;
+  --surface-color: #1e293b;
+  --surface-light: #334155;
+  --card-bg: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-color: #cbd5e1;
+  --border-color: #334155;
+  --accent-color: #f87171;
+  --accent-color-rgb: 248, 113, 113;
+  --glass-bg: rgba(15, 23, 42, 0.85);
+  --nav-blur-bg: rgba(15, 23, 42, 0.85);
+
+  background-image:
+    linear-gradient(to right, #1e293b 1px, transparent 1px),
+    linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+
+  .header {
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+
+    .nav-links li a {
+      &:hover {
+        background: #1e293b;
+        color: var(--text-primary);
+      }
+
+      &.active {
+        background: rgba(var(--accent-color-rgb), 0.12);
+        color: var(--primary-color);
+
+        &::before {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    }
+  }
+}
+
 .theme-toggle {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  padding: 0.5rem;
-  line-height: 1;
-  transition: transform 0.3s;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
 
   &:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
     transform: rotate(15deg);
   }
 }
 
-/* Ensure navbar transition is smooth */
-.header,
-body {
-  transition: background-color 0.3s, color 0.3s;
+/* Navbar scrolled state */
+.header.scrolled {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  background: var(--glass-bg);
+}
+
+/* Hamburger menu for mobile */
+.hamburger {
+  display: none;
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 6px;
+
+  @media (max-width: 768px) {
+    display: flex;
+  }
+
+  span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--text-secondary);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+
+  &.open {
+    span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+  }
+}
+
+/* Mobile nav drawer */
+@media (max-width: 768px) {
+  .header .navbar {
+    flex-wrap: wrap;
+    align-items: center;
+
+    .nav-links {
+      order: 3;
+      width: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0;
+      white-space: normal;
+      mask-image: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+
+      &.open {
+        max-height: 400px;
+        padding: 0.5rem 0 0.75rem;
+      }
+
+      li {
+        width: 100%;
+        display: block;
+
+        a {
+          display: block;
+          padding: 0.6rem 0.5rem;
+          border-radius: 8px;
+        }
+      }
+    }
+  }
+}
+
+/* Back to top button */
+.back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(var(--accent-color-rgb), 0.4);
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  &:hover {
+    background: #c8202a;
+    transform: translateY(-3px);
+  }
+
+  @media (max-width: 768px) {
+    bottom: 1.25rem;
+    right: 1.25rem;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Focus-visible global styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Rutas no-home: necesitan scroll propio ────────
+   El .main-content tiene overflow:hidden, así que
+   cada ruta debe exponer un wrapper scrolleable.
+   Añadimos padding-top para el navbar fijo (64px).
+   ─────────────────────────────────────────────── */
+.page-scroll-wrapper {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 64px;  /* altura del navbar */
+  padding-bottom: 44px; /* altura del footer fijo */
+  box-sizing: border-box;
+  /* Ocultamos la barra de scroll para evitar el “scroll interior” visible */
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Smooth theme transitions */
+body, .header, .skill-tag, .form-card, .section-card,
+.sidebar-widget, .bento-card, .service-card, .job-card,
+.summary-card, .skills-card, .education-card {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }

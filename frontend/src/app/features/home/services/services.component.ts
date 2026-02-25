@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { Service } from '../../../core/models/service.model';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { RevealDirective } from '../../../shared/directives/reveal.directive';
+import { SkeletonComponent } from '../../../shared/components/skeleton/skeleton.component';
 
 const ICON_MAP: Record<string, string> = {
   'api-icon':       'fas fa-code',
@@ -22,17 +25,23 @@ const ICON_MAP: Record<string, string> = {
 @Component({
     selector: 'app-services',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, RevealDirective, SkeletonComponent],
     templateUrl: './services.component.html',
     styleUrl: './services.component.scss'
 })
 export class ServicesComponent implements OnInit {
     services$!: Observable<Service[]>;
+    isLoading = true;
 
-    constructor(private portfolioService: PortfolioService) { }
+    constructor(private portfolioService: PortfolioService, private cdr: ChangeDetectorRef) { }
 
     ngOnInit(): void {
-        this.services$ = this.portfolioService.getServices();
+        this.services$ = this.portfolioService.getServices().pipe(
+            tap(() => {
+                this.isLoading = false;
+                this.cdr.detectChanges();
+            })
+        );
     }
 
     getIcon(iconUrl: string): string {

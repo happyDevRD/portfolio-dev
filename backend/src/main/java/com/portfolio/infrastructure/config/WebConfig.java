@@ -1,7 +1,10 @@
 package com.portfolio.infrastructure.config;
 
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -12,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
     private String allowedOrigins;
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
+    public void addCorsMappings(@NonNull CorsRegistry registry) {
         boolean isWildcard = "*".equals(allowedOrigins);
 
         var mapping = registry.addMapping("/**")
@@ -22,7 +25,9 @@ public class WebConfig implements WebMvcConfigurer {
         if (isWildcard) {
             mapping.allowedOriginPatterns("*");
         } else {
-            mapping.allowedOrigins(allowedOrigins.split(","))
+            String[] origins = Objects.requireNonNull(allowedOrigins, "allowedOrigins must not be null")
+                                      .split(",");
+            mapping.allowedOrigins(origins)
                    .allowCredentials(true);
         }
     }

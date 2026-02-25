@@ -109,6 +109,22 @@
         border-left: 2px solid #3fb950;
     }
 
+    .info {
+        color: #58a6ff;
+        margin-bottom: 0.5rem;
+        padding-left: 0.5rem;
+        border-left: 2px solid #388bfd;
+        font-size: 0.8rem;
+        opacity: 0.9;
+    }
+
+    .warn {
+        color: #e3b341;
+        margin-bottom: 0.5rem;
+        padding-left: 0.5rem;
+        border-left: 2px solid #e3b341;
+    }
+
     .typing-area {
         display: flex;
         align-items: center;

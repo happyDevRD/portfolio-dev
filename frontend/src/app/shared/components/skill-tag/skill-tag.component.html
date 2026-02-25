@@ -1,9 +1,20 @@
-<div class="skill-tag" [title]="skill.name + ': ' + skill.proficiency + '%'">
+<div class="skill-tag">
     <ng-container *ngIf="skill.iconUrl && !imgError; else faFallback">
-        <img [src]="skill.iconUrl" [alt]="skill.name" class="skill-icon" (error)="onImgError()">
+        <img [src]="skill.iconUrl" [alt]="skill.name" class="skill-icon" loading="lazy" (error)="onImgError()">
     </ng-container>
     <ng-template #faFallback>
-        <i [class]="faIcon + ' skill-fa-icon'"></i>
+        <i [class]="faIcon + ' skill-fa-icon'" aria-hidden="true"></i>
     </ng-template>
     <span class="skill-name">{{ skill.name }}</span>
+
+    <!-- Tooltip con barra de proficiencia -->
+    <div class="skill-tooltip" *ngIf="skill.proficiency" role="tooltip">
+        <div class="tooltip-label">
+            <span>{{ skill.name }}</span>
+            <span class="pct">{{ skill.proficiency }}%</span>
+        </div>
+        <div class="tooltip-bar-track">
+            <div class="tooltip-bar-fill" [style.width.%]="skill.proficiency"></div>
+        </div>
+    </div>
 </div>

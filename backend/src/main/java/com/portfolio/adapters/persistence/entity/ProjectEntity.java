@@ -26,6 +26,7 @@ public class ProjectEntity {
 
     private String imageUrl;
     private String projectUrl;
+    private String githubUrl;
     private LocalDate startDate;
     private LocalDate endDate;
 

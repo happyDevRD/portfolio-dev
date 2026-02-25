@@ -1,24 +1,33 @@
-<!-- Top Navbar (Restored & Enhanced) -->
-<header class="header">
+<!-- Navbar — posición fixed, siempre visible -->
+<header class="header" [class.scrolled]="isScrolled">
   <nav class="navbar">
-    <div class="logo">
+    <a routerLink="/" class="logo">
       <span class="symbol">&lt;/&gt;</span> Eleazar Garcia
-    </div>
+    </a>
 
-    <ul class="nav-links">
-      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
-      <li><a routerLink="/projects" routerLinkActive="active">Proyectos</a></li>
-      <li><a routerLink="/blog" routerLinkActive="active">Blog</a></li>
-      <li><a routerLink="/resume" routerLinkActive="active">Currículum</a></li>
-      <li><a routerLink="/contact" routerLinkActive="active">Contacto</a></li>
+    <ul class="nav-links" [class.open]="isMobileMenuOpen">
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="isMobileMenuOpen=false">Inicio</a></li>
+      <li><a routerLink="/projects" routerLinkActive="active" (click)="isMobileMenuOpen=false">Proyectos</a></li>
+      <li><a routerLink="/blog" routerLinkActive="active" (click)="isMobileMenuOpen=false">Blog</a></li>
+      <li><a routerLink="/resume" routerLinkActive="active" (click)="isMobileMenuOpen=false">Currículum</a></li>
+      <li><a routerLink="/contact" routerLinkActive="active" (click)="isMobileMenuOpen=false">Contacto</a></li>
     </ul>
 
+    <div class="controls">
+      <button class="theme-toggle" (click)="toggleTheme()" [title]="isDarkMode ? 'Modo claro' : 'Modo oscuro'">
+        <i [class]="isDarkMode ? 'fas fa-sun' : 'fas fa-moon'"></i>
+      </button>
+      <button class="hamburger" (click)="toggleMobileMenu()" [class.open]="isMobileMenuOpen" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
 </header>
 
-<!-- Main Content with Animation -->
-<main class="main-content" [@routeAnimations]="o && o.isActivated ? o.activatedRouteData['animation'] : -1">
-  <router-outlet #o="outlet"></router-outlet>
+<!-- Main Content — ocupa el espacio entre nav y footer -->
+<main class="main-content">
+  <router-outlet></router-outlet>
 </main>
 
+<!-- Footer — barra permanente fija en la parte inferior -->
 <app-footer></app-footer>

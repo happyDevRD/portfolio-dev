@@ -1,36 +1,32 @@
-/* Shell layout — variables viven en styles.scss */
+/* Shell layout */
 
-html {
-    scrollbar-gutter: stable;
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
 }
 
 /* Custom Scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+* { scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
+
+/* Layout raíz: columna full-height */
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
 }
 
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-}
-
+/* El main-content ocupa todo el espacio entre navbar y footer */
 .main-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 2rem;
-    min-height: 80vh;
+    flex: 1;
+    overflow: hidden;
     position: relative;
-    overflow-x: hidden;
-
-    @media (max-width: 768px) {
-        padding: 1rem 1rem;
-    }
+    /* El footer fijo tiene 44px — el contenido no queda tapado */
+    padding-bottom: 44px;
+    box-sizing: border-box;
 }

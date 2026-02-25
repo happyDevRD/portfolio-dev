@@ -46,6 +46,7 @@ export const routes: Routes = [
     {
         path: '**',
         loadComponent: () => import('./features/not-found/not-found.component').then(m => m.NotFoundComponent),
-        title: 'Página no encontrada | Eleazar Garcia'
+        title: 'Página no encontrada | Eleazar Garcia',
+        data: { animation: 99 }
     }
 ];

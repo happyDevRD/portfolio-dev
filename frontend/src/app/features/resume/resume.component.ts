@@ -7,6 +7,7 @@ import { SkillTagComponent } from '../../shared/components/skill-tag/skill-tag.c
 import { Skill } from '../../core/models/skill.model';
 import { SkillGroup } from '../../core/models/skill-group.model';
 import { map } from 'rxjs/operators';
+import { SeoService } from '../../core/services/seo.service';
 
 const CATEGORY_ORDER = ['Backend', 'Frontend', 'DevOps', 'Database', 'Tools', 'Reporting', 'Quality'];
 
@@ -21,9 +22,16 @@ export class ResumeComponent implements OnInit {
   experiences$!: Observable<Experience[]>;
   skillGroups$!: Observable<SkillGroup[]>;
 
-  constructor(private portfolioService: PortfolioService) { }
+  constructor(private portfolioService: PortfolioService, private seo: SeoService) { }
 
   ngOnInit(): void {
+    this.seo.update({
+      title: 'Currículum',
+      description: 'Currículum de Eleazar Garcia. Experiencia en desarrollo full stack con Java, Spring Boot, Angular y DevOps.',
+      keywords: 'currículum, CV, desarrollador, Java, Spring Boot, Angular, experiencia',
+      url: '/resume'
+    });
+
     this.experiences$ = this.portfolioService.getExperiences();
 
     this.skillGroups$ = this.portfolioService.getSkills().pipe(
