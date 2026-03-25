@@ -2,8 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { Service } from '../../../core/models/service.model';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, shareReplay, take, tap } from 'rxjs';
 import { RevealDirective } from '../../../shared/directives/reveal.directive';
 import { SkeletonComponent } from '../../../shared/components/skeleton/skeleton.component';
 
@@ -36,12 +35,16 @@ export class ServicesComponent implements OnInit {
     constructor(private portfolioService: PortfolioService, private cdr: ChangeDetectorRef) { }
 
     ngOnInit(): void {
+        // shareReplay + suscripción inicial: sin esto, el | async queda dentro de *ngIf="!isLoading"
+        // y nadie se suscribe hasta que isLoading sea false — la petición HTTP nunca arranca (deadlock).
         this.services$ = this.portfolioService.getServices().pipe(
             tap(() => {
                 this.isLoading = false;
-                this.cdr.detectChanges();
-            })
+                this.cdr.markForCheck();
+            }),
+            shareReplay(1)
         );
+        this.services$.pipe(take(1)).subscribe();
     }
 
     getIcon(iconUrl: string): string {

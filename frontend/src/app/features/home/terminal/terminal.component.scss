@@ -53,8 +53,15 @@
     color: #e5e5e5;
     height: 320px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     font-size: 0.85rem;
     line-height: 1.6;
+
+    @media (max-width: 600px) {
+        height: min(160px, 28vh);
+        padding: 0.75rem 1rem;
+        font-size: 0.78rem;
+    }
 
     /* Scrollbar Styling */
     &::-webkit-scrollbar {

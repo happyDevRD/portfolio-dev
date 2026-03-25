@@ -1,16 +1,29 @@
 .services-section {
     padding: 5rem 0;
+
+    @media (max-width: 768px) {
+        padding: 2rem 0 2.5rem;
+    }
 }
 
 .services-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 max(1.5rem, env(safe-area-inset-right, 0px)) 0 max(1.5rem, env(safe-area-inset-left, 0px));
+
+    @media (max-width: 768px) {
+        padding-left: max(1rem, env(safe-area-inset-left, 0px));
+        padding-right: max(1rem, env(safe-area-inset-right, 0px));
+    }
 }
 
 .section-header {
     text-align: center;
     margin-bottom: 3.5rem;
+
+    @media (max-width: 768px) {
+        margin-bottom: 2rem;
+    }
 
     .section-badge {
         display: inline-block;

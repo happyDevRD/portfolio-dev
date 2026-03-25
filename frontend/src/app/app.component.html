@@ -1,8 +1,10 @@
 <!-- Navbar — posición fixed, siempre visible -->
 <header class="header" [class.scrolled]="isScrolled">
   <nav class="navbar">
-    <a routerLink="/" class="logo">
-      <span class="symbol">&lt;/&gt;</span> Eleazar Garcia
+    <a routerLink="/" class="logo" aria-label="Eleazar Garcia, ir al inicio">
+      <span class="symbol" aria-hidden="true">&lt;/&gt;</span>
+      <span class="logo-name-full">Eleazar Garcia</span>
+      <span class="logo-name-short">E. García</span>
     </a>
 
     <ul class="nav-links" [class.open]="isMobileMenuOpen">

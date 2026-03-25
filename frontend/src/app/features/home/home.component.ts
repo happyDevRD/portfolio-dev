@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TerminalComponent } from './terminal/terminal.component';
@@ -10,7 +10,6 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CountUpDirective } from '../../shared/directives/count-up.directive';
 import { SeoService } from '../../core/services/seo.service';
-import { AppComponent } from '../../app.component';
 
 const CATEGORY_ORDER = ['Backend', 'Frontend', 'Database', 'DevOps', 'Tools', 'Reporting', 'Quality'];
 
@@ -44,7 +43,7 @@ export interface SnapSection {
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit {
   skillGroups$: Observable<SkillGroup[]>;
   activeSection = 0;
 
@@ -57,12 +56,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   @ViewChild('snapContainer') snapContainerRef!: ElementRef<HTMLElement>;
 
-  private scrollTimeout: any;
-
   constructor(
     private portfolioService: PortfolioService,
-    private seo: SeoService,
-    private appComponent: AppComponent
+    private seo: SeoService
   ) {
     this.skillGroups$ = this.portfolioService.getSkills().pipe(
       map(skills => {
@@ -94,31 +90,31 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.scrollTimeout) clearTimeout(this.scrollTimeout);
-  }
-
-  /** Detecta qué sección está activa según el scroll */
+  /** Sección activa: compatible con alturas variables en móvil */
   onScroll(event: Event): void {
     const container = event.target as HTMLElement;
-    const scrollTop = container.scrollTop;
-    const viewH = container.clientHeight;
+    const cRect = container.getBoundingClientRect();
+    const probeY = cRect.top + Math.min(100, cRect.height * 0.12);
 
-    // Notifica al AppComponent para el efecto scrolled del navbar
-    this.appComponent.onInnerScroll(scrollTop);
-
-    // Determina la sección activa
-    this.activeSection = Math.round(scrollTop / viewH);
+    const sections = Array.from(container.querySelectorAll<HTMLElement>(':scope > .snap-section'));
+    let idx = 0;
+    for (let i = 0; i < sections.length; i++) {
+      const r = sections[i].getBoundingClientRect();
+      if (r.top <= probeY + 2) {
+        idx = i;
+      }
+    }
+    this.activeSection = idx;
   }
 
-  /** Hace scroll suave a una sección por índice */
+  /** Scroll a sección por índice (altura variable) */
   snapTo(index: number): void {
     const container = this.snapContainerRef?.nativeElement;
     if (!container) return;
-    container.scrollTo({
-      top: index * container.clientHeight,
-      behavior: 'smooth'
-    });
+    const sections = container.querySelectorAll<HTMLElement>(':scope > .snap-section');
+    const el = sections[index];
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   getFaIcon(name: string): string {
