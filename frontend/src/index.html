@@ -7,35 +7,28 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f8f6f6">
-  <meta name="description" content="Portfolio de Eleazar Garcia, Desarrollador Full Stack especializado en Java, Spring Boot y Angular. Proyectos, experiencia y artículos técnicos.">
+  <meta name="description" content="Eleazar Garcia — Desarrollador Full Stack (Java, Spring Boot, Angular). Integración, reporting y sistemas legacy. elgarcia.org">
   <meta name="author" content="Eleazar Garcia">
   <meta name="keywords" content="Eleazar Garcia, Desarrollador Full Stack, Java, Spring Boot, Angular, TypeScript, Portfolio">
 
-  <!-- Open Graph -->
+  <!-- Open Graph (Angular actualiza og:url y og:image al navegar; imagen por defecto alineada con environment.prod) -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Eleazar Garcia | Desarrollador Full Stack">
-  <meta property="og:description" content="Portfolio de Eleazar Garcia, Desarrollador Full Stack especializado en Java, Spring Boot y Angular.">
-  <meta property="og:url" content="https://portfolio-dev-1-592i.onrender.com">
+  <meta property="og:description" content="Full Stack: Java, Spring Boot y Angular. Integración, reporting y modernización de sistemas. elgarcia.org">
+  <meta property="og:image" content="https://elgarcia.org/assets/og-default.png">
   <meta property="og:locale" content="es_DO">
 
   <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Eleazar Garcia | Desarrollador Full Stack">
-  <meta name="twitter:description" content="Portfolio de Eleazar Garcia, Desarrollador Full Stack especializado en Java, Spring Boot y Angular.">
+  <meta name="twitter:description" content="Full Stack: Java, Spring Boot y Angular. Integración, reporting y modernización. elgarcia.org">
+  <meta name="twitter:image" content="https://elgarcia.org/assets/og-default.png">
 
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-  <!--
-    Analytics: Umami (privacy-friendly, sin cookies, GDPR compliant).
-    Pasos para activar:
-    1. Crea una cuenta gratuita en https://cloud.umami.is
-    2. Registra tu sitio y obtén el Website ID
-    3. Reemplaza el atributo data-website-id con tu ID real
-    4. El script se carga solo en producción (no afecta el desarrollo local)
-  -->
-  <!-- <script defer src="https://cloud.umami.is/script.js" data-website-id="TU-WEBSITE-ID-AQUI"></script> -->
+  <!-- Umami: pon tu Website ID en environment.prod.ts → umamiWebsiteId (el script se inyecta desde app.component). -->
 </head>
 
 <body>

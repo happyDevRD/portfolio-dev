@@ -6,8 +6,8 @@ import { ServicesComponent } from './services/services.component';
 import { PortfolioService } from '../../core/services/portfolio.service';
 import { SkillGroup } from '../../core/models/skill-group.model';
 import { Skill } from '../../core/models/skill.model';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { CountUpDirective } from '../../shared/directives/count-up.directive';
 import { SeoService } from '../../core/services/seo.service';
 
@@ -16,6 +16,7 @@ const CATEGORY_ORDER = ['Backend', 'Frontend', 'Database', 'DevOps', 'Tools', 'R
 const FA_ICON_MAP: Record<string, string> = {
   'Java':           'fab fa-java',
   'Spring Boot':    'fas fa-leaf',
+  'Quarkus':        'fab fa-quarkus',
   'Jakarta EE':     'fab fa-java',
   'Angular':        'fab fa-angular',
   'TypeScript':     'fab fa-js-square',
@@ -45,6 +46,8 @@ export interface SnapSection {
 })
 export class HomeComponent implements OnInit {
   skillGroups$: Observable<SkillGroup[]>;
+  /** Error al cargar skills desde el API (no se oculta como lista vacía). */
+  skillsLoadError = false;
   activeSection = 0;
 
   readonly snapSections: SnapSection[] = [
@@ -77,6 +80,10 @@ export class HomeComponent implements OnInit {
             return a.localeCompare(b);
           })
           .map(category => ({ category, items: groups[category] }));
+      }),
+      catchError(() => {
+        this.skillsLoadError = true;
+        return of([]);
       })
     );
   }
@@ -84,8 +91,8 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.seo.update({
       title: 'Eleazar Garcia | Desarrollador Full Stack',
-      description: 'Portfolio de Eleazar Garcia, Desarrollador Full Stack especializado en Spring Boot y Angular.',
-      keywords: 'desarrollador full stack, Spring Boot, Angular, Java, TypeScript, portfolio',
+      description: 'Eleazar Garcia — Full Stack (Java, Spring Boot, Angular). Integración, reporting y modernización de sistemas. elgarcia.org',
+      keywords: 'desarrollador full stack, Spring Boot, Quarkus, Angular, Java, integración, JasperReports, trabajo remoto',
       url: '/'
     });
   }

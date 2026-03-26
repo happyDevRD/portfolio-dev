@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { PortfolioService } from '../../core/services/portfolio.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Experience } from '../../core/models/experience.model';
-import { SkillTagComponent } from '../../shared/components/skill-tag/skill-tag.component';
 import { Skill } from '../../core/models/skill.model';
 import { SkillGroup } from '../../core/models/skill-group.model';
 import { map } from 'rxjs/operators';
@@ -14,25 +14,31 @@ const CATEGORY_ORDER = ['Backend', 'Frontend', 'DevOps', 'Database', 'Tools', 'R
 @Component({
   selector: 'app-resume',
   standalone: true,
-  imports: [CommonModule, DatePipe, SkillTagComponent],
+  imports: [CommonModule, DatePipe],
   templateUrl: './resume.component.html',
   styleUrl: './resume.component.scss'
 })
 export class ResumeComponent implements OnInit {
   experiences$!: Observable<Experience[]>;
   skillGroups$!: Observable<SkillGroup[]>;
+  loadError = false;
 
   constructor(private portfolioService: PortfolioService, private seo: SeoService) { }
 
   ngOnInit(): void {
     this.seo.update({
       title: 'Currículum',
-      description: 'Currículum de Eleazar Garcia. Experiencia en desarrollo full stack con Java, Spring Boot, Angular y DevOps.',
-      keywords: 'currículum, CV, desarrollador, Java, Spring Boot, Angular, experiencia',
+      description: 'Experiencia Full Stack: MayBlue, integraciones financieras, migración de reportes en sector público. Java, Spring Boot, Angular.',
+      keywords: 'currículum, CV, Java, Spring Boot, Angular, integración, JasperReports',
       url: '/resume'
     });
 
-    this.experiences$ = this.portfolioService.getExperiences();
+    this.experiences$ = this.portfolioService.getExperiences().pipe(
+      catchError(() => {
+        this.loadError = true;
+        return of([]);
+      })
+    );
 
     this.skillGroups$ = this.portfolioService.getSkills().pipe(
       map(skills => {
@@ -51,6 +57,10 @@ export class ResumeComponent implements OnInit {
             return a.localeCompare(b);
           })
           .map(category => ({ category, items: groups[category] }));
+      }),
+      catchError(() => {
+        this.loadError = true;
+        return of([]);
       })
     );
   }

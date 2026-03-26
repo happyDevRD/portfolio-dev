@@ -6,6 +6,7 @@ import com.portfolio.core.domain.model.Project;
 import com.portfolio.core.domain.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ public class ProjectPersistenceAdapter implements ProjectRepository {
     private final ProjectMapper projectMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Project> findAll() {
         return jpaProjectRepository.findAll().stream()
                 .map(projectMapper::toDomain)
@@ -25,6 +27,7 @@ public class ProjectPersistenceAdapter implements ProjectRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Project> findById(Long id) {
         if (id == null)
             return Optional.empty();
@@ -33,6 +36,7 @@ public class ProjectPersistenceAdapter implements ProjectRepository {
     }
 
     @Override
+    @Transactional
     public Project save(Project project) {
         var entity = projectMapper.toEntity(project);
         if (entity == null) {
@@ -43,6 +47,7 @@ public class ProjectPersistenceAdapter implements ProjectRepository {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         if (id != null) {
             jpaProjectRepository.deleteById(id);

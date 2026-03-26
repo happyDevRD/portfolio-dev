@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, shareReplay, catchError, of } from 'rxjs';
+import { Observable, shareReplay, tap } from 'rxjs';
 import { Project } from '../models/project.model';
 import { Skill } from '../models/skill.model';
 import { Experience } from '../models/experience.model';
 import { Service } from '../models/service.model';
+import { Testimonial } from '../models/testimonial.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -13,15 +14,12 @@ import { environment } from '../../../environments/environment';
 export class PortfolioService {
     private apiUrl = environment.apiUrl;
 
-    // Cached observables — se comparten entre suscriptores
     private skills$?: Observable<Skill[]>;
 
     constructor(private http: HttpClient) { }
 
     getProjects(): Observable<Project[]> {
-        return this.http.get<Project[]>(`${this.apiUrl}/projects`).pipe(
-            catchError(() => of([] as Project[]))
-        );
+        return this.http.get<Project[]>(`${this.apiUrl}/projects`);
     }
 
     getProjectById(id: number): Observable<Project> {
@@ -31,22 +29,22 @@ export class PortfolioService {
     getSkills(): Observable<Skill[]> {
         if (!this.skills$) {
             this.skills$ = this.http.get<Skill[]>(`${this.apiUrl}/skills`).pipe(
-                catchError(() => of([] as Skill[])),
-                shareReplay(1)
+                shareReplay({ bufferSize: 1, refCount: true }),
+                tap({ error: () => { this.skills$ = undefined; } })
             );
         }
         return this.skills$;
     }
 
     getExperiences(): Observable<Experience[]> {
-        return this.http.get<Experience[]>(`${this.apiUrl}/experiences`).pipe(
-            catchError(() => of([] as Experience[]))
-        );
+        return this.http.get<Experience[]>(`${this.apiUrl}/experiences`);
     }
 
     getServices(): Observable<Service[]> {
-        return this.http.get<Service[]>(`${this.apiUrl}/services`).pipe(
-            catchError(() => of([] as Service[]))
-        );
+        return this.http.get<Service[]>(`${this.apiUrl}/services`);
+    }
+
+    getTestimonials(): Observable<Testimonial[]> {
+        return this.http.get<Testimonial[]>(`${this.apiUrl}/testimonials`);
     }
 }

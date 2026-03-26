@@ -6,6 +6,7 @@ import com.portfolio.core.domain.model.Experience;
 import com.portfolio.core.domain.repository.ExperienceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ public class ExperiencePersistenceAdapter implements ExperienceRepository {
     private final ExperienceMapper experienceMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Experience> findAll() {
         return jpaExperienceRepository.findAll().stream()
                 .map(experienceMapper::toDomain)
@@ -25,6 +27,7 @@ public class ExperiencePersistenceAdapter implements ExperienceRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Experience> findById(Long id) {
         if (id == null)
             return Optional.empty();
@@ -33,6 +36,7 @@ public class ExperiencePersistenceAdapter implements ExperienceRepository {
     }
 
     @Override
+    @Transactional
     public Experience save(Experience experience) {
         var entity = experienceMapper.toEntity(experience);
         if (entity == null) {
@@ -43,6 +47,7 @@ public class ExperiencePersistenceAdapter implements ExperienceRepository {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         if (id != null) {
             jpaExperienceRepository.deleteById(id);

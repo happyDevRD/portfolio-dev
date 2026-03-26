@@ -33,6 +33,7 @@ export interface FilterTab {
 })
 export class ProjectsComponent implements OnInit {
   isLoading = true;
+  loadError = false;
   private allProjects$ = new BehaviorSubject<Project[]>([]);
   filter$ = new BehaviorSubject<string>('Todos');
   currentPage$ = new BehaviorSubject<number>(1);
@@ -106,14 +107,22 @@ export class ProjectsComponent implements OnInit {
   ngOnInit(): void {
     this.seo.update({
       title: 'Proyectos',
-      description: 'Proyectos de desarrollo full stack de Eleazar Garcia: aplicaciones web con Spring Boot, Angular, Docker y más.',
-      keywords: 'proyectos, portfolio, Spring Boot, Angular, full stack',
+      description: 'Selección de proyectos: integración, reporting Jasper, API gateway y este portafolio open source (Spring Boot, Angular).',
+      keywords: 'proyectos, Spring Boot, Angular, integración, JasperReports, portfolio',
       url: '/projects'
     });
-    this.portfolioService.getProjects().subscribe(p => {
-      this.allProjects$.next(p);
-      this.isLoading = false;
-      this.cdr.detectChanges();
+    this.portfolioService.getProjects().subscribe({
+      next: p => {
+        this.allProjects$.next(p);
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.loadError = true;
+        this.isLoading = false;
+        this.allProjects$.next([]);
+        this.cdr.detectChanges();
+      }
     });
   }
 

@@ -3,53 +3,108 @@
 
     <!-- ① HERO -->
     <section class="snap-section home-section" id="snap-hero">
-        <div class="glow-blob"></div>
-        <div class="container">
-            <div class="hero-grid">
-                <div class="hero-text animate-slide-up">
-                    <div class="greeting-badge">
-                        <span class="pulse-dot"></span>
-                        Hola, Soy
+        <div class="hero-backdrop" aria-hidden="true">
+            <div class="hero-backdrop__mesh"></div>
+            <div class="glow-blob glow-blob--primary"></div>
+            <div class="glow-blob glow-blob--secondary"></div>
+        </div>
+        <div class="container hero-container">
+            <!-- Grid de 3 columnas: orbes con hueco propio (no absolute → no quedan bajo el texto/terminal) -->
+            <div class="hero-layout">
+                <aside class="hero-orbs hero-orbs--left" aria-hidden="true">
+                    <div class="hero-orb" style="--orb-delay: 0s">
+                        <span class="hero-orb__float">
+                            <span class="hero-orb__face hero-orb__face--angular"><i class="fab fa-angular"></i></span>
+                        </span>
                     </div>
-                    <h1 class="main-title">
-                        Eleazar Garcia<br />
-                        <span class="gradient-text">Desarrollador</span><br />
-                        Full Stack
-                    </h1>
-                    <p class="bio-text bio-text--compact">
-                        Full Stack: <span class="highlight-angular">Angular</span> + <span class="highlight-java">Java</span>
-                        / Spring Boot — APIs, UI y despliegues.
-                    </p>
-                    <p class="bio-text bio-text--default">
-                        Guiando proyectos a través de todo el ciclo de vida full-stack, desde la vibrante interfaz de
-                        <span class="highlight-angular">Angular</span> hasta la robusta lógica de negocio con
-                        <span class="highlight-java">Java</span>.
-                    </p>
-                    <div class="cta-group">
-                        <a class="btn btn-primary" routerLink="/projects">Ver Proyectos</a>
-                        <a class="btn btn-outline" routerLink="/contact">Contactar <i class="fas fa-arrow-right"></i></a>
+                    <div class="hero-orb" style="--orb-delay: 0.4s">
+                        <span class="hero-orb__float">
+                            <span class="hero-orb__face hero-orb__face--java"><i class="fab fa-java"></i></span>
+                        </span>
+                    </div>
+                    <div class="hero-orb" style="--orb-delay: 0.8s">
+                        <span class="hero-orb__float">
+                            <span class="hero-orb__face hero-orb__face--spring"><i class="fas fa-leaf"></i></span>
+                        </span>
+                    </div>
+                </aside>
+                <div class="hero-main">
+                    <div class="hero-grid">
+                    <div class="hero-text hero-panel animate-slide-up">
+                        <div class="greeting-badge">
+                            <span class="pulse-dot"></span>
+                            Hola, soy
+                        </div>
+                        <h1 class="main-title">
+                            Eleazar Garcia<br />
+                            <span class="gradient-text">Desarrollador</span><br />
+                            Full Stack
+                        </h1>
+                        <p class="hero-location"><span class="hero-location__domain">elgarcia.org</span></p>
+                        <p class="bio-text bio-text--compact">
+                            Diseño y construyo productos web con <span class="highlight-java">Java</span>, <span class="highlight-java">Spring Boot</span> y
+                            <span class="highlight-angular">Angular</span>: APIs claras, interfaces mantenibles y despliegues confiables.
+                        </p>
+                        <p class="bio-text bio-text--default">
+                            Trabajo con equipos que necesitan integrar sistemas legacy, reporting exigente y experiencias de usuario modernas —
+                            desde la base de datos y el backend hasta el front y el pipeline de entrega.
+                        </p>
+                        <div class="cta-group">
+                            <a class="btn btn-primary" routerLink="/projects">Ver proyectos</a>
+                            <a class="btn btn-outline" routerLink="/contact">Hablemos <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="hero-terminal-wrap animate-fade-in delay-300">
+                        <div class="hero-terminal-ring" aria-hidden="true"></div>
+                        <div class="hero-terminal">
+                            <app-terminal></app-terminal>
+                        </div>
+                    </div>
                     </div>
                 </div>
-                <div class="hero-terminal animate-fade-in delay-300">
-                    <app-terminal></app-terminal>
-                </div>
+                <aside class="hero-orbs hero-orbs--right" aria-hidden="true">
+                    <div class="hero-orb" style="--orb-delay: 0.2s">
+                        <span class="hero-orb__float">
+                            <span class="hero-orb__face hero-orb__face--docker"><i class="fab fa-docker"></i></span>
+                        </span>
+                    </div>
+                    <div class="hero-orb" style="--orb-delay: 0.6s">
+                        <span class="hero-orb__float">
+                            <span class="hero-orb__face hero-orb__face--ts"><i class="fab fa-js-square"></i></span>
+                        </span>
+                    </div>
+                    <div class="hero-orb" style="--orb-delay: 1s">
+                        <span class="hero-orb__float">
+                            <span class="hero-orb__face hero-orb__face--git"><i class="fab fa-git-alt"></i></span>
+                        </span>
+                    </div>
+                </aside>
             </div>
         </div>
     </section>
 
     <!-- ② TECH STACK -->
     <section class="snap-section tech-section" id="snap-tech">
+        <div class="tech-section__ambient" aria-hidden="true"></div>
         <div class="container">
 
             <!-- Encabezado -->
             <div class="tech-header">
                 <div class="section-badge">Stack</div>
-                <h2 class="tech-title">Tecnologías que <span class="gradient-text">domino</span></h2>
-                <p class="tech-subtitle">Herramientas con las que construyo soluciones robustas de extremo a extremo.</p>
+                <h2 class="tech-title">Stack <span class="gradient-text">profesional</span></h2>
+                <p class="tech-subtitle">
+                    Backend con <strong>Spring Boot</strong> y <strong>Quarkus</strong>, front con <strong>Angular</strong>, datos y entrega con herramientas que uso en producción todos los días.
+                </p>
+            </div>
+
+            <div class="api-error-banner" *ngIf="skillsLoadError" role="alert">
+                <i class="fas fa-plug" aria-hidden="true"></i>
+                <span>No se pudieron cargar las tecnologías. Revisa la conexión o inténtalo más tarde.</span>
             </div>
 
             <!-- Grid de skills por categoría -->
             <ng-container *ngIf="skillGroups$ | async as groups; else techSkeleton">
+                <div class="tech-stack-panel">
                 <div class="tech-categories">
                     <div class="tech-category" *ngFor="let group of groups; let gi = index"
                          [style.--gi]="gi">
@@ -71,9 +126,11 @@
                         </div>
                     </div>
                 </div>
+                </div>
             </ng-container>
 
             <ng-template #techSkeleton>
+                <div class="tech-stack-panel">
                 <div class="tech-categories">
                     <div class="tech-category sk-cat" *ngFor="let i of [1,2,3,4]">
                         <div class="sk-line cat-sk-label"></div>
@@ -84,6 +141,7 @@
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
             </ng-template>
 
@@ -101,15 +159,15 @@
             <div class="about-grid">
                 <div class="about-text">
                     <div class="section-badge">Sobre mí</div>
-                    <h2 class="about-title">Desarrollador con pasión por la <span class="gradient-text">arquitectura limpia</span></h2>
+                    <h2 class="about-title">Software <span class="gradient-text">mantenible</span>, de verdad</h2>
                     <p class="about-body">
-                        Soy Eleazar Garcia, desarrollador Full Stack con sede en Punta Cana, República Dominicana.
-                        Me especializo en construir aplicaciones web escalables y de alto rendimiento usando
-                        <strong>Spring Boot</strong> en el backend y <strong>Angular</strong> en el frontend.
+                        Soy Eleazar Garcia, desarrollador Full Stack. Colaboro con equipos en remoto.
+                        Me centro en <strong>Spring Boot</strong> y <strong>Angular</strong> para aplicaciones que
+                        deben convivir años con equipos distintos: código legible, pruebas automatizadas y despliegues repetibles.
                     </p>
                     <p class="about-body">
-                        Me apasiona el software bien diseñado: APIs RESTful robustas, interfaces reactivas
-                        e intuitivas, y pipelines de CI/CD que permiten entregas continuas con confianza.
+                        Vengo del mundo de integraciones, reporting y modernización de sistemas Java.
+                        Eso me obliga a pensar en rendimiento, trazabilidad y en no dejar deuda técnica invisible para el siguiente desarrollador.
                     </p>
                     <div class="about-stats">
                         <div class="stat-item">
@@ -140,7 +198,6 @@
                         <pre class="code-body"><code>&#123;
   <span class="key">"nombre"</span>: <span class="str">"Eleazar Garcia"</span>,
   <span class="key">"rol"</span>: <span class="str">"Full Stack Developer"</span>,
-  <span class="key">"ubicacion"</span>: <span class="str">"Punta Cana, DO"</span>,
   <span class="key">"backend"</span>: [
     <span class="str">"Java"</span>, <span class="str">"Spring Boot"</span>,
     <span class="str">"PostgreSQL"</span>

@@ -4,6 +4,8 @@ import com.portfolio.adapters.persistence.entity.ArticleEntity;
 import com.portfolio.core.domain.model.Article;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Component
 public class ArticleMapper {
 
@@ -17,7 +19,7 @@ public class ArticleMapper {
                 .summary(entity.getSummary())
                 .content(entity.getContent())
                 .coverImageUrl(entity.getCoverImageUrl())
-                .tags(entity.getTags())
+                .tags(entity.getTags() == null ? null : new ArrayList<>(entity.getTags()))
                 .publishedAt(entity.getPublishedAt())
                 .readingTimeMinutes(entity.getReadingTimeMinutes())
                 .build();

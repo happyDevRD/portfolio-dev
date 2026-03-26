@@ -33,7 +33,9 @@
   --java-bg: #fffaf0;
 
   /* Layout Tokens */
-  --container-width: 1200px;
+  --container-width: min(1400px, 94vw);
+  /* Ancho máximo del shell (main + header alineados): antes 1200px apretaba todo el hero */
+  --layout-max-width: min(1680px, calc(100vw - 2rem));
   --radius-lg: 0.75rem;
 
   /* Glass Tokens */
@@ -177,7 +179,7 @@ body {
   transform: translateX(-50%);
   z-index: 1000;
   width: min(90%, calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 1rem));
-  max-width: min(1200px, calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 1rem));
+  max-width: min(var(--layout-max-width), calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 1rem));
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
@@ -191,7 +193,7 @@ body {
   @media (max-width: 1024px) and (min-width: 769px) {
     top: calc(0.85rem + env(safe-area-inset-top, 0px));
     width: min(96%, calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 1rem));
-    max-width: min(1200px, calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 1rem));
+    max-width: min(var(--layout-max-width), calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 1rem));
     border-radius: 20px;
     padding: 0.65rem 1.15rem;
   }
@@ -345,13 +347,15 @@ body {
 }
 
 .main-content {
-  max-width: 1200px;
+  max-width: var(--layout-max-width);
+  width: 100%;
   margin: 2rem auto;
-  padding: 0 2rem;
+  padding: 0 max(1rem, env(safe-area-inset-left, 0px)) 0 max(1rem, env(safe-area-inset-right, 0px));
   min-height: 80vh;
+  box-sizing: border-box;
 
   @media(max-width: 768px) {
-    padding: 0 1rem;
+    padding: 0 max(1rem, env(safe-area-inset-left, 0px)) 0 max(1rem, env(safe-area-inset-right, 0px));
     margin: 1rem auto;
   }
 }
@@ -367,7 +371,7 @@ body {
   backdrop-filter: none;
 
   .footer-content {
-    max-width: 1200px;
+    max-width: var(--layout-max-width);
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -664,4 +668,30 @@ body, .header, .skill-tag, .form-card, .section-card,
 .sidebar-widget, .bento-card, .service-card, .job-card,
 .summary-card, .skills-card, .education-card {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Aviso cuando el API no responde (PortfolioService sin datos) */
+.api-error-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-lg, 0.75rem);
+  border: 1px solid rgba(234, 40, 49, 0.35);
+  background: rgba(234, 40, 49, 0.08);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  line-height: 1.45;
+
+  i {
+    color: var(--primary-color);
+    margin-top: 0.1rem;
+    flex-shrink: 0;
+  }
+}
+
+body.dark-mode .api-error-banner {
+  border-color: rgba(248, 113, 113, 0.4);
+  background: rgba(248, 113, 113, 0.1);
 }

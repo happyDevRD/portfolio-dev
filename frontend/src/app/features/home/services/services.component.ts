@@ -2,7 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { Service } from '../../../core/models/service.model';
-import { Observable, shareReplay, take, tap } from 'rxjs';
+import { Observable, of, shareReplay, take, tap } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { RevealDirective } from '../../../shared/directives/reveal.directive';
 import { SkeletonComponent } from '../../../shared/components/skeleton/skeleton.component';
 
@@ -31,6 +32,7 @@ const ICON_MAP: Record<string, string> = {
 export class ServicesComponent implements OnInit {
     services$!: Observable<Service[]>;
     isLoading = true;
+    servicesError = false;
 
     constructor(private portfolioService: PortfolioService, private cdr: ChangeDetectorRef) { }
 
@@ -41,6 +43,12 @@ export class ServicesComponent implements OnInit {
             tap(() => {
                 this.isLoading = false;
                 this.cdr.markForCheck();
+            }),
+            catchError(() => {
+                this.servicesError = true;
+                this.isLoading = false;
+                this.cdr.markForCheck();
+                return of([]);
             }),
             shareReplay(1)
         );

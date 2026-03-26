@@ -68,22 +68,22 @@ export class TerminalComponent implements OnInit, OnDestroy {
     const date = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
     const time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return `System: portfolio-dev | Date: ${date} ${time} | TZ: ${tz}`;
+    return `Host: elgarcia.org | ${date} ${time} | TZ: ${tz}`;
   }
 
   async startSequence(skills: Skill[]) {
     const skillsJson = skills.length > 0
       ? this.buildSkillsJson(skills)
-      : `{\n  "backend": ["Java 17", "Spring Boot 3", "PL/SQL"],\n  "frontend": ["Angular 17", "TypeScript"],\n  "devops": ["Docker", "Jenkins"]\n}`;
+      : `{\n  "backend": ["Java 17", "Spring Boot 3", "Quarkus", "PL/SQL"],\n  "frontend": ["Angular 17", "TypeScript"],\n  "devops": ["Docker", "Jenkins"]\n}`;
 
     const commands: { cmd: string; output: string; type: TerminalLine['type'] }[] = [
       {
         cmd: 'whoami',
-        output: 'eleazar.garcia — Senior Full Stack Developer',
+        output: 'eleazar.garcia — Full Stack Developer (Java · Angular)',
         type: 'success'
       },
       {
-        cmd: 'date && uname -s',
+        cmd: 'date',
         output: this.getSystemInfo(),
         type: 'info'
       },
@@ -94,7 +94,7 @@ export class TerminalComponent implements OnInit, OnDestroy {
       },
       {
         cmd: './check-status.sh',
-        output: '✔  Disponible para proyectos freelance y posiciones remotas',
+        output: '✔  Abierto a colaboraciones remotas y proyectos por objetivos',
         type: 'success'
       }
     ];

@@ -35,6 +35,8 @@ public class ArticleEntity {
     private String coverImageUrl;
 
     @ElementCollection
+    @CollectionTable(name = "article_tags", joinColumns = @JoinColumn(name = "article_id"))
+    @Column(name = "tag")
     private List<String> tags;
 
     private LocalDate publishedAt;

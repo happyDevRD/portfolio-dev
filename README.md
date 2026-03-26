@@ -83,7 +83,29 @@ npm start
 | `DATABASE_URL`        | JDBC URL de PostgreSQL                  |
 | `DATABASE_USERNAME`   | Usuario de la base de datos             |
 | `DATABASE_PASSWORD`   | Contraseña de la base de datos          |
-| `CORS_ALLOWED_ORIGINS`| Origen permitido (URL del frontend)     |
+| `CORS_ALLOWED_ORIGINS`| Orígenes del frontend, separados por coma. Ej.: `https://elgarcia.org,https://www.elgarcia.org` |
+| `ADMIN_API_KEY`       | **Obligatorio en prod.** Clave para `POST`/`PUT`/`DELETE` en `/api/projects`, `/api/skills`, `/api/experiences`. Enviar cabecera `X-API-Key`. |
+
+En desarrollo local (`spring.profiles.active` distinto de `prod`) las escrituras no exigen API key salvo que configures `app.security.require-api-key-for-writes=true`.
+
+En **Render**, añade `ADMIN_API_KEY` en el panel de Environment del servicio backend (valor secreto y largo).
+
+**Documentación API:** en **prod**, Swagger UI y `/v3/api-docs` están **desactivados** por seguridad. En local (`http://localhost:8080/swagger-ui.html`) puedes usar el botón *Authorize* y la cabecera `X-API-Key` para probar `POST`/`PUT`/`DELETE` cuando actives la API key.
+
+**Métricas:** con el perfil por defecto (dev), Actuator expone también Prometheus en `/actuator/prometheus`. En **prod** solo se exponen `health` e `info` (sin `/actuator/prometheus` público).
+
+### Frontend — `environment` / `environment.prod.ts`
+
+- **`siteUrl`**: URL pública del frontend (canonical, Open Graph). Debe coincidir con el dominio desplegado.
+- **`defaultOgImagePath`**: ruta bajo el sitio para la imagen por defecto al compartir enlaces (`src/assets/og-default.png`); puedes sustituirla por tu propio diseño (recomendado ~1200×630 px).
+- **`umamiWebsiteId`**: opcional. Si pones el ID de [Umami](https://umami.is), el `AppComponent` carga el script de `cloud.umami.is` (la CSP de `nginx.conf` ya lo permite).
+
+### Base de datos — perfil `prod`
+
+- **Flyway** ejecuta los scripts en `backend/src/main/resources/db/migration/`. La primera migración crea el esquema completo en PostgreSQL.
+- Con `prod`, Hibernate usa `ddl-auto: validate` (no modifica el esquema; debe coincidir con lo aplicado por Flyway).
+- En desarrollo (H2), Flyway está **desactivado** y se sigue usando `ddl-auto: create-drop`.
+- Si tu PostgreSQL de producción se creó antes solo con Hibernate (`update`) y nunca con Flyway, puede hacer falta un **baseline** manual o ajustar el esquema antes de desplegar; las instalaciones nuevas aplican `V1__initial_schema.sql` solas.
 
 ### GitHub Actions — Secrets requeridos
 
@@ -105,6 +127,8 @@ cd backend && mvn test
 # Frontend
 cd frontend && ng test --watch=false
 ```
+
+El test `FlywayPostgresIntegrationTest` levanta PostgreSQL con **Testcontainers** y valida Flyway + Hibernate en un entorno cercano a producción. **Requiere Docker** (en CI suele estar disponible; sin Docker, ese test se omite automáticamente).
 
 ---
 
@@ -137,4 +161,4 @@ portfolio-dev/
 ## Autor
 
 **Eleazar Garcia** — Senior Full Stack Java Developer  
-[contact@eleazargarcia.com](mailto:contact@eleazargarcia.com) · [LinkedIn](https://linkedin.com/in/eleazar-garcia) · [GitHub](https://github.com/eleazar-garcia)
+[hola@elgarcia.org](mailto:hola@elgarcia.org) · [LinkedIn](https://www.linkedin.com/in/garciaeleazar/) · [GitHub](https://github.com/happyDevRD)

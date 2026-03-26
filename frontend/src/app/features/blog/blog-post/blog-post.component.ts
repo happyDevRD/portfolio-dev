@@ -83,7 +83,8 @@ export class BlogPostComponent implements OnInit, AfterViewChecked {
           description: article.summary ?? 'Artículo técnico por Eleazar Garcia.',
           keywords: article.tags?.join(', '),
           url: `/blog/${article.slug}`,
-          type: 'article'
+          type: 'article',
+          imageUrl: article.coverImageUrl
         });
       })
     );
@@ -106,7 +107,7 @@ export class BlogPostComponent implements OnInit, AfterViewChecked {
 
   getTwitterShareUrl(title: string): string {
     const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent(`${title} — por @eleazargarcia`);
+    const text = encodeURIComponent(`${title} — Eleazar Garcia`);
     return `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
   }
 

@@ -2,8 +2,11 @@ package com.portfolio.infrastructure.rest;
 
 import com.portfolio.core.domain.model.Project;
 import com.portfolio.core.usecase.ProjectService;
+import com.portfolio.infrastructure.rest.dto.ProjectWriteRequest;
+import com.portfolio.infrastructure.rest.mapper.RestDtoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,15 +38,15 @@ public class ProjectController {
 
     @PostMapping
     @Operation(summary = "Create a new project")
-    public ResponseEntity<Project> createProject(@RequestBody Project project) {
+    public ResponseEntity<Project> createProject(@Valid @RequestBody ProjectWriteRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(projectService.createProject(project));
+                .body(projectService.createProject(RestDtoMapper.toProject(request)));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update a project")
-    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project project) {
-        return projectService.updateProject(id, project)
+    public ResponseEntity<Project> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectWriteRequest request) {
+        return projectService.updateProject(id, RestDtoMapper.toProject(request))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

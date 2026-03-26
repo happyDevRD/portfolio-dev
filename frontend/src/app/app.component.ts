@@ -1,9 +1,12 @@
+import { DOCUMENT } from '@angular/common';
 import { Component, OnInit, OnDestroy, AfterViewInit, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { filter } from 'rxjs/operators';
 import { Subscription, fromEvent } from 'rxjs';
+
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +20,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   isScrolled = false;
   isMobileMenuOpen = false;
   private router = inject(Router);
+  private document = inject(DOCUMENT);
   private subs = new Subscription();
   private scrollSub?: Subscription;
 
@@ -36,6 +40,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     const saved = localStorage.getItem('theme');
     this.isDarkMode = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
     this.applyTheme();
+
+    if (environment.umamiWebsiteId) {
+      const s = this.document.createElement('script');
+      s.defer = true;
+      s.src = 'https://cloud.umami.is/script.js';
+      s.setAttribute('data-website-id', environment.umamiWebsiteId);
+      this.document.head.appendChild(s);
+    }
   }
 
   ngAfterViewInit() {

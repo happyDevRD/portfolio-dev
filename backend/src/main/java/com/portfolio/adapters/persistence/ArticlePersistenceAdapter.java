@@ -7,6 +7,7 @@ import com.portfolio.core.domain.model.Article;
 import com.portfolio.core.domain.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,7 @@ public class ArticlePersistenceAdapter implements ArticleRepository {
     private final ArticleMapper mapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Article> findAll() {
         return jpaRepository.findAll().stream()
                 .map(mapper::toDomain)
@@ -27,12 +29,14 @@ public class ArticlePersistenceAdapter implements ArticleRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Article> findBySlug(String slug) {
         return jpaRepository.findBySlug(slug)
                 .map(mapper::toDomain);
     }
 
     @Override
+    @Transactional
     public Article save(Article article) {
         ArticleEntity entity = mapper.toEntity(article);
         if (entity == null) {

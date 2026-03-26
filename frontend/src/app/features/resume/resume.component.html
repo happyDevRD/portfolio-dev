@@ -4,8 +4,8 @@
     <div class="web-resume">
         <header class="resume-hero">
             <div class="hero-left">
-                <h1>Curriculum Vitae</h1>
-                <p>Desarrollador Full Stack</p>
+                <h1>Currículum vitae</h1>
+                <p>Desarrollador Full Stack · Java &amp; Angular</p>
             </div>
             <div class="hero-right">
                 <button class="btn-download" (click)="downloadPDF()">
@@ -14,12 +14,17 @@
             </div>
         </header>
 
+        <div class="api-error-banner" *ngIf="loadError" role="alert">
+            <i class="fas fa-plug" aria-hidden="true"></i>
+            <span>No se pudieron cargar experiencia o habilidades desde el servidor. Revisa la conexión o inténtalo más tarde.</span>
+        </div>
+
         <div class="resume-grid">
             <!-- Left Column: Summary & Experience -->
             <div class="main-col">
                 <section class="summary-card animate-up" style="--delay: 0.1s">
                     <h2><span class="icon"><i class="fas fa-user-circle"></i></span> Resumen Profesional</h2>
-                    <p>Apasionado por crear aplicaciones web escalables con Spring Boot y Angular. Me encanta resolver problemas complejos y aprender nuevas tecnologías.</p>
+                    <p>Full Stack con foco en sistemas empresariales: APIs REST, integraciones (SOAP/REST), reporting (Jasper / Oracle) y frontends Angular mantenibles. Priorizo diseño por dominios, pruebas y despliegues repetibles.</p>
                 </section>
 
                 <section class="timeline-section">
@@ -87,12 +92,11 @@
                     <div class="edu-item" style="margin-top: 1.5rem">
                         <div class="edu-badge"><i class="fas fa-certificate"></i></div>
                         <div class="edu-info">
-                            <h4>Certificaciones</h4>
-                            <p class="school">Spring Boot · Angular · Docker · Clean Architecture</p>
+                            <h4>Formación continua</h4>
+                            <p class="school">Spring Boot, Angular, Docker, arquitectura limpia — cursos y práctica aplicada a proyectos reales.</p>
                             <p class="year cert-tags">
-                                <span class="cert-tag">Udemy</span>
-                                <span class="cert-tag">Platzi</span>
-                                <span class="cert-tag">YouTube</span>
+                                <span class="cert-tag">Online</span>
+                                <span class="cert-tag">Autodidacta</span>
                             </p>
                         </div>
                     </div>
@@ -110,17 +114,17 @@
             </div>
             <div class="header-right">
                 <ul>
-                    <li>Punta Cana, República Dominicana</li>
-                    <li>contact&#64;eleazargarcia.com</li>
-                    <li>linkedin.com/in/eleazar-garcia</li>
-                    <li>github.com/eleazar-garcia</li>
+                    <li>hola&#64;elgarcia.org</li>
+                    <li>+1 (809) 757-2408</li>
+                    <li>linkedin.com/in/garciaeleazar</li>
+                    <li>github.com/happyDevRD</li>
                 </ul>
             </div>
         </header>
         <hr>
         <section class="section">
             <h3>Resumen Profesional</h3>
-            <p>Desarrollador Full Stack con más de 3 años de experiencia construyendo aplicaciones web empresariales con Spring Boot y Angular. Especializado en Clean Architecture, APIs RESTful y modernización de sistemas legacy.</p>
+            <p>Full Stack (Java, Spring Boot, Angular) con experiencia en integraciones bancarias, reporting crítico y modernización de sistemas Java. Enfoque en código mantenible, observabilidad y entrega continua.</p>
         </section>
         <section class="section">
             <h3>Experiencia Profesional</h3>

@@ -4,6 +4,8 @@ import com.portfolio.adapters.persistence.entity.ExperienceEntity;
 import com.portfolio.core.domain.model.Experience;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Component
 public class ExperienceMapper {
     public Experience toDomain(ExperienceEntity entity) {
@@ -17,7 +19,7 @@ public class ExperienceMapper {
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
                 .currentInfo(entity.isCurrentInfo())
-                .highlights(entity.getHighlights())
+                .highlights(entity.getHighlights() == null ? null : new ArrayList<>(entity.getHighlights()))
                 .build();
     }
 

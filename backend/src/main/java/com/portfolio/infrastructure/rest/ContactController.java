@@ -3,6 +3,8 @@ package com.portfolio.infrastructure.rest;
 import com.portfolio.core.domain.model.Contact;
 import com.portfolio.core.usecase.ContactService;
 import com.portfolio.infrastructure.rest.dto.ContactRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/contact")
+@Tag(name = "Contact", description = "Formulario de contacto")
 @RequiredArgsConstructor
 @Slf4j
 public class ContactController {
@@ -24,6 +27,7 @@ public class ContactController {
     private final ContactService contactService;
 
     @PostMapping
+    @Operation(summary = "Enviar mensaje de contacto")
     public ResponseEntity<Map<String, String>> sendMessage(@Valid @RequestBody ContactRequest request) {
         Contact contact = Contact.builder()
                 .name(request.getName())

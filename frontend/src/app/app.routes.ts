@@ -22,7 +22,7 @@ export const routes: Routes = [
     {
         path: 'blog',
         loadComponent: () => import('./features/blog/blog/blog.component').then(m => m.BlogComponent),
-        title: 'Bitácora | Eleazar Garcia',
+        title: 'Blog | Eleazar Garcia',
         data: { animation: 2 }
     },
     {

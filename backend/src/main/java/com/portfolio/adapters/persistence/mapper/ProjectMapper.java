@@ -4,6 +4,9 @@ import com.portfolio.adapters.persistence.entity.ProjectEntity;
 import com.portfolio.core.domain.model.Project;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class ProjectMapper {
     public Project toDomain(ProjectEntity entity) {
@@ -18,11 +21,15 @@ public class ProjectMapper {
                 .githubUrl(entity.getGithubUrl())
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
-                .tags(entity.getTags())
+                .tags(copyList(entity.getTags()))
                 .challenge(entity.getChallenge())
                 .solution(entity.getSolution())
-                .features(entity.getFeatures())
+                .features(copyList(entity.getFeatures()))
                 .build();
+    }
+
+    private static List<String> copyList(List<String> from) {
+        return from == null ? null : new ArrayList<>(from);
     }
 
     public ProjectEntity toEntity(Project domain) {

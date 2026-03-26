@@ -2,8 +2,11 @@ package com.portfolio.infrastructure.rest;
 
 import com.portfolio.core.domain.model.Experience;
 import com.portfolio.core.usecase.ExperienceService;
+import com.portfolio.infrastructure.rest.dto.ExperienceWriteRequest;
+import com.portfolio.infrastructure.rest.mapper.RestDtoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,15 +38,15 @@ public class ExperienceController {
 
     @PostMapping
     @Operation(summary = "Create a new experience")
-    public ResponseEntity<Experience> createExperience(@RequestBody Experience experience) {
+    public ResponseEntity<Experience> createExperience(@Valid @RequestBody ExperienceWriteRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(experienceService.createExperience(experience));
+                .body(experienceService.createExperience(RestDtoMapper.toExperience(request)));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update an experience")
-    public ResponseEntity<Experience> updateExperience(@PathVariable Long id, @RequestBody Experience experience) {
-        return experienceService.updateExperience(id, experience)
+    public ResponseEntity<Experience> updateExperience(@PathVariable Long id, @Valid @RequestBody ExperienceWriteRequest request) {
+        return experienceService.updateExperience(id, RestDtoMapper.toExperience(request))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

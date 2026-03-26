@@ -2,12 +2,17 @@
 <section class="projects-section">
 
   <div class="section-header">
-    <h1>Mis Proyectos</h1>
-    <p class="section-subtitle">Una selección de lo que he construido</p>
+    <h1>Proyectos</h1>
+    <p class="section-subtitle">Casos reales de integración, reporting y productos web — el detalle incluye contexto, reto y solución.</p>
+  </div>
+
+  <div class="api-error-banner" *ngIf="loadError" role="alert">
+    <i class="fas fa-plug" aria-hidden="true"></i>
+    <span>No se pudieron cargar los proyectos. Revisa la conexión o inténtalo más tarde.</span>
   </div>
 
   <!-- Filtros por categoría principal -->
-  <div class="filters" *ngIf="!isLoading" role="group" aria-label="Filtrar proyectos por categoría">
+  <div class="filters" *ngIf="!isLoading && !loadError" role="group" aria-label="Filtrar proyectos por categoría">
     <button *ngFor="let tab of (availableTabs$ | async)"
         class="filter-btn"
         [class.active]="(filter$ | async) === tab.label"
@@ -19,7 +24,7 @@
   </div>
 
   <!-- Resultado count -->
-  <p class="result-count" *ngIf="!isLoading">
+  <p class="result-count" *ngIf="!isLoading && !loadError">
     <span>{{ resultCount$ | async }}</span> proyecto{{ (resultCount$ | async) !== 1 ? 's' : '' }}
     <span class="filter-label" *ngIf="(filter$ | async) !== 'Todos'">en <em>{{ filter$ | async }}</em></span>
   </p>
@@ -28,7 +33,7 @@
     <!-- Flecha lateral izquierda -->
     <button
       class="side-arrow left"
-      *ngIf="!isLoading && (totalPages$ | async)! > 1"
+      *ngIf="!isLoading && !loadError && (totalPages$ | async)! > 1"
       (click)="prevPage()"
       [disabled]="(currentPage$ | async) === 1"
       aria-label="Página anterior">
@@ -41,7 +46,7 @@
     </div>
 
     <!-- Grid de proyectos -->
-    <div class="projects-grid" *ngIf="!isLoading">
+    <div class="projects-grid" *ngIf="!isLoading && !loadError">
         <app-project-card *ngFor="let project of (paginatedProjects$ | async); let i = index"
             [project]="project"
             class="animate-slide-up"
@@ -52,7 +57,7 @@
     <!-- Flecha lateral derecha -->
     <button
       class="side-arrow right"
-      *ngIf="!isLoading && (totalPages$ | async)! > 1"
+      *ngIf="!isLoading && !loadError && (totalPages$ | async)! > 1"
       (click)="nextPage()"
       [disabled]="(currentPage$ | async) === (totalPages$ | async)"
       aria-label="Página siguiente">
@@ -61,7 +66,7 @@
   </div>
 
   <!-- Paginación -->
-  <div class="pagination-controls" *ngIf="!isLoading && (totalPages$ | async)! > 1">
+  <div class="pagination-controls" *ngIf="!isLoading && !loadError && (totalPages$ | async)! > 1">
       <button class="page-btn" (click)="prevPage()" [disabled]="(currentPage$ | async) === 1">
           <i class="fas fa-chevron-left" aria-hidden="true"></i> Anterior
       </button>
@@ -71,7 +76,7 @@
       </button>
   </div>
 
-  <div *ngIf="!isLoading && (filteredProjects$ | async)?.length === 0" class="no-results">
+  <div *ngIf="!isLoading && !loadError && (filteredProjects$ | async)?.length === 0" class="no-results">
       <i class="fas fa-search" aria-hidden="true"></i>
       No se encontraron proyectos en esta categoría.
   </div>

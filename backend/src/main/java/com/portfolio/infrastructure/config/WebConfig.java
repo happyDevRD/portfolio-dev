@@ -1,5 +1,6 @@
 package com.portfolio.infrastructure.config;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
     private String allowedOrigins;
 
     @Override
+    @SuppressWarnings("null") 
     public void addCorsMappings(@NonNull CorsRegistry registry) {
         boolean isWildcard = "*".equals(allowedOrigins);
 
@@ -25,8 +27,11 @@ public class WebConfig implements WebMvcConfigurer {
         if (isWildcard) {
             mapping.allowedOriginPatterns("*");
         } else {
-            String[] origins = Objects.requireNonNull(allowedOrigins, "allowedOrigins must not be null")
-                                      .split(",");
+            String raw = Objects.requireNonNull(allowedOrigins, "allowedOrigins must not be null");
+            String[] origins = Arrays.stream(raw.split(","))
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty())
+                    .toArray(String[]::new);
             mapping.allowedOrigins(origins)
                    .allowCredentials(true);
         }

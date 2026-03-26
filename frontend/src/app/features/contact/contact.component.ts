@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { SeoService } from '../../core/services/seo.service';
 
 @Component({
   selector: 'app-contact',
@@ -11,7 +12,7 @@ import { environment } from '../../../environments/environment';
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss'
 })
-export class ContactComponent {
+export class ContactComponent implements OnInit {
   contactForm: FormGroup;
   isSubmitting = false;
   successMessage = '';
@@ -21,12 +22,22 @@ export class ContactComponent {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private seo: SeoService
   ) {
     this.contactForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       message: ['', [Validators.required, Validators.minLength(10)]]
+    });
+  }
+
+  ngOnInit(): void {
+    this.seo.update({
+      title: 'Contacto',
+      description: 'Escríbeme a hola@elgarcia.org o llama al +1 (809) 757-2408. Full Stack Java / Angular · República Dominicana · trabajo remoto.',
+      keywords: 'contacto, desarrollador full stack, freelance, trabajo remoto, República Dominicana',
+      url: '/contact'
     });
   }
 
@@ -54,9 +65,19 @@ export class ContactComponent {
         this.successMessage = '¡Mensaje enviado correctamente!';
         this.contactForm.reset();
       },
-      error: () => {
+      error: (err: HttpErrorResponse) => {
         this.isSubmitting = false;
-        this.errorMessage = 'No se pudo enviar el mensaje. Por favor intenta más tarde.';
+        if (err.status === 429) {
+          this.errorMessage = 'Demasiados envíos. Espera un minuto e inténtalo de nuevo.';
+        } else if (err.status === 0 || err.status === 503) {
+          this.errorMessage = 'El servicio no está disponible en este momento. Intenta más tarde.';
+        } else if (err.status >= 500) {
+          this.errorMessage = 'Error en el servidor. Intenta más tarde.';
+        } else if (err.status === 400) {
+          this.errorMessage = 'Revisa los datos del formulario e inténtalo de nuevo.';
+        } else {
+          this.errorMessage = 'No se pudo enviar el mensaje. Por favor intenta más tarde.';
+        }
       }
     });
   }

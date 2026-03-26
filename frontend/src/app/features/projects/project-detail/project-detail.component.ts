@@ -25,8 +25,9 @@ export class ProjectDetailComponent implements OnInit {
     private router = inject(Router);
 
     ngOnInit(): void {
-        this.portfolioService.getProjects().subscribe(projects => {
-            this.allProjects.set(projects);
+        this.portfolioService.getProjects().subscribe({
+            next: projects => this.allProjects.set(projects),
+            error: () => this.allProjects.set([])
         });
 
         this.route.paramMap.pipe(
@@ -44,7 +45,8 @@ export class ProjectDetailComponent implements OnInit {
                     description: p.description?.substring(0, 155) ?? 'Proyecto de Eleazar Garcia.',
                     keywords: p.tags?.join(', '),
                     url: `/projects/${p.id}`,
-                    type: 'article'
+                    type: 'article',
+                    imageUrl: p.imageUrl
                 });
             },
             error: () => {

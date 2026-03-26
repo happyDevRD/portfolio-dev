@@ -3,7 +3,12 @@
         <div class="section-header">
             <div class="section-badge">Servicios</div>
             <h2>¿En qué puedo <span class="gradient-text">ayudarte?</span></h2>
-            <p>Soluciones técnicas de extremo a extremo para proyectos web modernos.</p>
+            <p>Desde una API nueva hasta modernizar lo que ya tienes: diseño, implementación y acompañamiento con código limpio.</p>
+        </div>
+
+        <div class="api-error-banner" *ngIf="servicesError" role="alert">
+            <i class="fas fa-plug" aria-hidden="true"></i>
+            <span>No se pudieron cargar los servicios. Revisa la conexión o inténtalo más tarde.</span>
         </div>
 
         <!-- Skeleton loader -->
@@ -18,7 +23,7 @@
             </div>
         </div>
 
-        <div class="services-grid" *ngIf="!isLoading">
+        <div class="services-grid" *ngIf="!isLoading && !servicesError">
             <div class="service-card" *ngFor="let service of services$ | async; let i = index"
                 [style.--delay]="(i * 0.1) + 's'">
                 <div class="service-header">

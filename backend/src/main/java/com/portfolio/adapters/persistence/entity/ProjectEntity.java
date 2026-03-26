@@ -31,6 +31,8 @@ public class ProjectEntity {
     private LocalDate endDate;
 
     @ElementCollection
+    @CollectionTable(name = "project_tags", joinColumns = @JoinColumn(name = "project_id"))
+    @Column(name = "tag")
     private java.util.List<String> tags;
 
     @Column(length = 2000)
@@ -40,5 +42,7 @@ public class ProjectEntity {
     private String solution;
 
     @ElementCollection
+    @CollectionTable(name = "project_features", joinColumns = @JoinColumn(name = "project_id"))
+    @Column(name = "feature")
     private java.util.List<String> features;
 }
