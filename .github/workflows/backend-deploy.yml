@@ -1,0 +1,94 @@
+# Despliega el backend a Cloud Run cuando cambia backend/ (rama principal).
+# Requiere Artifact Registry: repositorio Docker "backend-repo" en us-central1 (crear una vez en consola GCP).
+name: CD — Backend → Cloud Run
+
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - 'backend/**'
+  workflow_dispatch:
+
+concurrency:
+  group: cloud-run-backend-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GCP_REGION: us-central1
+  AR_REPO: backend-repo
+  IMAGE_NAME: portfolio-backend
+  CLOUD_RUN_SERVICE: portfolio-backend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Build and push image (Cloud Build)
+        run: |
+          IMAGE="${GCP_REGION}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${AR_REPO}/${IMAGE_NAME}:latest"
+          gcloud builds submit ./backend \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --tag "${IMAGE}" \
+            --quiet
+
+      - name: Write Cloud Run env file
+        env:
+          SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+          CORS_ALLOWED_ORIGINS: ${{ secrets.CORS_ALLOWED_ORIGINS }}
+          ADMIN_API_KEY: ${{ secrets.ADMIN_API_KEY }}
+          OUT_FILE: ${{ runner.temp }}/cloudrun-env.yaml
+        run: |
+          python3 << 'PY'
+          import json
+          import os
+          import sys
+
+          def req(name):
+              v = os.environ.get(name, "").strip()
+              if not v:
+                  print(f"Missing required env / secret: {name}", file=sys.stderr)
+                  sys.exit(1)
+              return v
+
+          # Perfiles: prod (seguridad, CORS) + supabase (pool Hikari para Postgres remoto)
+          mapping = {
+              "SPRING_PROFILES_ACTIVE": "prod,supabase",
+              "SPRING_DATASOURCE_URL": req("SPRING_DATASOURCE_URL"),
+              "SPRING_DATASOURCE_USERNAME": req("SPRING_DATASOURCE_USERNAME"),
+              "SPRING_DATASOURCE_PASSWORD": req("SPRING_DATASOURCE_PASSWORD"),
+              "CORS_ALLOWED_ORIGINS": req("CORS_ALLOWED_ORIGINS"),
+              "ADMIN_API_KEY": req("ADMIN_API_KEY"),
+          }
+          path = os.environ["OUT_FILE"]
+          with open(path, "w", encoding="utf-8") as f:
+              for k, v in mapping.items():
+                  f.write(f"{k}: {json.dumps(v)}\n")
+          PY
+
+      - name: Deploy to Cloud Run
+        run: |
+          IMAGE="${GCP_REGION}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${AR_REPO}/${IMAGE_NAME}:latest"
+          gcloud run deploy "${CLOUD_RUN_SERVICE}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --region="${GCP_REGION}" \
+            --platform=managed \
+            --image="${IMAGE}" \
+            --env-vars-file="$RUNNER_TEMP/cloudrun-env.yaml" \
+            --allow-unauthenticated \
+            --quiet

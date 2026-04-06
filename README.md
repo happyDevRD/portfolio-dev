@@ -1,6 +1,6 @@
 # Portfolio Dev — Eleazar Garcia
 
-Portfolio profesional Full Stack construido con **Spring Boot 3** y **Angular 17**, siguiendo Clean Architecture y con CI/CD automatizado hacia Render.
+Portfolio profesional Full Stack construido con **Spring Boot 3** y **Angular 17**, siguiendo Clean Architecture y con CI en GitHub Actions.
 
 [![CI — Build & Test](https://github.com/happyDevRD/portfolio-dev/actions/workflows/ci.yml/badge.svg)](https://github.com/happyDevRD/portfolio-dev/actions/workflows/ci.yml)
 
@@ -19,8 +19,8 @@ Portfolio profesional Full Stack construido con **Spring Boot 3** y **Angular 17
 - **Features**: Formularios reactivos, CV imprimible, grid de proyectos con filtros dinámicos, blog con Markdown
 
 ### DevOps
-- **CI**: GitHub Actions — build + test en cada push
-- **CD**: Deploy automático a Render cuando el CI pasa
+- **CI**: GitHub Actions — build + test en cada push (`ci.yml`)
+- **CD**: GitHub Actions — backend a **Google Cloud Run** (`backend-deploy.yml`) y frontend a **Firebase Hosting** (`frontend-deploy.yml`) solo en ramas `master`/`main` y cuando cambian `backend/**` o `frontend/**`
 - **Contenedores**: Docker Compose con PostgreSQL para entorno local completo
 
 ---
@@ -78,17 +78,21 @@ npm start
 
 ### Backend — perfil `prod`
 
-| Variable              | Descripción                             |
-|-----------------------|-----------------------------------------|
-| `DATABASE_URL`        | JDBC URL de PostgreSQL                  |
-| `DATABASE_USERNAME`   | Usuario de la base de datos             |
-| `DATABASE_PASSWORD`   | Contraseña de la base de datos          |
-| `CORS_ALLOWED_ORIGINS`| Orígenes del frontend, separados por coma. Ej.: `https://elgarcia.org,https://www.elgarcia.org` |
-| `ADMIN_API_KEY`       | **Obligatorio en prod.** Clave para `POST`/`PUT`/`DELETE` en `/api/projects`, `/api/skills`, `/api/experiences`. Enviar cabecera `X-API-Key`. |
+Spring Boot lee la configuración típica de datasource con estas variables (equivalentes a `spring.datasource.*`):
+
+| Variable                    | Descripción                             |
+|-----------------------------|-----------------------------------------|
+| `SPRING_DATASOURCE_URL`     | JDBC URL de PostgreSQL (p. ej. Supabase) |
+| `SPRING_DATASOURCE_USERNAME`| Usuario de la base de datos             |
+| `SPRING_DATASOURCE_PASSWORD`| Contraseña de la base de datos          |
+| `CORS_ALLOWED_ORIGINS`      | Orígenes del frontend, separados por coma. Ej.: `https://elgarcia.org,https://www.elgarcia.org,https://portfolio-eleazar-garcia.web.app` |
+| `ADMIN_API_KEY`             | **Obligatorio en prod.** Clave para `POST`/`PUT`/`DELETE` en `/api/projects`, `/api/skills`, `/api/experiences`. Enviar cabecera `X-API-Key`. |
+
+En **Cloud Run**, el workflow `backend-deploy.yml` también fija `SPRING_PROFILES_ACTIVE=prod,supabase` (seguridad + pool Hikari para Postgres remoto).
 
 En desarrollo local (`spring.profiles.active` distinto de `prod`) las escrituras no exigen API key salvo que configures `app.security.require-api-key-for-writes=true`.
 
-En **Render**, añade `ADMIN_API_KEY` en el panel de Environment del servicio backend (valor secreto y largo).
+En producción (p. ej. **Google Cloud Run**), define `ADMIN_API_KEY` como variable de entorno del servicio (valor secreto y largo).
 
 **Documentación API:** en **prod**, Swagger UI y `/v3/api-docs` están **desactivados** por seguridad. En local (`http://localhost:8080/swagger-ui.html`) puedes usar el botón *Authorize* y la cabecera `X-API-Key` para probar `POST`/`PUT`/`DELETE` cuando actives la API key.
 
@@ -107,14 +111,24 @@ En **Render**, añade `ADMIN_API_KEY` en el panel de Environment del servicio ba
 - En desarrollo (H2), Flyway está **desactivado** y se sigue usando `ddl-auto: create-drop`.
 - Si tu PostgreSQL de producción se creó antes solo con Hibernate (`update`) y nunca con Flyway, puede hacer falta un **baseline** manual o ajustar el esquema antes de desplegar; las instalaciones nuevas aplican `V1__initial_schema.sql` solas.
 
-### GitHub Actions — Secrets requeridos
+### GitHub Actions — secrets para CD
 
-| Secret                        | Descripción                          |
-|-------------------------------|--------------------------------------|
-| `RENDER_BACKEND_DEPLOY_HOOK`  | URL del deploy hook de Render (backend)  |
-| `RENDER_FRONTEND_DEPLOY_HOOK` | URL del deploy hook de Render (frontend) |
+Configura en **Settings → Secrets and variables → Actions** (valores nunca en el código):
 
-> Los secrets se configuran en **Settings → Secrets and variables → Actions** del repositorio de GitHub.
+| Secreto | Uso |
+|---------|-----|
+| `GCP_PROJECT_ID` | ID del proyecto en Google Cloud (p. ej. `portafolio-492015`). |
+| `GCP_SA_KEY` | JSON de la cuenta de servicio de GCP con permisos para Cloud Build, Artifact Registry y Cloud Run (desde IAM → Service accounts → Keys). |
+| `SPRING_DATASOURCE_URL` | JDBC completo hacia Postgres (Supabase u otro), p. ej. `jdbc:postgresql://....pooler.supabase.com:6543/postgres?sslmode=require`. |
+| `SPRING_DATASOURCE_USERNAME` | Usuario JDBC (en Supabase suele ser `postgres.xxxx` con pooler). |
+| `SPRING_DATASOURCE_PASSWORD` | Contraseña de la base de datos. |
+| `CORS_ALLOWED_ORIGINS` | Lista separada por comas, sin espacios problemáticos al pegar: `https://elgarcia.org,https://www.elgarcia.org,https://portfolio-eleazar-garcia.web.app`. |
+| `ADMIN_API_KEY` | Misma clave larga que usarás en el panel admin del sitio (`X-API-Key`). |
+| `FIREBASE_SERVICE_ACCOUNT` | JSON de la cuenta de servicio de Firebase (Hosting). Puedes generar/ enlazar el repo con `firebase init hosting:github` desde `frontend/` o crear la clave en la consola de Firebase/Google Cloud. |
+
+**GCP (una vez):** crea en Artifact Registry un repositorio Docker llamado `backend-repo` en `us-central1` (o cambia `AR_REPO` en `backend-deploy.yml`). La imagen publicada es `us-central1-docker.pkg.dev/<GCP_PROJECT_ID>/backend-repo/portfolio-backend:latest`.
+
+**Seguridad:** si alguna clave llegó a filtrarse (chat, issue, commit), **rótala** en GCP/Firebase/GitHub y vuelve a guardar el secreto.
 
 ---
 
@@ -150,8 +164,9 @@ portfolio-dev/
 │   │   └── shared/           # Componentes reutilizables
 │   └── Dockerfile
 ├── .github/workflows/
-│   ├── ci.yml                # Build + test en cada push
-│   └── cd.yml                # Deploy a Render si CI pasa
+│   ├── ci.yml                 # Build + test en cada push
+│   ├── backend-deploy.yml     # CD: Cloud Run (solo cambios en backend/)
+│   └── frontend-deploy.yml    # CD: Firebase Hosting (solo cambios en frontend/)
 ├── docker-compose.yml
 └── start.ps1                 # Script de inicio local (Windows)
 ```
