@@ -1,0 +1,42 @@
+<section
+    class="certificates-showcase"
+    *ngIf="certificates.length"
+    aria-labelledby="certs-showcase-heading">
+    <header class="certificates-showcase__header">
+        <div class="certificates-showcase__title-icon" aria-hidden="true">
+            <i class="fas fa-trophy"></i>
+        </div>
+        <div class="certificates-showcase__head-text">
+            <h2 id="certs-showcase-heading">Certificaciones y cursos</h2>
+            <p class="certificates-showcase__sub">Credenciales verificables — como diplomas en la vitrina</p>
+        </div>
+    </header>
+    <div class="cert-showcase-grid" role="list">
+        <article
+            class="cert-trophy-card"
+            *ngFor="let cert of certificates; let i = index; trackBy: trackByCertificate"
+            [class.cert-trophy-card--silver]="i % 2 === 1"
+            role="listitem">
+            <div class="cert-trophy-card__medal" aria-hidden="true">
+                <i class="fas fa-award"></i>
+            </div>
+            <div class="cert-trophy-card__frame">
+                <div class="cert-trophy-card__corners" aria-hidden="true"></div>
+                <p class="cert-trophy-card__issuer">{{ cert.issuer }}</p>
+                <h3 class="cert-trophy-card__title">{{ cert.title }}</h3>
+                <time class="cert-trophy-card__date" [attr.datetime]="cert.issuedOn">
+                    {{ cert.issuedOn | date: 'd MMM y' }}
+                </time>
+                <p class="cert-trophy-card__topics" *ngIf="cert.topics">{{ cert.topics }}</p>
+                <a
+                    class="cert-trophy-card__verify"
+                    [href]="cert.verificationUrl"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <span>Verificar credencial</span>
+                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                </a>
+            </div>
+        </article>
+    </div>
+</section>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TerminalComponent } from './terminal/terminal.component';
@@ -44,7 +44,7 @@ export interface SnapSection {
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   skillGroups$: Observable<SkillGroup[]>;
   /** Error al cargar skills desde el API (no se oculta como lista vacía). */
   skillsLoadError = false;
@@ -95,6 +95,11 @@ export class HomeComponent implements OnInit {
       keywords: 'desarrollador full stack, Spring Boot, Quarkus, Angular, Java, integración, JasperReports, trabajo remoto',
       url: '/'
     });
+    this.seo.setStructuredData(this.seo.homePageJsonLd());
+  }
+
+  ngOnDestroy(): void {
+    this.seo.setStructuredData(null);
   }
 
   /** Sección activa: compatible con alturas variables en móvil */

@@ -13,9 +13,13 @@ export interface SeoConfig {
   type?: string;
   /** Imagen para Open Graph / Twitter (URL absoluta o ruta relativa al sitio). */
   imageUrl?: string;
+  /** p. ej. `noindex, nofollow` para páginas de error. */
+  robots?: string;
 }
 
 const BASE_TITLE = 'Eleazar Garcia | Desarrollador Full Stack';
+
+const JSONLD_SCRIPT_ID = 'portfolio-jsonld';
 
 @Injectable({ providedIn: 'root' })
 export class SeoService {
@@ -56,7 +60,59 @@ export class SeoService {
     this.meta.updateTag({ name: 'twitter:description', content: config.description });
     this.meta.updateTag({ name: 'twitter:image', content: ogImage });
 
+    if (config.robots) {
+      this.meta.updateTag({ name: 'robots', content: config.robots });
+    } else {
+      this.meta.removeTag('name=\'robots\'');
+    }
+
     this.setCanonicalHref(canonical);
+  }
+
+  /**
+   * JSON-LD (schema.org). Pasar `null` para eliminar el bloque (p. ej. al salir de la home).
+   */
+  setStructuredData(jsonLd: Record<string, unknown> | null): void {
+    const head = this.doc.head;
+    if (!head) return;
+    head.querySelector(`#${JSONLD_SCRIPT_ID}`)?.remove();
+    if (!jsonLd) return;
+    const script = this.doc.createElement('script');
+    script.id = JSONLD_SCRIPT_ID;
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify(jsonLd);
+    head.appendChild(script);
+  }
+
+  /** WebSite + Person para la página de inicio (datos enriquecidos en buscadores). */
+  homePageJsonLd(): Record<string, unknown> {
+    const base = environment.siteUrl.replace(/\/$/, '');
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebSite',
+          '@id': `${base}/#website`,
+          url: `${base}/`,
+          name: 'Eleazar Garcia',
+          description:
+            'Desarrollador Full Stack (Java, Spring Boot, Angular). Integración, reporting y modernización de sistemas.',
+          inLanguage: 'es-DO'
+        },
+        {
+          '@type': 'Person',
+          '@id': `${base}/#person`,
+          name: 'Eleazar Garcia',
+          url: `${base}/`,
+          jobTitle: 'Desarrollador Full Stack',
+          email: 'hola@elgarcia.org',
+          sameAs: [
+            'https://github.com/happyDevRD',
+            'https://www.linkedin.com/in/garciaeleazar/'
+          ]
+        }
+      ]
+    };
   }
 
   /** URL absoluta para una imagen del sitio o remota (p. ej. portada de artículo). */

@@ -1,3 +1,24 @@
+/* Enlace de accesibilidad: oculto hasta foco por teclado */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0.5rem;
+  z-index: 10000;
+  padding: 0.5rem 1rem;
+  background: var(--accent-primary, #c45c3e);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: left 0.15s ease;
+
+  &:focus {
+    left: 0.75rem;
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
 /* Shell layout */
 
 html, body {
@@ -45,4 +66,17 @@ html, body {
     /* Footer fijo + barra inicio en iPhone */
     padding-bottom: calc(44px + env(safe-area-inset-bottom, 0px));
     box-sizing: border-box;
+}
+
+@media print {
+    :host {
+        display: block !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+    }
+
+    .main-content {
+        padding-bottom: 0 !important;
+    }
 }

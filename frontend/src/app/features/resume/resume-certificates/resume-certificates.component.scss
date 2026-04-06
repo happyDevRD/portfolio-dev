@@ -1,0 +1,57 @@
+.certificates-page-root {
+    min-height: 100%;
+}
+
+.certificates-page {
+    min-height: calc(100vh - var(--header-bar-height, 64px) - 3.5rem);
+    padding: clamp(1rem, 3vw, 1.75rem) 0 clamp(2.5rem, 6vw, 4rem);
+    background: var(--surface-light);
+    border-radius: 12px;
+}
+
+.certificates-page__toolbar {
+    margin-bottom: clamp(1.25rem, 4vw, 2rem);
+}
+
+.certificates-page__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 0.45rem 0.65rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+
+    i {
+        font-size: 0.85rem;
+        opacity: 0.85;
+    }
+
+    &:hover {
+        color: var(--primary-color);
+        background: rgba(var(--accent-color-rgb), 0.06);
+        border-color: rgba(var(--accent-color-rgb), 0.15);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+}
+
+.certificates-page__inner {
+    max-width: var(--container-width);
+    margin: 0 auto;
+}
+
+.certificates-page__empty {
+    margin: 2rem 0 0;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}

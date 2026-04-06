@@ -5,7 +5,14 @@
             <div class="quote-icon">“</div>
             <p class="content">{{ item.content }}</p>
             <div class="author">
-                <img [src]="item.avatarUrl" alt="{{ item.authorName }}" class="avatar">
+                <img
+                    [src]="item.avatarUrl"
+                    [attr.alt]="'Avatar de ' + item.authorName"
+                    class="avatar"
+                    width="56"
+                    height="56"
+                    loading="lazy"
+                    decoding="async">
                 <div class="author-info">
                     <h4>{{ item.authorName }}</h4>
                     <span>{{ item.authorRole }}</span>

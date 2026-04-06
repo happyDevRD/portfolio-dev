@@ -695,3 +695,53 @@ body.dark-mode .api-error-banner {
   border-color: rgba(248, 113, 113, 0.4);
   background: rgba(248, 113, 113, 0.1);
 }
+
+/* Impresión / PDF: el shell usa overflow:hidden en pantalla; al imprimir debe fluir en varias páginas */
+@media print {
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  body {
+    overflow: visible !important;
+  }
+
+  app-root {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .main-content {
+    height: auto !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-bottom: 0 !important;
+    max-width: none !important;
+  }
+
+  .route-anim-host {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /*
+   * Cabecera y pie del sitio (fuera de app-resume; los estilos del CV no encapsulados llegan aquí).
+   * Sin esto, el nav y el footer siguen apareciendo en PDF porque el encapsulado de Angular
+   * no aplica selectores a hermanos de app-resume.
+   */
+  a.skip-link,
+  app-root > header.header,
+  app-root > app-footer {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Por si el orden del DOM cambia */
+  app-root header.header {
+    display: none !important;
+  }
+}

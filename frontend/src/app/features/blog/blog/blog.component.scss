@@ -197,6 +197,40 @@
         background: linear-gradient(145deg, var(--surface-color) 0%, rgba(var(--accent-color-rgb), 0.05) 100%);
         border: 1px solid rgba(var(--accent-color-rgb), 0.15);
 
+        &.has-cover {
+            background: var(--surface-color);
+
+            .featured-cover {
+                position: absolute;
+                inset: 0;
+                z-index: 0;
+                background-size: cover;
+                background-position: center;
+                opacity: 0.32;
+                pointer-events: none;
+            }
+
+            .card-content {
+                position: relative;
+                z-index: 2;
+                text-shadow: 0 1px 2px rgba(255, 255, 255, 0.65);
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                z-index: 1;
+                background: linear-gradient(
+                    180deg,
+                    rgba(248, 246, 246, 0.88) 0%,
+                    rgba(248, 246, 246, 0.5) 50%,
+                    rgba(248, 246, 246, 0.15) 100%
+                );
+                pointer-events: none;
+            }
+        }
+
         h2 {
             font-size: 2.5rem;
             margin: 1.5rem 0;
@@ -317,5 +351,20 @@
         align-items: center;
         font-family: 'JetBrains Mono', monospace;
         font-weight: 500;
+    }
+}
+
+:host-context(body.dark-mode) {
+    .bento-card.featured.has-cover .card-content {
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);
+    }
+
+    .bento-card.featured.has-cover::after {
+        background: linear-gradient(
+            180deg,
+            rgba(15, 23, 42, 0.9) 0%,
+            rgba(15, 23, 42, 0.52) 50%,
+            rgba(15, 23, 42, 0.12) 100%
+        );
     }
 }

@@ -74,7 +74,7 @@ export class TerminalComponent implements OnInit, OnDestroy {
   async startSequence(skills: Skill[]) {
     const skillsJson = skills.length > 0
       ? this.buildSkillsJson(skills)
-      : `{\n  "backend": ["Java 17", "Spring Boot 3", "Quarkus", "PL/SQL"],\n  "frontend": ["Angular 17", "TypeScript"],\n  "devops": ["Docker", "Jenkins"]\n}`;
+      : `{\n  "backend": ["Java 17", "Spring Boot 3 & Quarkus", "PL/SQL"],\n  "frontend": ["Angular 17", "TypeScript"],\n  "devops": ["Docker", "Jenkins"]\n}`;
 
     const commands: { cmd: string; output: string; type: TerminalLine['type'] }[] = [
       {

@@ -4,6 +4,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } fro
 import { slideInAnimation } from './core/animations/route.animations';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from './shared/components/footer/footer.component';
+import { PrefetchRouteDirective } from './shared/directives/prefetch-route.directive';
 import { filter } from 'rxjs/operators';
 import { Subscription, fromEvent } from 'rxjs';
 
@@ -12,7 +13,7 @@ import { environment } from '../environments/environment';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, FooterComponent],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, FooterComponent, PrefetchRouteDirective],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   animations: [slideInAnimation]

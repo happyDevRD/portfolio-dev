@@ -1,6 +1,12 @@
 <div class="project-card">
     <div class="card-image" *ngIf="project.imageUrl">
-        <img [src]="project.imageUrl" [alt]="project.title" loading="lazy">
+        <img
+            [src]="project.imageUrl"
+            [alt]="project.title"
+            width="800"
+            height="450"
+            loading="lazy"
+            decoding="async">
         <!-- Badge con primer tag -->
         <span class="tech-badge" *ngIf="project.tags && project.tags.length > 0">
             {{ project.tags[0] }}

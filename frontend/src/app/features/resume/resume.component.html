@@ -4,13 +4,25 @@
     <div class="web-resume">
         <header class="resume-hero">
             <div class="hero-left">
-                <h1>Currículum vitae</h1>
-                <p>Desarrollador Full Stack · Java &amp; Angular</p>
+                <h1>{{ cv.heroTitle }}</h1>
+                <p class="hero-subtitle">{{ cv.heroSubtitle }}</p>
             </div>
             <div class="hero-right">
-                <button class="btn-download" (click)="downloadPDF()">
-                    <span class="icon">📄</span> Descargar PDF
-                </button>
+                <div class="hero-actions">
+                    <div class="hero-actions__row">
+                        <button type="button" class="btn-download" (click)="downloadPDF()">
+                            <i class="fas fa-file-pdf" aria-hidden="true"></i>
+                            Descargar / imprimir PDF
+                        </button>
+                        <a
+                            *ngIf="cv.certificates.length"
+                            routerLink="/resume/certificates"
+                            class="btn-certificates">
+                            <i class="fas fa-award" aria-hidden="true"></i>
+                            Ver certificados
+                        </a>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -22,78 +34,90 @@
         <div class="resume-grid">
             <!-- Left Column: Summary & Experience -->
             <div class="main-col">
-                <section class="summary-card animate-up" style="--delay: 0.1s">
-                    <h2><span class="icon"><i class="fas fa-user-circle"></i></span> Resumen Profesional</h2>
-                    <p>Full Stack con foco en sistemas empresariales: APIs REST, integraciones (SOAP/REST), reporting (Jasper / Oracle) y frontends Angular mantenibles. Priorizo diseño por dominios, pruebas y despliegues repetibles.</p>
+                <section class="summary-card animate-up" style="--delay: 0.1s" aria-labelledby="resume-summary-heading">
+                    <h2 id="resume-summary-heading"><span class="icon" aria-hidden="true"><i class="fas fa-user-circle"></i></span> Resumen profesional</h2>
+                    <p class="summary-body">{{ cv.professionalSummary }}</p>
                 </section>
 
-                <section class="timeline-section">
-                    <h2 class="animate-up" style="--delay: 0.2s"><span class="icon"><i
-                                class="fas fa-briefcase"></i></span> Experiencia Profesional</h2>
-                    <div class="timeline">
-                        <div class="timeline-item animate-up" *ngFor="let job of (experiences$ | async); let i = index"
-                            [style.--delay]="(0.3 + i*0.1) + 's'">
-                            <div class="time-marker"></div>
-                            <div class="job-card">
-                                <div class="job-header">
-                                    <h3>{{ job.role }}</h3>
-                                    <span class="date-badge">
-                        {{ job.startDate | date:'MMM y' }} -
-                        {{ job.currentInfo ? 'Presente' : (job.endDate | date:'MMM y') }}
-                                    </span>
-                                </div>
-                                <h4 class="company">{{ job.company }}</h4>
-                                <p>{{ job.description }}</p>
-                                <ul class="highlights" *ngIf="job.highlights?.length">
-                                    <li *ngFor="let h of job.highlights">
-                                        <i class="fas fa-chart-line"></i> {{ h }}
-                                    </li>
-                                </ul>
+                <section class="timeline-section" aria-labelledby="resume-exp-heading">
+                    <h2 id="resume-exp-heading" class="animate-up" style="--delay: 0.2s"><span class="icon" aria-hidden="true"><i class="fas fa-briefcase"></i></span> Experiencia profesional</h2>
+
+                    <ng-container *ngIf="experiences$ | async as experiences">
+                        <div class="cv-empty" *ngIf="experiences.length === 0 && !loadError">
+                            <i class="fas fa-inbox" aria-hidden="true"></i>
+                            <p>No hay experiencias cargadas todavía.</p>
+                        </div>
+                        <div class="timeline" *ngIf="experiences.length > 0">
+                            <div class="timeline-item animate-up"
+                                *ngFor="let job of experiences; let i = index; trackBy: trackByExperienceId"
+                                [style.--delay]="(0.3 + i*0.1) + 's'">
+                                <div class="time-marker" aria-hidden="true"></div>
+                                <article class="job-card">
+                                    <div class="job-header">
+                                        <h3>{{ job.role }}</h3>
+                                        <span class="date-badge">
+                                            {{ job.startDate | date:'MMM y' }} —
+                                            {{ job.currentInfo ? 'Presente' : (job.endDate | date:'MMM y') }}
+                                        </span>
+                                    </div>
+                                    <h4 class="company">{{ job.company }}</h4>
+                                    <p>{{ job.description }}</p>
+                                    <ul class="highlights" *ngIf="job.highlights?.length">
+                                        <li *ngFor="let h of job.highlights">
+                                            <i class="fas fa-check" aria-hidden="true"></i> {{ h }}
+                                        </li>
+                                    </ul>
+                                </article>
                             </div>
                         </div>
-                    </div>
+                    </ng-container>
                 </section>
             </div>
 
             <!-- Right Column: Skills & Education -->
             <aside class="side-col">
-                <section class="skills-card animate-up" style="--delay: 0.2s">
-                    <h2><span class="icon"><i class="fas fa-tools"></i></span> Habilidades Técnicas</h2>
+                <section class="skills-card animate-up" style="--delay: 0.2s" aria-labelledby="resume-skills-heading">
+                    <h2 id="resume-skills-heading"><span class="icon" aria-hidden="true"><i class="fas fa-tools"></i></span> Habilidades técnicas</h2>
 
-                    <div class="skill-category" *ngFor="let group of skillGroups$ | async">
-                        <h3>{{ group.category }}</h3>
-                        <div class="skill-bars">
-                            <div class="skill-bar-item" *ngFor="let skill of group.items">
-                                <div class="skill-bar-header">
-                                    <div class="skill-name">
-                                        <img *ngIf="skill.iconUrl" [src]="skill.iconUrl" [alt]="skill.name" class="skill-icon-sm" onerror="this.style.display='none'">
-                                        <span>{{ skill.name }}</span>
+                    <ng-container *ngIf="skillGroups$ | async as skillGroups">
+                        <div class="cv-empty cv-empty--compact" *ngIf="skillGroups.length === 0 && !loadError">
+                            <p>Sin datos de habilidades.</p>
+                        </div>
+                        <div class="skill-category" *ngFor="let group of skillGroups; trackBy: trackByCategory">
+                            <h3>{{ group.category }}</h3>
+                            <div class="skill-bars">
+                                <div class="skill-bar-item" *ngFor="let skill of group.items; trackBy: trackBySkillId">
+                                    <div class="skill-bar-header">
+                                        <div class="skill-name">
+                                            <img *ngIf="skill.iconUrl" [src]="skill.iconUrl" alt="" class="skill-icon-sm" onerror="this.style.display='none'">
+                                            <span>{{ skill.name }}</span>
+                                        </div>
+                                        <span class="skill-pct" [attr.aria-label]="'Nivel ' + skill.proficiency + ' por ciento'">{{ skill.proficiency }}%</span>
                                     </div>
-                                    <span class="skill-pct">{{ skill.proficiency }}%</span>
-                                </div>
-                                <div class="skill-track">
-                                    <div class="skill-fill" [style.width.%]="skill.proficiency"></div>
+                                    <div class="skill-track" role="presentation">
+                                        <div class="skill-fill" [style.width.%]="skill.proficiency"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </ng-container>
                 </section>
 
-                <section class="education-card animate-up" style="--delay: 0.3s">
-                    <h2><span class="icon"><i class="fas fa-graduation-cap"></i></span> Educación</h2>
+                <section class="education-card animate-up" style="--delay: 0.3s" aria-labelledby="resume-edu-heading">
+                    <h2 id="resume-edu-heading"><span class="icon" aria-hidden="true"><i class="fas fa-graduation-cap"></i></span> Educación</h2>
                     <div class="edu-item">
                         <div class="edu-badge"><i class="fas fa-university"></i></div>
                         <div class="edu-info">
-                            <h4>Ingeniería en Sistemas</h4>
-                            <p class="school">Universidad Dominicana O&M</p>
-                            <p class="year"><i class="far fa-calendar-alt"></i> 2021</p>
+                            <h4>{{ cv.degreeTitle }}</h4>
+                            <p class="school">{{ cv.schoolName }}</p>
+                            <p class="year"><i class="far fa-calendar-alt"></i> {{ cv.graduationYear }}</p>
                         </div>
                     </div>
                     <div class="edu-item" style="margin-top: 1.5rem">
                         <div class="edu-badge"><i class="fas fa-certificate"></i></div>
                         <div class="edu-info">
                             <h4>Formación continua</h4>
-                            <p class="school">Spring Boot, Angular, Docker, arquitectura limpia — cursos y práctica aplicada a proyectos reales.</p>
+                            <p class="school">{{ cv.continuingEducation }}</p>
                             <p class="year cert-tags">
                                 <span class="cert-tag">Online</span>
                                 <span class="cert-tag">Autodidacta</span>
@@ -105,50 +129,86 @@
         </div>
     </div>
 
-    <!-- PRINT VIEW (A4 Paper - Hidden on Screen) -->
-    <div class="print-resume">
-        <header class="resume-header">
-            <div class="header-left">
-                <h1>Eleazar Garcia</h1>
-                <h2>Desarrollador Full Stack</h2>
-            </div>
-            <div class="header-right">
+    <!--
+      Vista solo impresión: texto plano, jerarquía h1–h3, URLs completas y sección de competencias
+      para parsers ATS y multipágina sin cortar bloques largos de forma incorrecta.
+    -->
+    <article class="print-resume" id="cv-print" itemscope itemtype="https://schema.org/Person">
+        <header class="print-header">
+            <h1><span itemprop="name">Eleazar Garcia</span></h1>
+            <p class="print-tagline">{{ cv.printTagline }}</p>
+            <address class="print-contact">
                 <ul>
-                    <li>hola&#64;elgarcia.org</li>
-                    <li>+1 (809) 757-2408</li>
-                    <li>linkedin.com/in/garciaeleazar</li>
-                    <li>github.com/happyDevRD</li>
+                    <li><span class="label">Correo:</span> <a [href]="'mailto:hola@elgarcia.org'">hola&#64;elgarcia.org</a></li>
+                    <li><span class="label">Teléfono:</span> <span>+1 (809) 757-2408</span></li>
+                    <li><span class="label">LinkedIn:</span> https://www.linkedin.com/in/garciaeleazar/</li>
+                    <li><span class="label">GitHub:</span> https://github.com/happyDevRD</li>
+                    <li><span class="label">Sitio web:</span> https://elgarcia.org</li>
                 </ul>
-            </div>
+            </address>
         </header>
-        <hr>
-        <section class="section">
-            <h3>Resumen Profesional</h3>
-            <p>Full Stack (Java, Spring Boot, Angular) con experiencia en integraciones bancarias, reporting crítico y modernización de sistemas Java. Enfoque en código mantenible, observabilidad y entrega continua.</p>
+
+        <section class="print-section" aria-labelledby="sec-summary">
+            <h2 id="sec-summary">Resumen profesional</h2>
+            <p>{{ cv.professionalSummary }}</p>
         </section>
-        <section class="section">
-            <h3>Experiencia Profesional</h3>
-            <div class="job-item" *ngFor="let job of (experiences$ | async)">
-                <div class="job-header">
-                    <strong>{{ job.role }}</strong>
-                    <span class="company"> — {{ job.company }}</span>
-                    <span class="dates">
-                        {{ job.startDate | date:'MMM yyyy' }} – {{ job.currentInfo ? 'Presente' : (job.endDate | date:'MMM yyyy') }}
-                    </span>
+
+        <ng-container *ngIf="skillGroups$ | async as skillGroups">
+            <section class="print-section" aria-labelledby="sec-skills" *ngIf="skillGroups.length">
+                <h2 id="sec-skills">Competencias técnicas</h2>
+                <div class="print-skill-block" *ngFor="let group of skillGroups">
+                    <h3>{{ group.category }}</h3>
+                    <p>{{ plainSkillsLine(group) }}</p>
                 </div>
-                <p>{{ job.description }}</p>
+            </section>
+        </ng-container>
+
+        <section class="print-section" aria-labelledby="sec-exp">
+            <h2 id="sec-exp">Experiencia profesional</h2>
+            <article class="print-job" *ngFor="let job of (experiences$ | async)">
+                <header class="print-job-head">
+                    <h3>{{ job.role }}</h3>
+                    <p class="print-company">{{ job.company }}</p>
+                    <p class="print-dates">
+                        {{ job.startDate | date:'MMMM yyyy' }} — {{ job.currentInfo ? 'Presente' : (job.endDate | date:'MMMM yyyy') }}
+                    </p>
+                </header>
+                <p class="print-job-desc">{{ job.description }}</p>
                 <ul class="print-highlights" *ngIf="job.highlights?.length">
                     <li *ngFor="let h of job.highlights">{{ h }}</li>
                 </ul>
+            </article>
+        </section>
+
+        <section class="print-section" aria-labelledby="sec-edu">
+            <h2 id="sec-edu">Formación e idiomas</h2>
+            <p class="print-edu-line">
+                <strong>Titulación:</strong> {{ cv.degreeTitle }} — {{ cv.schoolName }} — {{ cv.graduationYear }}.
+            </p>
+            <p class="print-edu-line">
+                <strong>Formación complementaria:</strong> {{ cv.continuingEducation }}
+            </p>
+            <p class="print-edu-line">
+                <strong>Idiomas:</strong> {{ cv.languages }}
+            </p>
+        </section>
+
+        <section class="print-section" aria-labelledby="sec-certs" *ngIf="cv.certificates.length">
+            <h2 id="sec-certs">Certificaciones y cursos</h2>
+            <div
+                class="print-cert"
+                *ngFor="let cert of cv.certificates; trackBy: trackByCertificate">
+                <p class="print-cert-line">
+                    <strong>{{ cert.title }}</strong> — {{ cert.issuer }}.
+                    {{ cert.issuedOn | date: 'd MMMM yyyy' }}.
+                </p>
+                <p class="print-cert-line" *ngIf="cert.topics">{{ cert.topics }}</p>
+                <p class="print-cert-line print-cert-verify">
+                    Verificación: {{ cert.verificationUrl }}
+                </p>
             </div>
         </section>
-        <section class="section">
-            <h3>Educación</h3>
-            <div class="edu-print">
-                <strong>Ingeniería en Sistemas</strong> — Universidad Dominicana O&M · 2021
-            </div>
-        </section>
-    </div>
+    </article>
 
 </div>
 </div>

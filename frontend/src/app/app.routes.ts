@@ -32,6 +32,15 @@ export const routes: Routes = [
         data: { animation: 3 }
     },
     {
+        path: 'resume/certificates',
+        loadComponent: () =>
+            import('./features/resume/resume-certificates/resume-certificates.component').then(
+                (m) => m.ResumeCertificatesComponent
+            ),
+        title: 'Certificaciones | Eleazar Garcia',
+        data: { animation: 4 }
+    },
+    {
         path: 'resume',
         loadComponent: () => import('./features/resume/resume.component').then(m => m.ResumeComponent),
         title: 'Currículum | Eleazar Garcia',

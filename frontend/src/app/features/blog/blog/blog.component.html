@@ -54,9 +54,14 @@
 
             <div class="bento-grid" *ngIf="articles.length > 0" appReveal>
                 <!-- Featured (índice 0) — span 2×2 -->
-                <article class="bento-card featured" *ngIf="articles[0]"
+                <article class="bento-card featured"
+                    *ngIf="articles[0]"
+                    [class.has-cover]="!!articles[0].coverImageUrl"
                     [routerLink]="['/blog', articles[0].slug]"
                     role="article" [attr.aria-label]="articles[0].title">
+                    <div class="featured-cover" *ngIf="articles[0].coverImageUrl"
+                        [style.backgroundImage]="'url(' + articles[0].coverImageUrl + ')'"
+                        aria-hidden="true"></div>
                     <div class="card-content">
                         <div class="tags">
                             <span *ngFor="let tag of articles[0].tags">{{ tag }}</span>

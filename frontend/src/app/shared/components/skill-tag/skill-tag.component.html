@@ -1,6 +1,14 @@
 <div class="skill-tag">
     <ng-container *ngIf="skill.iconUrl && !imgError; else faFallback">
-        <img [src]="skill.iconUrl" [alt]="skill.name" class="skill-icon" loading="lazy" (error)="onImgError()">
+        <img
+            [src]="skill.iconUrl"
+            [alt]="skill.name"
+            class="skill-icon"
+            width="20"
+            height="20"
+            loading="lazy"
+            decoding="async"
+            (error)="onImgError()">
     </ng-container>
     <ng-template #faFallback>
         <i [class]="faIcon + ' skill-fa-icon'" aria-hidden="true"></i>

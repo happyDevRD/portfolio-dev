@@ -1,3 +1,5 @@
+<a class="skip-link" href="#main-content">Saltar al contenido</a>
+
 <!-- Navbar — posición fixed, siempre visible -->
 <header class="header" [class.scrolled]="isScrolled">
   <nav class="navbar">
@@ -8,11 +10,11 @@
     </a>
 
     <ul class="nav-links" [class.open]="isMobileMenuOpen">
-      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="isMobileMenuOpen=false">Inicio</a></li>
-      <li><a routerLink="/projects" routerLinkActive="active" (click)="isMobileMenuOpen=false">Proyectos</a></li>
-      <li><a routerLink="/blog" routerLinkActive="active" (click)="isMobileMenuOpen=false">Blog</a></li>
-      <li><a routerLink="/resume" routerLinkActive="active" (click)="isMobileMenuOpen=false">Currículum</a></li>
-      <li><a routerLink="/contact" routerLinkActive="active" title="Contacto y agenda" (click)="isMobileMenuOpen=false">Contacto</a></li>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" appPrefetch="home" (click)="isMobileMenuOpen=false">Inicio</a></li>
+      <li><a routerLink="/projects" routerLinkActive="active" appPrefetch="projects" (click)="isMobileMenuOpen=false">Proyectos</a></li>
+      <li><a routerLink="/blog" routerLinkActive="active" appPrefetch="blog" (click)="isMobileMenuOpen=false">Blog</a></li>
+      <li><a routerLink="/resume" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" appPrefetch="resume" (click)="isMobileMenuOpen=false">Currículum</a></li>
+      <li><a routerLink="/contact" routerLinkActive="active" appPrefetch="contact" title="Contacto y agenda" (click)="isMobileMenuOpen=false">Contacto</a></li>
     </ul>
 
     <div class="controls">
@@ -27,7 +29,7 @@
 </header>
 
 <!-- Main Content — ocupa el espacio entre nav y footer -->
-<main class="main-content">
+<main id="main-content" class="main-content" tabindex="-1">
   <div class="route-anim-host" [@routeAnimations]="prepareRoute(outlet)">
     <router-outlet #outlet="outlet"></router-outlet>
   </div>

@@ -1,0 +1,15 @@
+<div class="page-scroll-wrapper certificates-page-root">
+    <div class="certificates-page">
+        <header class="certificates-page__toolbar">
+            <a routerLink="/resume" class="certificates-page__back">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                Volver al currículum
+            </a>
+        </header>
+        <div class="certificates-page__inner">
+            <app-certificate-showcase />
+            <p class="certificates-page__empty" *ngIf="!cv.certificates.length">
+                No hay certificaciones publicadas.</p>
+        </div>
+    </div>
+</div>
