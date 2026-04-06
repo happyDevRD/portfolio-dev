@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import com.portfolio.infrastructure.security.ApiKeyAuthenticationFilter;
 import com.portfolio.infrastructure.security.ContactRateLimitFilter;
+import com.portfolio.infrastructure.security.MeetingRateLimitFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -27,6 +28,12 @@ public class SecurityConfig {
     }
 
     @Bean
+    public MeetingRateLimitFilter meetingRateLimitFilter(
+            @Value("${app.meeting.rate-limit-per-minute:30}") int maxPerMinute) {
+        return new MeetingRateLimitFilter(maxPerMinute);
+    }
+
+    @Bean
     public ApiKeyAuthenticationFilter apiKeyAuthenticationFilter(
             @Value("${app.security.admin-api-key:}") String adminApiKey) {
         return new ApiKeyAuthenticationFilter(adminApiKey);
@@ -36,6 +43,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             ContactRateLimitFilter contactRateLimitFilter,
+            MeetingRateLimitFilter meetingRateLimitFilter,
             ApiKeyAuthenticationFilter apiKeyAuthenticationFilter,
             @Value("${app.security.require-api-key-for-writes:false}") boolean requireApiKeyForWrites,
             @Value("${app.security.admin-api-key:}") String adminApiKey) throws Exception {
@@ -50,6 +58,7 @@ public class SecurityConfig {
         http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(contactRateLimitFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(meetingRateLimitFilter, UsernamePasswordAuthenticationFilter.class);
         if (requireApiKeyForWrites) {
             http.addFilterBefore(apiKeyAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         }
@@ -62,9 +71,9 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/contact").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/meetings").permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")

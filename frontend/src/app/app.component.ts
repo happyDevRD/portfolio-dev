@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, OnInit, OnDestroy, AfterViewInit, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
+import { slideInAnimation } from './core/animations/route.animations';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { filter } from 'rxjs/operators';
@@ -13,7 +14,8 @@ import { environment } from '../environments/environment';
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, FooterComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  animations: [slideInAnimation]
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   isDarkMode = false;
@@ -67,6 +69,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  prepareRoute(outlet: RouterOutlet): number | undefined {
+    return outlet?.isActivated ? (outlet.activatedRouteData['animation'] as number | undefined) : undefined;
   }
 
   scrollToTop() {

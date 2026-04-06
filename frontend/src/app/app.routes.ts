@@ -40,8 +40,13 @@ export const routes: Routes = [
     {
         path: 'contact',
         loadComponent: () => import('./features/contact/contact.component').then(m => m.ContactComponent),
-        title: 'Contacto | Eleazar Garcia',
+        title: 'Contacto y agenda | Eleazar Garcia',
         data: { animation: 5 }
+    },
+    {
+        path: 'schedule',
+        loadComponent: () =>
+            import('./features/contact/schedule-redirect.component').then((m) => m.ScheduleRedirectComponent)
     },
     {
         path: '**',

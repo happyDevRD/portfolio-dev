@@ -2,22 +2,22 @@ spring:
   application:
     name: portfolio-backend
   datasource:
-    url: jdbc:h2:mem:portfolio
-    driverClassName: org.h2.Driver
-    username: sa
-    password: password
+    # Perfiles:
+    #   local    → application-local.yml (Postgres en localhost; ver docker-compose.yml o script scripts/)
+    #   supabase → application-supabase.yml + SPRING_DATASOURCE_URL, USERNAME, PASSWORD en el entorno
+    #   prod     → bloque --- más abajo; Cloud Run con variables de entorno
+    # mvn spring-boot:run activa "local" (pom). Supabase: mvn ... -Dspring-boot.run.profiles=supabase + env.
+    driver-class-name: org.postgresql.Driver
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     show-sql: false
   flyway:
-    enabled: false
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
   output:
     ansi:
       enabled: ALWAYS
@@ -35,6 +35,20 @@ app:
     admin-api-key: ${ADMIN_API_KEY:}
   contact:
     rate-limit-per-minute: 30
+  meeting:
+    rate-limit-per-minute: 30
+    min-notice-hours: 2
+    max-days-ahead: 28
+    business-hour-start: 9
+    business-hour-end: 18
+    timezone: America/Santo_Domingo
+  google:
+    calendar:
+      enabled: false
+      application-name: portfolio-backend
+      calendar-id: ${GOOGLE_CALENDAR_ID:primary}
+      credentials-path: ${GOOGLE_CALENDAR_CREDENTIALS_PATH:}
+      oauth2-client-id: ${GOOGLE_OAUTH_CLIENT_ID:}
 
 logging:
   level:
@@ -61,24 +75,6 @@ spring:
   config:
     activate:
       on-profile: prod
-  datasource:
-    url: ${DATABASE_URL}
-    driverClassName: org.postgresql.Driver
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    open-in-view: false
-    hibernate:
-      ddl-auto: validate
-    show-sql: false
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
-    locations: classpath:db/migration
-  h2:
-    console:
-      enabled: false
   output:
     ansi:
       enabled: NEVER
@@ -94,6 +90,20 @@ app:
     admin-api-key: ${ADMIN_API_KEY}
   contact:
     rate-limit-per-minute: 30
+  meeting:
+    rate-limit-per-minute: 30
+    min-notice-hours: 2
+    max-days-ahead: 28
+    business-hour-start: 9
+    business-hour-end: 18
+    timezone: America/Santo_Domingo
+  google:
+    calendar:
+      enabled: ${GOOGLE_CALENDAR_ENABLED:false}
+      application-name: portfolio-backend
+      calendar-id: ${GOOGLE_CALENDAR_ID:primary}
+      credentials-path: ${GOOGLE_CALENDAR_CREDENTIALS_PATH:}
+      oauth2-client-id: ${GOOGLE_OAUTH_CLIENT_ID:}
 
 logging:
   level:

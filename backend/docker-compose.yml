@@ -1,0 +1,16 @@
+# PostgreSQL para desarrollo local (mismo host/puerto/credenciales que application-local.yml).
+# Uso: `docker compose up -d` y luego `mvn spring-boot:run -Dspring-boot.run.profiles=local`.
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

@@ -1,0 +1,15 @@
+# Perfil "local" — PostgreSQL en tu máquina (activado por defecto con mvn spring-boot:run).
+#
+# Si instalaste Postgres en Windows, la contraseña del usuario "postgres" suele ser la que elegiste en el instalador,
+# no "postgres". Cámbiala abajo o define SPRING_DATASOURCE_PASSWORD en el entorno.
+#
+# Docker: .\scripts\start-local-postgres.ps1 o docker compose up -d (mismas credenciales por defecto).
+#
+# Supabase (sin local): mvn spring-boot:run "-Dspring-boot.run.profiles=supabase" y variables SPRING_DATASOURCE_*.
+#
+# Las variables SPRING_DATASOURCE_* tienen prioridad sobre lo de abajo.
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres

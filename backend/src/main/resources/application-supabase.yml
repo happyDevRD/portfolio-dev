@@ -1,0 +1,18 @@
+# Perfil "supabase" — base de datos del proyecto en la nube (Supabase).
+#
+# Antes de arrancar, define en la consola (o en variables de usuario de Windows):
+#   SPRING_DATASOURCE_URL   → JDBC, p. ej. jdbc:postgresql://xxxx.pooler.supabase.com:6543/postgres?sslmode=require
+#   SPRING_DATASOURCE_USERNAME → usuario (suele ser postgres.xxxxx con el pooler)
+#   SPRING_DATASOURCE_PASSWORD → contraseña del proyecto
+#
+# En Supabase: Project Settings → Database → Connection string (modo URI o JDBC).
+# Pooler (puerto 6543) suele ir bien para desarrollo; conexión directa usa 5432.
+#
+# Arranque: mvn spring-boot:run -Dspring-boot.run.profiles=supabase
+#
+# No pongas secretos en este archivo; solo variables de entorno.
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 30000

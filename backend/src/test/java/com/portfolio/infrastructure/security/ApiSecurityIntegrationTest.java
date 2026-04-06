@@ -14,9 +14,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.portfolio.infrastructure.persistence.PostgresIntegrationTestBase;
+
 @SpringBootTest
 @AutoConfigureMockMvc
-class ApiSecurityIntegrationTest {
+class ApiSecurityIntegrationTest extends PostgresIntegrationTestBase {
 
     private static final String MINIMAL_PROJECT_JSON = """
             {
@@ -53,10 +55,11 @@ class ApiSecurityIntegrationTest {
             properties = {
                 "app.security.require-api-key-for-writes=true",
                 "app.security.admin-api-key=test-secret",
-                "app.contact.rate-limit-per-minute=10000"
+                "app.contact.rate-limit-per-minute=10000",
+                "app.meeting.rate-limit-per-minute=10000"
             })
     @DisplayName("Escrituras protegidas por API key")
-    class SecuredWrites {
+    class SecuredWrites extends PostgresIntegrationTestBase {
 
         @Autowired
         private MockMvc mockMvc;
