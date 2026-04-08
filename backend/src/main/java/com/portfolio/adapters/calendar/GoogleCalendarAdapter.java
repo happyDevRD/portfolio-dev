@@ -1,10 +1,12 @@
 package com.portfolio.adapters.calendar;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
+import com.google.api.services.calendar.model.FreeBusyCalendar;
 import com.google.api.services.calendar.model.FreeBusyRequest;
 import com.google.api.services.calendar.model.FreeBusyRequestItem;
 import com.google.api.services.calendar.model.FreeBusyResponse;
@@ -16,6 +18,9 @@ import com.portfolio.core.domain.port.CalendarBookingPort;
 import com.portfolio.infrastructure.config.GoogleCalendarProperties;
 import com.portfolio.infrastructure.config.MeetingSchedulingProperties;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -23,15 +28,21 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @ConditionalOnProperty(prefix = "app.google.calendar", name = "enabled", havingValue = "true")
 @RequiredArgsConstructor
 public class GoogleCalendarAdapter implements CalendarBookingPort {
 
+    private static final Logger log = LoggerFactory.getLogger(GoogleCalendarAdapter.class);
+
     private final Calendar calendar;
     private final GoogleCalendarProperties googleProps;
     private final MeetingSchedulingProperties scheduling;
+
+    @Value("${app.error.expose-details:false}")
+    private boolean exposeErrorDetails;
 
     @Override
     public boolean isSlotFree(Instant start, Instant end) {
@@ -43,10 +54,10 @@ public class GoogleCalendarAdapter implements CalendarBookingPort {
 
             FreeBusyResponse response = calendar.freebusy().query(req).execute();
             var calMap = response.getCalendars();
-            if (calMap == null) {
+            if (calMap == null || calMap.isEmpty()) {
                 return true;
             }
-            var cal = calMap.get(googleProps.getCalendarId());
+            var cal = resolveFreeBusyCalendar(calMap, googleProps.getCalendarId());
             if (cal == null || cal.getBusy() == null || cal.getBusy().isEmpty()) {
                 return true;
             }
@@ -59,8 +70,24 @@ public class GoogleCalendarAdapter implements CalendarBookingPort {
             }
             return true;
         } catch (IOException e) {
-            throw new CalendarIntegrationException("No se pudo consultar la disponibilidad en Google Calendar.", e);
+            log.warn("Google Calendar freebusy falló para calendarId={}: {}", googleProps.getCalendarId(), e.getMessage());
+            throw new CalendarIntegrationException(
+                    "No se pudo consultar la disponibilidad en Google Calendar." + apiErrorHint(e), e);
         }
+    }
+
+    /**
+     * La API a veces devuelve la clave del calendario como email aunque se pidió {@code primary}.
+     */
+    private static FreeBusyCalendar resolveFreeBusyCalendar(Map<String, FreeBusyCalendar> calMap, String calendarId) {
+        var direct = calMap.get(calendarId);
+        if (direct != null) {
+            return direct;
+        }
+        if (calMap.size() == 1) {
+            return calMap.values().iterator().next();
+        }
+        return null;
     }
 
     private static boolean overlaps(Instant aStart, Instant aEnd, Instant bStart, Instant bEnd) {
@@ -92,8 +119,29 @@ public class GoogleCalendarAdapter implements CalendarBookingPort {
             }
             return created.getId();
         } catch (IOException e) {
-            throw new CalendarIntegrationException("No se pudo crear el evento en Google Calendar.", e);
+            log.warn("Google Calendar insert evento falló: {}", e.getMessage());
+            throw new CalendarIntegrationException(
+                    "No se pudo crear el evento en Google Calendar." + apiErrorHint(e), e);
         }
+    }
+
+    private String apiErrorHint(IOException e) {
+        if (!exposeErrorDetails) {
+            return "";
+        }
+        for (Throwable c = e; c != null; c = c.getCause()) {
+            if (c instanceof GoogleJsonResponseException gj) {
+                return " Detalle: HTTP "
+                        + gj.getStatusCode()
+                        + " — "
+                        + gj.getStatusMessage()
+                        + ". Comprueba que la API Calendar esté habilitada en el proyecto, el scope calendar y el ID de calendario (Workspace: a veces hace falta el correo completo).";
+            }
+        }
+        return " Detalle: "
+                + e.getClass().getSimpleName()
+                + " — "
+                + e.getMessage();
     }
 
     private static String buildSummary(Meeting meeting) {

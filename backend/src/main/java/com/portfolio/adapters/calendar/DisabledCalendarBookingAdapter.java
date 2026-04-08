@@ -16,7 +16,8 @@ import java.time.Instant;
 public class DisabledCalendarBookingAdapter implements CalendarBookingPort {
 
     private static final String MSG =
-            "La integración con Google Calendar no está habilitada. Configura app.google.calendar en el servidor.";
+            "La integración con Google Calendar no está habilitada. Define GOOGLE_CALENDAR_ENABLED=true "
+                    + "en el entorno (p. ej. secret en GitHub Actions / Cloud Run) o app.google.calendar.enabled=true.";
 
     @Override
     public boolean isSlotFree(Instant start, Instant end) {
