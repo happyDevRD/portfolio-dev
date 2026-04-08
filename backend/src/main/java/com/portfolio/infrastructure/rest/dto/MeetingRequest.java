@@ -27,8 +27,8 @@ public class MeetingRequest {
     private Instant startDateTime;
 
     @NotNull(message = "La duración es obligatoria")
-    @Min(value = 15, message = "La duración mínima es 15 minutos")
-    @Max(value = 180, message = "La duración máxima es 180 minutos")
+    @Min(value = 60, message = "La duración debe ser 60 minutos")
+    @Max(value = 60, message = "La duración debe ser 60 minutos")
     private Integer durationMinutes;
 
     @NotBlank(message = "El nombre es obligatorio")

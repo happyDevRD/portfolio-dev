@@ -9,14 +9,21 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -57,6 +64,29 @@ public class MeetingController {
         body.put("message", "Reunión agendada correctamente.");
         body.put("meetingId", saved.getId());
         body.put("googleEventId", saved.getGoogleEventId());
+        return ResponseEntity.ok(body);
+    }
+
+    @DeleteMapping("/{meetingId}")
+    @Operation(summary = "Cancelar una reunión y eliminar su evento en Google Calendar")
+    public ResponseEntity<Map<String, Object>> cancel(@PathVariable Long meetingId) {
+        meetingService.cancelMeeting(meetingId);
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("message", "Reunión cancelada correctamente.");
+        body.put("meetingId", meetingId);
+        return ResponseEntity.ok(body);
+    }
+
+    @GetMapping("/availability")
+    @Operation(summary = "Consultar horarios disponibles reales en Google Calendar")
+    public ResponseEntity<Map<String, Object>> availability(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(defaultValue = "30") int durationMinutes) {
+        List<String> slots = meetingService.getAvailableSlots(date, durationMinutes);
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("date", date.toString());
+        body.put("durationMinutes", durationMinutes);
+        body.put("slots", slots);
         return ResponseEntity.ok(body);
     }
 }

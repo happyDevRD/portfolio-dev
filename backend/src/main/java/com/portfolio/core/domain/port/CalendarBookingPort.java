@@ -18,4 +18,9 @@ public interface CalendarBookingPort {
      * Crea el evento y devuelve el identificador en Google Calendar.
      */
     String createEvent(Meeting meeting);
+
+    /**
+     * Elimina un evento existente en Google Calendar por su identificador.
+     */
+    void deleteEvent(String googleEventId);
 }

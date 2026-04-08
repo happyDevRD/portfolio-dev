@@ -28,4 +28,9 @@ public class DisabledCalendarBookingAdapter implements CalendarBookingPort {
     public String createEvent(Meeting meeting) {
         throw new CalendarIntegrationException(MSG);
     }
+
+    @Override
+    public void deleteEvent(String googleEventId) {
+        // Integración desactivada: no hay backend de calendario remoto al cual propagar borrado.
+    }
 }

@@ -1,10 +1,11 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { environment } from '../../../environments/environment';
 import { SeoService } from '../../core/services/seo.service';
+import { MeetingApiService } from '../../core/services/meeting-api.service';
+import { ScheduleMeetingRequest, ScheduleMeetingResponse } from '../../core/models/meeting-api.model';
 
 @Component({
   selector: 'app-contact',
@@ -22,8 +23,13 @@ export class ContactComponent implements OnInit, AfterViewInit {
 
   scheduleForm: FormGroup;
   isSubmitting = false;
+  isCancelling = false;
+  isLoadingAvailability = false;
   successMessage = '';
   errorMessage = '';
+  availabilityMessage = '';
+  lastMeetingId: number | null = null;
+  lastGoogleEventId = '';
 
   readonly meetingTypes: { value: string; label: string }[] = [
     { value: 'TECH_CONSULTING', label: 'Consultoría técnica' },
@@ -32,9 +38,12 @@ export class ContactComponent implements OnInit, AfterViewInit {
     { value: 'OTHER', label: 'Otro' }
   ];
 
-  readonly durationOptions = [30, 45, 60, 90];
+  readonly meetingDurationMinutes = 60;
+  readonly slotMinutes = 60;
+  readonly fixedSlotTimes = ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00'];
+  readonly maxNotesLength = 2000;
+  slotOptions: { time: string; available: boolean }[] = [];
 
-  private readonly meetingsApiUrl = `${environment.apiUrl}/meetings`;
   /** Mensajes del backend cuando la agenda no está configurada (deshabilitada). */
   private readonly calendarDisabledPatterns = [
     'app.google.calendar',
@@ -44,7 +53,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
+    private meetingApi: MeetingApiService,
     private seo: SeoService,
     private route: ActivatedRoute
   ) {
@@ -63,10 +72,15 @@ export class ContactComponent implements OnInit, AfterViewInit {
       meetingType: ['TECH_CONSULTING', Validators.required],
       date: [dateStr, Validators.required],
       time: ['10:00', Validators.required],
-      durationMinutes: [30, Validators.required],
+      durationMinutes: [this.meetingDurationMinutes, Validators.required],
       requesterName: ['', [Validators.required, Validators.minLength(3)]],
       requesterEmail: ['', [Validators.required, Validators.email]],
       notes: ['']
+    });
+
+    this.refreshAvailability();
+    this.scheduleForm.get('date')?.valueChanges.subscribe(() => {
+      this.refreshAvailability();
     });
   }
 
@@ -116,24 +130,29 @@ export class ContactComponent implements OnInit, AfterViewInit {
     this.isSubmitting = true;
     this.successMessage = '';
     this.errorMessage = '';
+    this.lastMeetingId = null;
+    this.lastGoogleEventId = '';
 
     const v = this.scheduleForm.value;
     const combined = `${v.date}T${v.time}:00`;
     const start = new Date(combined);
-    const payload = {
+    const payload: ScheduleMeetingRequest = {
       meetingType: v.meetingType,
       startDateTime: start.toISOString(),
-      durationMinutes: Number(v.durationMinutes),
+      durationMinutes: this.meetingDurationMinutes,
       requesterName: v.requesterName,
       requesterEmail: v.requesterEmail,
       notes: v.notes?.trim() ? v.notes.trim() : undefined
     };
 
-    this.http.post<{ message: string }>(this.meetingsApiUrl, payload).subscribe({
-      next: (res) => {
+    this.meetingApi.scheduleMeeting(payload).subscribe({
+      next: (res: ScheduleMeetingResponse) => {
         this.isSubmitting = false;
         this.successMessage = res.message ?? '¡Solicitud registrada correctamente!';
+        this.lastMeetingId = res.meetingId ?? null;
+        this.lastGoogleEventId = res.googleEventId ?? '';
         this.scheduleForm.patchValue({ notes: '' });
+        this.refreshAvailability();
       },
       error: (err: HttpErrorResponse) => {
         this.isSubmitting = false;
@@ -158,6 +177,107 @@ export class ContactComponent implements OnInit, AfterViewInit {
     });
   }
 
+  onCancelLastMeeting(): void {
+    if (!this.lastMeetingId || this.isCancelling) {
+      return;
+    }
+    this.isCancelling = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.meetingApi.cancelMeeting(this.lastMeetingId).subscribe({
+      next: (res) => {
+        this.isCancelling = false;
+        this.successMessage = res.message ?? 'Reunión cancelada correctamente.';
+        this.lastMeetingId = null;
+        this.lastGoogleEventId = '';
+        this.refreshAvailability();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.isCancelling = false;
+        const msg = this.extractErrorMessage(err);
+        this.errorMessage = this.mapServerMessageForUser(msg) || 'No se pudo cancelar la reunión.';
+      }
+    });
+  }
+
+  private refreshAvailability(): void {
+    const date = String(this.scheduleForm.get('date')?.value ?? '');
+    const durationMinutes = this.meetingDurationMinutes;
+    const timeCtrl = this.scheduleForm.get('time');
+    this.scheduleForm.patchValue({ durationMinutes }, { emitEvent: false });
+    if (!date) {
+      this.slotOptions = [];
+      this.availabilityMessage = '';
+      timeCtrl?.disable({ emitEvent: false });
+      this.ensureSelectedTimeIsValid();
+      return;
+    }
+    this.isLoadingAvailability = true;
+    this.availabilityMessage = '';
+    timeCtrl?.disable({ emitEvent: false });
+    const allSlots = this.fixedSlotTimes;
+    this.meetingApi.getAvailability(date, durationMinutes).subscribe({
+      next: (res) => {
+        this.isLoadingAvailability = false;
+        const free = new Set(Array.isArray(res.slots) ? res.slots : []);
+        this.slotOptions = allSlots.map((time) => ({ time, available: free.has(time) }));
+        if (!this.slotOptions.some((s) => s.available)) {
+          this.availabilityMessage = 'No hay bloques disponibles para esa fecha y duración.';
+        }
+        if (this.slotOptions.some((s) => s.available)) {
+          timeCtrl?.enable({ emitEvent: false });
+        } else {
+          timeCtrl?.disable({ emitEvent: false });
+        }
+        this.ensureSelectedTimeIsValid();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.isLoadingAvailability = false;
+        this.slotOptions = [];
+        const msg = this.extractErrorMessage(err);
+        if (msg.includes("Request method 'GET' is not supported")) {
+          this.availabilityMessage = 'Reinicia el backend para cargar el endpoint de disponibilidad.';
+        } else {
+          this.availabilityMessage =
+            this.mapServerMessageForUser(msg) || 'No se pudo cargar la disponibilidad en tiempo real.';
+        }
+        timeCtrl?.disable({ emitEvent: false });
+        this.ensureSelectedTimeIsValid();
+      }
+    });
+  }
+
+  private ensureSelectedTimeIsValid(): void {
+    const current = String(this.scheduleForm.get('time')?.value ?? '');
+    const available = this.slotOptions.filter((s) => s.available).map((s) => s.time);
+    if (available.length === 0) {
+      this.scheduleForm.patchValue({ time: '' }, { emitEvent: false });
+      return;
+    }
+    if (!available.includes(current)) {
+      this.scheduleForm.patchValue({ time: available[0] }, { emitEvent: false });
+    }
+  }
+
+  get availableSlotCount(): number {
+    return this.slotOptions.filter((s) => s.available).length;
+  }
+
+  get selectedMeetingTypeLabel(): string {
+    const selected = String(this.scheduleForm.get('meetingType')?.value ?? '');
+    return this.meetingTypes.find((t) => t.value === selected)?.label ?? 'Reunión';
+  }
+
+  get selectedSlotSummary(): string {
+    const date = String(this.scheduleForm.get('date')?.value ?? '');
+    const time = String(this.scheduleForm.get('time')?.value ?? '');
+    const duration = Number(this.scheduleForm.get('durationMinutes')?.value ?? 0);
+    if (!date || !time || !duration) {
+      return '';
+    }
+    return `${date} · ${time} · ${duration} min`;
+  }
+
   private extractErrorMessage(err: HttpErrorResponse): string {
     const body = err.error;
     if (body && typeof body === 'object' && 'message' in body) {
@@ -179,6 +299,10 @@ export class ContactComponent implements OnInit, AfterViewInit {
 
     if (this.calendarDisabledPatterns.some((p) => message.includes(p))) {
       return 'La agenda no está disponible por ahora. Escríbeme a hola@elgarcia.org y coordinamos por correo.';
+    }
+
+    if (message.includes('bloques de') || message.includes('múltiplo de')) {
+      return 'El horario disponible está segmentado en bloques de 1 hora.';
     }
 
     return message;

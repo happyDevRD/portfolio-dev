@@ -23,7 +23,8 @@ spring:
       enabled: ALWAYS
 
 server:
-  port: 8080
+  # Sobrescribe con variable de entorno SERVER_PORT si el 8080 está ocupado (p. ej. otra instancia del backend).
+  port: ${SERVER_PORT:8080}
 
 app:
   cors:
@@ -39,8 +40,12 @@ app:
     rate-limit-per-minute: 30
     min-notice-hours: 2
     max-days-ahead: 28
-    business-hour-start: 9
-    business-hour-end: 18
+    morning-hour-start: 9
+    morning-hour-end: 12
+    afternoon-hour-start: 14
+    afternoon-hour-end: 17
+    slot-minutes: 60
+    availability-cache-seconds: 45
     timezone: America/Santo_Domingo
   # Google Calendar: credenciales vía ADC (GOOGLE_APPLICATION_CREDENTIALS, metadatos Cloud Run/GCE, etc.).
   google:
@@ -94,8 +99,12 @@ app:
     rate-limit-per-minute: 30
     min-notice-hours: 2
     max-days-ahead: 28
-    business-hour-start: 9
-    business-hour-end: 18
+    morning-hour-start: 9
+    morning-hour-end: 12
+    afternoon-hour-start: 14
+    afternoon-hour-end: 17
+    slot-minutes: 60
+    availability-cache-seconds: 45
     timezone: America/Santo_Domingo
   google:
     calendar:

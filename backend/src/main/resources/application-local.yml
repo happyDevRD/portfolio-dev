@@ -15,11 +15,11 @@ spring:
     password: postgres
 
 # Google Calendar (ADC local: gcloud auth application-default login).
-# Sin credenciales ADC, arranca con GOOGLE_CALENDAR_ENABLED=false o deja calendar desactivado en application.yml base.
-# Workspace: si ves 403 al crear eventos, prueba GOOGLE_CALENDAR_ID con tu correo completo en lugar de "primary".
+# Sin ADC: GOOGLE_CALENDAR_ENABLED=false en el entorno.
+# calendar-id: por defecto el correo del calendario Workspace; sobrescribe con GOOGLE_CALENDAR_ID si hace falta.
 app:
   google:
     calendar:
       enabled: ${GOOGLE_CALENDAR_ENABLED:true}
-      calendar-id: ${GOOGLE_CALENDAR_ID:primary}
+      calendar-id: ${GOOGLE_CALENDAR_ID:me@elgarcia.org}
       application-name: ${GOOGLE_CALENDAR_APP_NAME:portfolio-backend}

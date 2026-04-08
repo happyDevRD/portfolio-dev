@@ -125,6 +125,34 @@ public class GoogleCalendarAdapter implements CalendarBookingPort {
         }
     }
 
+    @Override
+    public void deleteEvent(String googleEventId) {
+        try {
+            calendar.events()
+                    .delete(googleProps.getCalendarId(), googleEventId)
+                    .setSendUpdates("all")
+                    .execute();
+        } catch (IOException e) {
+            // Si ya no existe en Google, tratamos como operación idempotente para no bloquear el borrado local.
+            if (isNotFound(e)) {
+                log.info("Google Calendar event no encontrado al borrar (id={}): {}", googleEventId, e.getMessage());
+                return;
+            }
+            log.warn("Google Calendar delete evento falló (id={}): {}", googleEventId, e.getMessage());
+            throw new CalendarIntegrationException(
+                    "No se pudo cancelar el evento en Google Calendar." + apiErrorHint(e), e);
+        }
+    }
+
+    private static boolean isNotFound(IOException e) {
+        for (Throwable c = e; c != null; c = c.getCause()) {
+            if (c instanceof GoogleJsonResponseException gj && gj.getStatusCode() == 404) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private String apiErrorHint(IOException e) {
         if (!exposeErrorDetails) {
             return "";

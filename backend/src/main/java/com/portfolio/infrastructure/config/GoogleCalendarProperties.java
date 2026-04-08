@@ -10,8 +10,8 @@ public class GoogleCalendarProperties {
     private boolean enabled = false;
     private String applicationName = "portfolio-backend";
     /**
-     * ID del calendario de destino (p. ej. {@code primary} o el correo del calendario compartido con la identidad ADC).
-     * Valor por defecto desde env: {@code GOOGLE_CALENDAR_ID} (ver {@code application.yml}).
+     * ID del calendario de destino ({@code primary}, correo del calendario o recurso compartido con la identidad ADC).
+     * En prod/local se suele fijar con {@code GOOGLE_CALENDAR_ID} en el entorno (ver {@code application.yml}).
      */
     private String calendarId = "primary";
 

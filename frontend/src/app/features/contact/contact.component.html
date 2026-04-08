@@ -1,143 +1,196 @@
-<div class="page-scroll-wrapper contact-page">
-<section class="contact-unified" aria-labelledby="contact-heading">
-    <div class="contact-panel">
-        <header class="contact-panel__head">
-            <h1 id="contact-heading" class="contact-panel__title">
-                Cuéntame tu <span class="highlight-red">reto técnico</span>
-            </h1>
-            <p class="contact-panel__subtitle">
-                Escríbeme, conecta en LinkedIn o reserva un horario: todo aquí.
-            </p>
-        </header>
-
-        <div class="contact-panel__body">
-            <aside class="contact-panel__aside" aria-label="Accesos rápidos">
-                <div class="contact-quick" role="group" aria-label="Formas de contacto">
-                    <a
-                        class="contact-quick__btn contact-quick__btn--mail-g"
-                        [href]="gmailComposeUrl"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        [attr.aria-label]="'Abrir Gmail para escribir a ' + contactEmail">
-                        <i class="fab fa-google" aria-hidden="true"></i>
-                        Gmail
-                    </a>
-                    <a
-                        class="contact-quick__btn contact-quick__btn--mail-o"
-                        [href]="mailtoUrl"
-                        [attr.aria-label]="'Abrir tu correo con destinatario ' + contactEmail">
-                        <i class="fas fa-envelope" aria-hidden="true"></i>
-                        Correo
-                    </a>
-                    <a
-                        class="contact-quick__btn contact-quick__btn--in"
-                        [href]="linkedinUrl"
-                        target="_blank"
-                        rel="noopener"
-                        aria-label="Perfil de LinkedIn">
-                        <i class="fab fa-linkedin-in" aria-hidden="true"></i>
-                        LinkedIn
-                    </a>
-                </div>
-
-                <p class="contact-meta-line">
-                    <a [href]="mailtoUrl" class="contact-meta-line__link">{{ contactEmail }}</a>
-                    <span class="contact-meta-line__sep" aria-hidden="true">·</span>
-                    <span>RD, remoto</span>
-                    <span class="contact-meta-line__sep" aria-hidden="true">·</span>
-                    <a href="tel:+18097572408" class="contact-meta-line__link">+1 (809) 757-2408</a>
-                    <span class="contact-meta-line__sep" aria-hidden="true">·</span>
-                    <a [href]="githubUrl" target="_blank" rel="noopener" class="contact-meta-line__gh" aria-label="GitHub">
-                        <i class="fab fa-github" aria-hidden="true"></i>
-                    </a>
-                </p>
-
-                <div class="contact-divider contact-divider--mobile" aria-hidden="true">
-                    <span class="contact-divider__line"></span>
-                    <span class="contact-divider__dot"></span>
-                    <span class="contact-divider__line"></span>
-                </div>
-            </aside>
-
-            <div class="contact-panel__main">
-                <div id="agenda" class="contact-panel__agenda">
-                    <h2 class="agenda-title">
-                        <span class="agenda-title__icon" aria-hidden="true"><i class="fas fa-calendar-day"></i></span>
-                        Agendar cita
-                    </h2>
-
-                    <form [formGroup]="scheduleForm" (ngSubmit)="onScheduleSubmit()" class="schedule-form" novalidate>
-                        <div class="schedule-form__row schedule-form__row--3">
-                            <div class="form-group">
-                                <label for="meetingType">Tipo</label>
-                                <select id="meetingType" formControlName="meetingType"
-                                    [class.is-invalid]="isInvalid('meetingType')"
-                                    [class.is-valid]="isValid('meetingType')">
-                                    <option *ngFor="let t of meetingTypes" [value]="t.value">{{ t.label }}</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="date">Fecha</label>
-                                <input id="date" type="date" formControlName="date"
-                                    [class.is-invalid]="isInvalid('date')"
-                                    [class.is-valid]="isValid('date')">
-                                <span class="field-error" *ngIf="isInvalid('date') && scheduleForm.get('date')?.errors?.['required']">Indica una fecha.</span>
-                            </div>
-                            <div class="form-group">
-                                <label for="time">Hora</label>
-                                <input id="time" type="time" formControlName="time"
-                                    [class.is-invalid]="isInvalid('time')"
-                                    [class.is-valid]="isValid('time')">
-                                <span class="field-error" *ngIf="isInvalid('time') && scheduleForm.get('time')?.errors?.['required']">Indica una hora.</span>
-                            </div>
-                        </div>
-
-                        <div class="schedule-form__row schedule-form__row--2">
-                            <div class="form-group">
-                                <label for="durationMinutes">Duración</label>
-                                <select id="durationMinutes" formControlName="durationMinutes">
-                                    <option *ngFor="let m of durationOptions" [value]="m">{{ m }} min</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="requesterName">Nombre</label>
-                                <input id="requesterName" type="text" formControlName="requesterName" placeholder="Tu nombre"
-                                    [class.is-invalid]="isInvalid('requesterName')"
-                                    [class.is-valid]="isValid('requesterName')">
-                                <span class="field-error" *ngIf="isInvalid('requesterName') && scheduleForm.get('requesterName')?.errors?.['required']">Obligatorio.</span>
-                                <span class="field-error" *ngIf="isInvalid('requesterName') && scheduleForm.get('requesterName')?.errors?.['minlength']">Mín. 3 caracteres.</span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="requesterEmail">Correo</label>
-                            <input id="requesterEmail" type="email" formControlName="requesterEmail" placeholder="hola@ejemplo.com"
-                                [class.is-invalid]="isInvalid('requesterEmail')"
-                                [class.is-valid]="isValid('requesterEmail')">
-                            <span class="field-error" *ngIf="isInvalid('requesterEmail') && scheduleForm.get('requesterEmail')?.errors?.['required']">Obligatorio.</span>
-                            <span class="field-error" *ngIf="isInvalid('requesterEmail') && scheduleForm.get('requesterEmail')?.errors?.['email']">Correo no válido.</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="notes">Notas <span class="label-opt">(opcional)</span></label>
-                            <textarea id="notes" formControlName="notes" rows="3" placeholder="Contexto del proyecto, stack, objetivo de la llamada…"></textarea>
-                        </div>
-
-                        <button type="submit" [disabled]="scheduleForm.invalid || isSubmitting" class="btn-submit">
-                            <span *ngIf="!isSubmitting">Solicitar <i class="fas fa-calendar-check" aria-hidden="true"></i></span>
-                            <span *ngIf="isSubmitting"><i class="fas fa-circle-notch fa-spin"></i> Enviando…</span>
-                        </button>
-
-                        <div class="success-msg" *ngIf="successMessage">
-                            <i class="fas fa-check-circle"></i> {{ successMessage }}
-                        </div>
-                        <div class="error-msg" *ngIf="errorMessage">
-                            <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-</div>
+<div class="page-scroll-wrapper contact-page">
+<section class="contact-unified" aria-labelledby="contact-heading">
+    <div class="contact-panel">
+        <header class="contact-panel__head">
+            <h1 id="contact-heading" class="contact-panel__title">
+                Cuéntame tu <span class="highlight-red">reto técnico</span>
+            </h1>
+            <p class="contact-panel__subtitle">
+                Escríbeme, conecta en LinkedIn o reserva un horario: todo aquí.
+            </p>
+        </header>
+
+        <div class="contact-panel__body">
+            <aside class="contact-panel__aside" aria-label="Accesos rápidos">
+                <div class="contact-comm">
+                    <h3 class="contact-comm__title">Canales de comunicación</h3>
+                    <p class="contact-comm__subtitle">Elige el canal que prefieras y te respondo lo antes posible.</p>
+                </div>
+
+                <div class="contact-quick" role="group" aria-label="Formas de contacto">
+                    <a
+                        class="contact-quick__btn contact-quick__btn--mail-g"
+                        [href]="gmailComposeUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        [attr.aria-label]="'Abrir Gmail para escribir a ' + contactEmail">
+                        <i class="fab fa-google" aria-hidden="true"></i>
+                        Gmail
+                    </a>
+                    <a
+                        class="contact-quick__btn contact-quick__btn--mail-o"
+                        [href]="mailtoUrl"
+                        [attr.aria-label]="'Abrir tu correo con destinatario ' + contactEmail">
+                        <i class="fas fa-envelope" aria-hidden="true"></i>
+                        Correo
+                    </a>
+                    <a
+                        class="contact-quick__btn contact-quick__btn--in"
+                        [href]="linkedinUrl"
+                        target="_blank"
+                        rel="noopener"
+                        aria-label="Perfil de LinkedIn">
+                        <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+                        LinkedIn
+                    </a>
+                    <a
+                        class="contact-quick__btn contact-quick__btn--phone"
+                        href="tel:+18097572408"
+                        aria-label="Llamar por teléfono">
+                        <i class="fas fa-phone-alt" aria-hidden="true"></i>
+                        +1 (809) 757-2408
+                    </a>
+                    <a
+                        class="contact-quick__btn contact-quick__btn--gh"
+                        [href]="githubUrl"
+                        target="_blank"
+                        rel="noopener"
+                        aria-label="GitHub">
+                        <i class="fab fa-github" aria-hidden="true"></i>
+                        GitHub
+                    </a>
+                    <a
+                        class="contact-quick__btn contact-quick__btn--mail-solid"
+                        [href]="mailtoUrl"
+                        [attr.aria-label]="'Enviar correo a ' + contactEmail">
+                        <i class="fas fa-at" aria-hidden="true"></i>
+                        {{ contactEmail }}
+                    </a>
+                </div>
+
+                <div class="contact-divider contact-divider--mobile" aria-hidden="true">
+                    <span class="contact-divider__line"></span>
+                    <span class="contact-divider__dot"></span>
+                    <span class="contact-divider__line"></span>
+                </div>
+            </aside>
+
+            <div class="contact-panel__main">
+                <div id="agenda" class="contact-panel__agenda">
+                    <h2 class="agenda-title">
+                        <span class="agenda-title__icon" aria-hidden="true"><i class="fas fa-calendar-day"></i></span>
+                        Agendar cita
+                    </h2>
+
+                    <form [formGroup]="scheduleForm" (ngSubmit)="onScheduleSubmit()" class="schedule-form" novalidate>
+                        <div class="schedule-form__row schedule-form__row--3">
+                            <div class="form-group">
+                                <label for="meetingType">Tipo</label>
+                                <select id="meetingType" formControlName="meetingType"
+                                    [class.is-invalid]="isInvalid('meetingType')"
+                                    [class.is-valid]="isValid('meetingType')">
+                                    <option *ngFor="let t of meetingTypes" [value]="t.value">{{ t.label }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="date">Fecha</label>
+                                <input id="date" type="date" formControlName="date"
+                                    [class.is-invalid]="isInvalid('date')"
+                                    [class.is-valid]="isValid('date')">
+                                <span class="field-error" *ngIf="isInvalid('date') && scheduleForm.get('date')?.errors?.['required']">Indica una fecha.</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="time">Hora</label>
+                                <select id="time" formControlName="time"
+                                    [class.is-invalid]="isInvalid('time')"
+                                    [class.is-valid]="isValid('time')">
+                                    <option *ngFor="let slot of slotOptions"
+                                        [value]="slot.time"
+                                        [disabled]="!slot.available"
+                                        [class.time-option--occupied]="!slot.available">
+                                        {{ slot.available ? slot.time : (slot.time + ' (ocupado)') }}
+                                    </option>
+                                </select>
+                                <span class="field-hint" *ngIf="isLoadingAvailability">Consultando disponibilidad real…</span>
+                                <span class="field-error" *ngIf="availabilityMessage">{{ availabilityMessage }}</span>
+                                <span class="field-error"
+                                    *ngIf="isInvalid('time') && scheduleForm.get('time')?.errors?.['required']">Indica una hora.</span>
+                            </div>
+                        </div>
+
+                        <div class="schedule-form__status">
+                            <span class="schedule-pill schedule-pill--type">{{ selectedMeetingTypeLabel }}</span>
+                            <span class="schedule-pill schedule-pill--type">Duración fija: 60 min</span>
+                            <span class="schedule-pill schedule-pill--ok" *ngIf="availableSlotCount > 0">
+                                {{ availableSlotCount }} bloques disponibles
+                            </span>
+                            <span class="schedule-pill schedule-pill--warn" *ngIf="availableSlotCount === 0 && !isLoadingAvailability">
+                                Sin bloques libres
+                            </span>
+                            <span class="schedule-pill schedule-pill--loading" *ngIf="isLoadingAvailability">
+                                Cargando disponibilidad...
+                            </span>
+                        </div>
+
+                        <div class="schedule-selected" *ngIf="selectedSlotSummary">
+                            <i class="fas fa-clock" aria-hidden="true"></i>
+                            <span>{{ selectedSlotSummary }}</span>
+                        </div>
+
+                        <div class="schedule-form__row schedule-form__row--2">
+                            <div class="form-group">
+                                <label for="requesterName">Nombre</label>
+                                <input id="requesterName" type="text" formControlName="requesterName" placeholder="Tu nombre"
+                                    [class.is-invalid]="isInvalid('requesterName')"
+                                    [class.is-valid]="isValid('requesterName')">
+                                <span class="field-error" *ngIf="isInvalid('requesterName') && scheduleForm.get('requesterName')?.errors?.['required']">Obligatorio.</span>
+                                <span class="field-error" *ngIf="isInvalid('requesterName') && scheduleForm.get('requesterName')?.errors?.['minlength']">Mín. 3 caracteres.</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="requesterEmail">Correo</label>
+                            <input id="requesterEmail" type="email" formControlName="requesterEmail" placeholder="hola@ejemplo.com"
+                                [class.is-invalid]="isInvalid('requesterEmail')"
+                                [class.is-valid]="isValid('requesterEmail')">
+                            <span class="field-error" *ngIf="isInvalid('requesterEmail') && scheduleForm.get('requesterEmail')?.errors?.['required']">Obligatorio.</span>
+                            <span class="field-error" *ngIf="isInvalid('requesterEmail') && scheduleForm.get('requesterEmail')?.errors?.['email']">Correo no válido.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes">Notas <span class="label-opt">(opcional)</span></label>
+                            <textarea id="notes" formControlName="notes" rows="3" [attr.maxlength]="maxNotesLength"
+                                placeholder="Contexto del proyecto, stack, objetivo de la llamada…"></textarea>
+                            <span class="field-hint field-hint--right">
+                                {{ (scheduleForm.get('notes')?.value?.length ?? 0) }} / {{ maxNotesLength }}
+                            </span>
+                        </div>
+
+                        <button type="submit" [disabled]="scheduleForm.invalid || isSubmitting || isLoadingAvailability" class="btn-submit">
+                            <span *ngIf="!isSubmitting">Solicitar <i class="fas fa-calendar-check" aria-hidden="true"></i></span>
+                            <span *ngIf="isSubmitting"><i class="fas fa-circle-notch fa-spin"></i> Enviando…</span>
+                        </button>
+
+                        <div class="success-msg" *ngIf="successMessage">
+                            <i class="fas fa-check-circle"></i> {{ successMessage }}
+                        </div>
+                        <div class="booking-meta" *ngIf="lastMeetingId">
+                            <span>Referencia: <strong>#{{ lastMeetingId }}</strong></span>
+                            <span *ngIf="lastGoogleEventId" class="booking-meta__sep" aria-hidden="true">·</span>
+                            <span *ngIf="lastGoogleEventId" class="booking-meta__event">Evento: {{ lastGoogleEventId }}</span>
+                        </div>
+                        <button type="button" class="btn-cancel-last" *ngIf="lastMeetingId"
+                            [disabled]="isCancelling || isSubmitting" (click)="onCancelLastMeeting()">
+                            <span *ngIf="!isCancelling"><i class="fas fa-calendar-times" aria-hidden="true"></i> Cancelar esta cita</span>
+                            <span *ngIf="isCancelling"><i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i> Cancelando…</span>
+                        </button>
+                        <div class="error-msg" *ngIf="errorMessage">
+                            <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</div>

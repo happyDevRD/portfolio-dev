@@ -7,6 +7,8 @@ import com.portfolio.core.domain.repository.MeetingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class MeetingPersistenceAdapter implements MeetingRepository {
@@ -22,5 +24,15 @@ public class MeetingPersistenceAdapter implements MeetingRepository {
         }
         var saved = meetingJpaRepository.save(entity);
         return meetingMapper.toDomain(saved);
+    }
+
+    @Override
+    public Optional<Meeting> findById(Long id) {
+        return meetingJpaRepository.findById(id).map(meetingMapper::toDomain);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        meetingJpaRepository.deleteById(id);
     }
 }
