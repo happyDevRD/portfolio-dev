@@ -88,6 +88,16 @@ Spring Boot lee la configuración típica de datasource con estas variables (equ
 | `CORS_ALLOWED_ORIGINS`      | Orígenes del frontend, separados por coma. Ej.: `https://elgarcia.org,https://www.elgarcia.org,https://portfolio-eleazar-garcia.web.app` |
 | `ADMIN_API_KEY`             | **Obligatorio en prod.** Clave para `POST`/`PUT`/`DELETE` en `/api/projects`, `/api/skills`, `/api/experiences`. Enviar cabecera `X-API-Key`. |
 
+### Backend — perfil `local` y Google Calendar (opcional)
+
+Con `application-local.yml`, la agenda puede usar **ADC** (sin JSON en el repo): en tu máquina ejecuta `gcloud auth application-default login` y define el calendario con variables de entorno si hace falta:
+
+| Variable | Descripción |
+|----------|-------------|
+| `GOOGLE_CALENDAR_ENABLED` | En local el valor por defecto es **activar** calendario (`true`); pon `false` si no tienes ADC y quieres arrancar sin Google Calendar. |
+| `GOOGLE_CALENDAR_ID` | `primary` o el correo completo del calendario (en **Google Workspace**, si aparece 403 al crear eventos, prueba el correo en lugar de `primary`). |
+| `GOOGLE_CALENDAR_APP_NAME` | Opcional; nombre que verás en la consola de Google (por defecto `portfolio-backend`). |
+
 En **Cloud Run**, el workflow `backend-deploy.yml` también fija `SPRING_PROFILES_ACTIVE=prod,supabase` (seguridad + pool Hikari para Postgres remoto).
 
 En desarrollo local (`spring.profiles.active` distinto de `prod`) las escrituras no exigen API key salvo que configures `app.security.require-api-key-for-writes=true`.
@@ -124,13 +134,15 @@ Configura en **Settings → Secrets and variables → Actions** (valores nunca e
 | `SPRING_DATASOURCE_PASSWORD` | Contraseña de la base de datos. |
 | `CORS_ALLOWED_ORIGINS` | Lista separada por comas, sin espacios problemáticos al pegar: `https://elgarcia.org,https://www.elgarcia.org,https://portfolio-eleazar-garcia.web.app`. |
 | `ADMIN_API_KEY` | Misma clave larga que usarás en el panel admin del sitio (`X-API-Key`). |
-| `GOOGLE_CALENDAR_ENABLED` | *(Opcional)* `true` para activar la agenda con Google Calendar en Cloud Run (ADC con la cuenta de servicio del servicio). Si no existe, el despliegue usa `false`. |
-| `GOOGLE_CALENDAR_ID` | *(Opcional)* ID del calendario destino (p. ej. `primary` o el correo del calendario compartido). Si no existe, se usa `primary`. |
+| `GOOGLE_CALENDAR_ENABLED` | **Obligatorio para la agenda en prod:** `true`. Si no creas este secret, el despliegue envía `false` y `/api/meetings` responderá 503 (“calendario no habilitado”). |
+| `GOOGLE_CALENDAR_ID` | *(Opcional)* ID del calendario destino (p. ej. `primary` o el correo del calendario compartido con la cuenta de servicio de Cloud Run). Si no existe, se usa `primary`. |
 | `FIREBASE_SERVICE_ACCOUNT_PORTFOLIO_ELEAZAR_GARCIA` | JSON de la cuenta de servicio de Firebase (Hosting). Debe coincidir con el nombre usado en `frontend-deploy.yml`. Puedes generar o enlazar el repo con `firebase init hosting:github` desde `frontend/` o crear la clave en la consola de Firebase/Google Cloud. |
 
 **GCP (una vez):** crea en Artifact Registry un repositorio Docker llamado `backend-repo` en `us-central1` (o cambia `AR_REPO` en `backend-deploy.yml`). La imagen publicada es `us-central1-docker.pkg.dev/<GCP_PROJECT_ID>/backend-repo/portfolio-backend:latest`.
 
 **Seguridad:** si alguna clave llegó a filtrarse (chat, issue, commit), **rótala** en GCP/Firebase/GitHub y vuelve a guardar el secreto.
+
+**Agenda y 503:** En **Cloud Run**, si ves “Google Calendar no está habilitada”, define el secret `GOOGLE_CALENDAR_ENABLED`=`true` y redepliega. Si ves “No se pudo consultar la disponibilidad”, en **Google Cloud Console** habilita **Google Calendar API** en el mismo proyecto que usa el backend, y comparte el calendario con el **email de la cuenta de servicio** del servicio Cloud Run (IAM → cuenta de servicio del servicio → copiar email). En local, con `gcloud auth application-default login`, el mismo proyecto debe tener la API habilitada; revisa el cuerpo del 503 con `app.error.expose-details=true` (por defecto en local) para ver el código HTTP de Google.
 
 ---
 

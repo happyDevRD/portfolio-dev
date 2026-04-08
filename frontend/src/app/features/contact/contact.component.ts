@@ -35,7 +35,12 @@ export class ContactComponent implements OnInit, AfterViewInit {
   readonly durationOptions = [30, 45, 60, 90];
 
   private readonly meetingsApiUrl = `${environment.apiUrl}/meetings`;
-  private readonly calendarDisabledMessageToken = 'app.google.calendar';
+  /** Mensajes del backend cuando la agenda no está configurada (deshabilitada). */
+  private readonly calendarDisabledPatterns = [
+    'app.google.calendar',
+    'GOOGLE_CALENDAR_ENABLED',
+    'Google Calendar no está habilitada'
+  ] as const;
 
   constructor(
     private fb: FormBuilder,
@@ -172,7 +177,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
       return '';
     }
 
-    if (message.includes(this.calendarDisabledMessageToken)) {
+    if (this.calendarDisabledPatterns.some((p) => message.includes(p))) {
       return 'La agenda no está disponible por ahora. Escríbeme a hola@elgarcia.org y coordinamos por correo.';
     }
 
