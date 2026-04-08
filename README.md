@@ -136,7 +136,7 @@ Configura en **Settings → Secrets and variables → Actions** (valores nunca e
 | `ADMIN_API_KEY` | Misma clave larga que usarás en el panel admin del sitio (`X-API-Key`). |
 | `GOOGLE_CALENDAR_ENABLED` | **Obligatorio para la agenda en prod:** `true`. Si no creas este secret, el despliegue envía `false` y `/api/meetings` responderá 503 (“calendario no habilitado”). |
 | `GOOGLE_CALENDAR_ID` | *(Opcional)* ID del calendario destino (p. ej. `primary` o el correo del calendario compartido con la cuenta de servicio de Cloud Run). Si no existe, se usa `primary`. |
-| `FIREBASE_SERVICE_ACCOUNT_PORTFOLIO_ELEAZAR_GARCIA` | JSON de la cuenta de servicio de Firebase (Hosting). Debe coincidir con el nombre usado en `frontend-deploy.yml`. Puedes generar o enlazar el repo con `firebase init hosting:github` desde `frontend/` o crear la clave en la consola de Firebase/Google Cloud. |
+| `FIREBASE_SERVICE_ACCOUNT_PORTAFOLIO_ELEAZAR_GARCIA` | JSON de la cuenta de servicio de Firebase (Hosting). Debe coincidir con el nombre usado en `frontend-deploy.yml`. Puedes generar o enlazar el repo con `firebase init hosting:github` desde `frontend/` o crear la clave en la consola de Firebase/Google Cloud. |
 
 **GCP (una vez):** crea en Artifact Registry un repositorio Docker llamado `backend-repo` en `us-central1` (o cambia `AR_REPO` en `backend-deploy.yml`). La imagen publicada es `us-central1-docker.pkg.dev/<GCP_PROJECT_ID>/backend-repo/portfolio-backend:latest`.
 
