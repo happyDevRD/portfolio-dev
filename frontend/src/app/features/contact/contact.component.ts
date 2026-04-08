@@ -35,6 +35,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
   readonly durationOptions = [30, 45, 60, 90];
 
   private readonly meetingsApiUrl = `${environment.apiUrl}/meetings`;
+  private readonly calendarDisabledMessageToken = 'app.google.calendar';
 
   constructor(
     private fb: FormBuilder,
@@ -132,20 +133,21 @@ export class ContactComponent implements OnInit, AfterViewInit {
       error: (err: HttpErrorResponse) => {
         this.isSubmitting = false;
         const msg = this.extractErrorMessage(err);
+        const safeMsg = this.mapServerMessageForUser(msg);
         if (err.status === 429) {
           this.errorMessage = 'Demasiadas solicitudes. Espera un minuto e inténtalo de nuevo.';
         } else if (err.status === 0 || err.status === 503) {
           this.errorMessage =
-            msg ||
+            safeMsg ||
             'El servicio de calendario no está disponible en este momento. Intenta más tarde o escribe a hola@elgarcia.org.';
         } else if (err.status === 409) {
-          this.errorMessage = msg || 'Ese horario ya no está disponible. Elige otra fecha u hora.';
+          this.errorMessage = safeMsg || 'Ese horario ya no está disponible. Elige otra fecha u hora.';
         } else if (err.status >= 500) {
-          this.errorMessage = msg || 'Error en el servidor. Intenta más tarde.';
+          this.errorMessage = safeMsg || 'Error en el servidor. Intenta más tarde.';
         } else if (err.status === 400) {
-          this.errorMessage = msg || 'Revisa los datos del formulario e inténtalo de nuevo.';
+          this.errorMessage = safeMsg || 'Revisa los datos del formulario e inténtalo de nuevo.';
         } else {
-          this.errorMessage = msg || 'No se pudo completar la solicitud.';
+          this.errorMessage = safeMsg || 'No se pudo completar la solicitud.';
         }
       }
     });
@@ -163,5 +165,17 @@ export class ContactComponent implements OnInit, AfterViewInit {
       }
     }
     return '';
+  }
+
+  private mapServerMessageForUser(message: string): string {
+    if (!message) {
+      return '';
+    }
+
+    if (message.includes(this.calendarDisabledMessageToken)) {
+      return 'La agenda no está disponible por ahora. Escríbeme a hola@elgarcia.org y coordinamos por correo.';
+    }
+
+    return message;
   }
 }

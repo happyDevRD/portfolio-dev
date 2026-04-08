@@ -124,6 +124,8 @@ Configura en **Settings → Secrets and variables → Actions** (valores nunca e
 | `SPRING_DATASOURCE_PASSWORD` | Contraseña de la base de datos. |
 | `CORS_ALLOWED_ORIGINS` | Lista separada por comas, sin espacios problemáticos al pegar: `https://elgarcia.org,https://www.elgarcia.org,https://portfolio-eleazar-garcia.web.app`. |
 | `ADMIN_API_KEY` | Misma clave larga que usarás en el panel admin del sitio (`X-API-Key`). |
+| `GOOGLE_CALENDAR_ENABLED` | *(Opcional)* `true` para activar la agenda con Google Calendar en Cloud Run (ADC con la cuenta de servicio del servicio). Si no existe, el despliegue usa `false`. |
+| `GOOGLE_CALENDAR_ID` | *(Opcional)* ID del calendario destino (p. ej. `primary` o el correo del calendario compartido). Si no existe, se usa `primary`. |
 | `FIREBASE_SERVICE_ACCOUNT_PORTFOLIO_ELEAZAR_GARCIA` | JSON de la cuenta de servicio de Firebase (Hosting). Debe coincidir con el nombre usado en `frontend-deploy.yml`. Puedes generar o enlazar el repo con `firebase init hosting:github` desde `frontend/` o crear la clave en la consola de Firebase/Google Cloud. |
 
 **GCP (una vez):** crea en Artifact Registry un repositorio Docker llamado `backend-repo` en `us-central1` (o cambia `AR_REPO` en `backend-deploy.yml`). La imagen publicada es `us-central1-docker.pkg.dev/<GCP_PROJECT_ID>/backend-repo/portfolio-backend:latest`.

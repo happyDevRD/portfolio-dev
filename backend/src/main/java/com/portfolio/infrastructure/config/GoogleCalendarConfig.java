@@ -6,37 +6,40 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.util.StringUtils;
 
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.Collections;
 
 @Configuration
 public class GoogleCalendarConfig {
 
+    /**
+     * Credenciales de aplicación por defecto (ADC): Workload Identity en GCP, variable
+     * {@code GOOGLE_APPLICATION_CREDENTIALS}, o metadatos de la VM.
+     */
+    @Bean(name = "googleCalendarCredentials")
+    @ConditionalOnProperty(prefix = "app.google.calendar", name = "enabled", havingValue = "true")
+    public GoogleCredentials googleCalendarCredentials() throws IOException {
+        return GoogleCredentials.getApplicationDefault()
+                .createScoped(Collections.singleton(CalendarScopes.CALENDAR));
+    }
+
     @Bean
     @ConditionalOnProperty(prefix = "app.google.calendar", name = "enabled", havingValue = "true")
-    public Calendar googleCalendar(GoogleCalendarProperties props, ResourceLoader resourceLoader) throws Exception {
-        if (!StringUtils.hasText(props.getCredentialsPath())) {
-            throw new IllegalStateException(
-                    "app.google.calendar.credentials-path debe estar definido cuando enabled=true");
-        }
-        Resource resource = resourceLoader.getResource(props.getCredentialsPath());
-        try (InputStream in = resource.getInputStream()) {
-            GoogleCredentials credentials =
-                    GoogleCredentials.fromStream(in).createScoped(Collections.singleton(CalendarScopes.CALENDAR));
-            HttpCredentialsAdapter requestInitializer = new HttpCredentialsAdapter(credentials);
-            return new Calendar.Builder(
-                            GoogleNetHttpTransport.newTrustedTransport(),
-                            GsonFactory.getDefaultInstance(),
-                            requestInitializer)
-                    .setApplicationName(props.getApplicationName())
-                    .build();
-        }
+    public Calendar googleCalendar(
+            GoogleCalendarProperties props,
+            @Qualifier("googleCalendarCredentials") GoogleCredentials googleCalendarCredentials)
+            throws Exception {
+        HttpCredentialsAdapter requestInitializer = new HttpCredentialsAdapter(googleCalendarCredentials);
+        return new Calendar.Builder(
+                        GoogleNetHttpTransport.newTrustedTransport(),
+                        GsonFactory.getDefaultInstance(),
+                        requestInitializer)
+                .setApplicationName(props.getApplicationName())
+                .build();
     }
 }
