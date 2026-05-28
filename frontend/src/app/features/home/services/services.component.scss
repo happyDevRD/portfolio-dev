@@ -27,29 +27,28 @@
 
     .section-badge {
         display: inline-block;
-        background: rgba(var(--accent-color-rgb), 0.1);
+        background: transparent;
         color: var(--primary-color);
-        padding: 0.3rem 0.9rem;
-        border-radius: 50px;
-        font-size: 0.78rem;
+        padding: 0.2rem 0.7rem;
+        border-radius: var(--radius-editorial, 4px);
+        border: 1.5px solid var(--primary-color);
+        font-size: 0.7rem;
         font-weight: 700;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
         margin-bottom: 1rem;
     }
 
     h2 {
-        font-size: clamp(1.8rem, 3vw, 2.5rem);
-        font-weight: 800;
+        font-size: clamp(1.9rem, 3.2vw, 2.8rem);
+        font-weight: 900;
         color: var(--text-primary);
         margin-bottom: 0.75rem;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.03em;
 
         .gradient-text {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #ff6b6b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary-color);
+            -webkit-text-fill-color: var(--primary-color);
         }
     }
 
@@ -88,33 +87,21 @@
 
 .service-card {
     background: var(--surface-color);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
+    border: 2px solid #0a0a0a;
+    border-radius: var(--radius-editorial, 4px);
     padding: 2rem;
     position: relative;
     overflow: hidden;
     cursor: default;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: box-shadow 0.18s, background 0.18s;
     animation: fadeUp 0.6s ease-out var(--delay, 0s) both;
 
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, rgba(var(--accent-color-rgb), 0.04) 0%, transparent 60%);
-        opacity: 0;
-        transition: opacity 0.3s;
-    }
-
     &:hover {
-        transform: translateY(-4px);
-        border-color: rgba(var(--accent-color-rgb), 0.4);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-
-        &::before { opacity: 1; }
+        box-shadow: 5px 5px 0 #0a0a0a;
+        background: #fafafa;
 
         .card-arrow { opacity: 1; transform: translateX(0); }
-        .icon-circle { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+        .icon-circle { background: #0a0a0a; color: white; border-color: #0a0a0a; }
     }
 
     .service-header {
@@ -127,16 +114,16 @@
     .icon-circle {
         width: 48px;
         height: 48px;
-        background: var(--surface-light);
-        border-radius: 12px;
+        background: transparent;
+        border-radius: var(--radius-editorial, 4px);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.2rem;
         color: var(--primary-color);
-        border: 1px solid var(--border-color);
+        border: 2px solid #0a0a0a;
         flex-shrink: 0;
-        transition: all 0.3s ease;
+        transition: background 0.18s, color 0.18s, border-color 0.18s;
     }
 
     h3 {

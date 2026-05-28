@@ -5,7 +5,7 @@
         <header class="resume-hero">
             <div class="hero-left">
                 <h1>{{ cv.heroTitle }}</h1>
-                <p class="hero-subtitle">{{ cv.heroSubtitle }}</p>
+                <p class="hero-subtitle">{{ activeProfile.heroSubtitle }}</p>
             </div>
             <div class="hero-right">
                 <div class="hero-actions">
@@ -26,6 +26,20 @@
             </div>
         </header>
 
+        <!-- Selector de perfil CV -->
+        <div class="cv-type-selector" role="group" aria-label="Perfil de currículum">
+            <button
+                *ngFor="let type of profileList"
+                type="button"
+                class="cv-type-btn"
+                [class.active]="activeCvType === type"
+                (click)="setCvType(type)"
+                [attr.aria-pressed]="activeCvType === type">
+                <i [class]="profilesMap[type].icon" aria-hidden="true"></i>
+                {{ profilesMap[type].label }}
+            </button>
+        </div>
+
         <div class="api-error-banner" *ngIf="loadError" role="alert">
             <i class="fas fa-plug" aria-hidden="true"></i>
             <span>No se pudieron cargar experiencia o habilidades desde el servidor. Revisa la conexión o inténtalo más tarde.</span>
@@ -36,7 +50,7 @@
             <div class="main-col">
                 <section class="summary-card animate-up" style="--delay: 0.1s" aria-labelledby="resume-summary-heading">
                     <h2 id="resume-summary-heading"><span class="icon" aria-hidden="true"><i class="fas fa-user-circle"></i></span> Resumen profesional</h2>
-                    <p class="summary-body">{{ cv.professionalSummary }}</p>
+                    <p class="summary-body">{{ activeProfile.summary }}</p>
                 </section>
 
                 <section class="timeline-section" aria-labelledby="resume-exp-heading">
@@ -79,28 +93,26 @@
                 <section class="skills-card animate-up" style="--delay: 0.2s" aria-labelledby="resume-skills-heading">
                     <h2 id="resume-skills-heading"><span class="icon" aria-hidden="true"><i class="fas fa-tools"></i></span> Habilidades técnicas</h2>
 
-                    <ng-container *ngIf="skillGroups$ | async as skillGroups">
-                        <div class="cv-empty cv-empty--compact" *ngIf="skillGroups.length === 0 && !loadError">
-                            <p>Sin datos de habilidades.</p>
-                        </div>
-                        <div class="skill-category" *ngFor="let group of skillGroups; trackBy: trackByCategory">
-                            <h3>{{ group.category }}</h3>
-                            <div class="skill-bars">
-                                <div class="skill-bar-item" *ngFor="let skill of group.items; trackBy: trackBySkillId">
-                                    <div class="skill-bar-header">
-                                        <div class="skill-name">
-                                            <img *ngIf="skill.iconUrl" [src]="skill.iconUrl" alt="" class="skill-icon-sm" onerror="this.style.display='none'">
-                                            <span>{{ skill.name }}</span>
-                                        </div>
-                                        <span class="skill-pct" [attr.aria-label]="'Nivel ' + skill.proficiency + ' por ciento'">{{ skill.proficiency }}%</span>
+                    <div class="cv-empty cv-empty--compact" *ngIf="skillGroups.length === 0 && !loadError">
+                        <p>Sin datos de habilidades.</p>
+                    </div>
+                    <div class="skill-category" *ngFor="let group of skillGroups; trackBy: trackByCategory">
+                        <h3>{{ group.category }}</h3>
+                        <div class="skill-bars">
+                            <div class="skill-bar-item" *ngFor="let skill of group.items; trackBy: trackBySkillId">
+                                <div class="skill-bar-header">
+                                    <div class="skill-name">
+                                        <img *ngIf="skill.iconUrl" [src]="skill.iconUrl" alt="" class="skill-icon-sm" onerror="this.style.display='none'">
+                                        <span>{{ skill.name }}</span>
                                     </div>
-                                    <div class="skill-track" role="presentation">
-                                        <div class="skill-fill" [style.width.%]="skill.proficiency"></div>
-                                    </div>
+                                    <span class="skill-pct" [attr.aria-label]="'Nivel ' + skill.proficiency + ' por ciento'">{{ skill.proficiency }}%</span>
+                                </div>
+                                <div class="skill-track" role="presentation">
+                                    <div class="skill-fill" [style.width.%]="skill.proficiency"></div>
                                 </div>
                             </div>
                         </div>
-                    </ng-container>
+                    </div>
                 </section>
 
                 <section class="education-card animate-up" style="--delay: 0.3s" aria-labelledby="resume-edu-heading">
@@ -136,7 +148,7 @@
     <article class="print-resume" id="cv-print" itemscope itemtype="https://schema.org/Person">
         <header class="print-header">
             <h1><span itemprop="name">Eleazar Garcia</span></h1>
-            <p class="print-tagline">{{ cv.printTagline }}</p>
+            <p class="print-tagline">{{ activeProfile.printTagline }}</p>
             <address class="print-contact">
                 <ul>
                     <li><span class="label">Correo:</span> <a [href]="'mailto:hola@elgarcia.org'">hola&#64;elgarcia.org</a></li>
@@ -150,18 +162,16 @@
 
         <section class="print-section" aria-labelledby="sec-summary">
             <h2 id="sec-summary">Resumen profesional</h2>
-            <p>{{ cv.professionalSummary }}</p>
+            <p>{{ activeProfile.summary }}</p>
         </section>
 
-        <ng-container *ngIf="skillGroups$ | async as skillGroups">
-            <section class="print-section" aria-labelledby="sec-skills" *ngIf="skillGroups.length">
-                <h2 id="sec-skills">Competencias técnicas</h2>
-                <div class="print-skill-block" *ngFor="let group of skillGroups">
-                    <h3>{{ group.category }}</h3>
-                    <p>{{ plainSkillsLine(group) }}</p>
-                </div>
-            </section>
-        </ng-container>
+        <section class="print-section" aria-labelledby="sec-skills" *ngIf="skillGroups.length">
+            <h2 id="sec-skills">Competencias técnicas</h2>
+            <div class="print-skill-block" *ngFor="let group of skillGroups">
+                <h3>{{ group.category }}</h3>
+                <p>{{ plainSkillsLine(group) }}</p>
+            </div>
+        </section>
 
         <section class="print-section" aria-labelledby="sec-exp">
             <h2 id="sec-exp">Experiencia profesional</h2>

@@ -2,7 +2,7 @@
 # Uso: .\run.ps1   o   .\run.ps1 "-Dspring-boot.run.profiles=supabase"
 $ErrorActionPreference = "Stop"
 
-$JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
+$JAVA_HOME = "C:\Program Files\Java\jdk-17"
 $MAVEN = "C:\Users\Usuario\maven\apache-maven-3.9.6\bin\mvn.cmd"
 
 if (-not (Test-Path "$JAVA_HOME\bin\java.exe")) {

@@ -11,9 +11,9 @@
   --secondary-color: #1e293b;
 
   /* Backgrounds */
-  --bg-color: #f8f6f6;
-  --surface-color: #ffffff;
-  --surface-light: #f1f5f9;
+  --bg-color: #ffffff;
+  --surface-color: #fafafa;
+  --surface-light: #f4f4f5;
   --card-bg: #ffffff;
 
   /* Text */
@@ -34,9 +34,13 @@
 
   /* Layout Tokens */
   --container-width: min(1400px, 94vw);
-  /* Ancho máximo del shell (main + header alineados): antes 1200px apretaba todo el hero */
   --layout-max-width: min(1680px, calc(100vw - 2rem));
   --radius-lg: 0.75rem;
+
+  /* Editorial Tokens */
+  --border-editorial: 2px solid #0a0a0a;
+  --border-editorial-light: 1.5px solid #d1d5db;
+  --radius-editorial: 4px;
 
   /* Glass Tokens */
   --glass-bg: rgba(255, 255, 255, 0.85);
@@ -79,11 +83,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Grid Background Pattern */
-  background-image:
-    linear-gradient(to right, #e5e7eb 1px, transparent 1px),
-    linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
-  background-size: 40px 40px;
+  /* Editorial: no grid — clean white */
 }
 
 /* === Global Animations === */
@@ -445,9 +445,7 @@ body.dark-mode {
   --glass-bg: rgba(15, 23, 42, 0.85);
   --nav-blur-bg: rgba(15, 23, 42, 0.85);
 
-  background-image:
-    linear-gradient(to right, #1e293b 1px, transparent 1px),
-    linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+  /* no grid in dark mode either */
 
   .header {
     border-color: rgba(255, 255, 255, 0.08);
