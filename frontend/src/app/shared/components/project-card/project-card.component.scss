@@ -1,7 +1,7 @@
 .project-card {
     background: var(--surface-color);
-    border: 2px solid #0a0a0a;
-    border-radius: var(--radius-editorial, 4px);
+    border: none;
+    border-radius: 0;
     overflow: hidden;
     height: 100%;
     display: flex;
