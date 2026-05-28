@@ -14,24 +14,24 @@ export class TerminalComponent implements OnInit {
 
   readonly specs = [
     {
-      icon: 'fas fa-server',
-      primary: 'Backend Java Enterprise',
-      secondary: 'Spring Boot 3 · Jakarta EE · Oracle'
+      icon: 'fas fa-building',
+      primary: 'Sector público y financiero',
+      secondary: 'Sistemas críticos · alta disponibilidad'
     },
     {
       icon: 'fas fa-file-alt',
-      primary: 'Migración & reporting',
-      secondary: 'JasperReports · PL/SQL · integraciones'
+      primary: 'Reporting e integraciones',
+      secondary: '200+ reportes Jasper · cores bancarios'
     },
     {
-      icon: 'fab fa-angular',
-      primary: 'Frontend Angular',
-      secondary: 'TypeScript · SCSS · RxJS'
+      icon: 'fas fa-layer-group',
+      primary: 'Entrega full stack',
+      secondary: 'APIs Spring Boot · front Angular'
     },
     {
       icon: 'fas fa-globe',
-      primary: 'Remote-first · GMT-4',
-      secondary: 'Contratos por objetivos'
+      primary: 'Remoto · GMT-4',
+      secondary: 'Inglés técnico · RD'
     }
   ];
 

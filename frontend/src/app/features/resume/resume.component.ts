@@ -34,13 +34,23 @@ export class ResumeComponent implements OnInit, OnDestroy {
   skillGroups: SkillGroup[] = [];
   loadError = false;
 
-  activeCvType: CvProfile = 'fullstack';
+  activeCvType: CvProfile = 'programador';
 
   get activeProfile(): CvProfileConfig {
     return CV_PROFILES[this.activeCvType];
   }
 
+  get orderedCertificates(): ResumeCertificate[] {
+    const order = this.activeProfile.certificateOrder;
+    const rank = (title: string) => {
+      const i = order.indexOf(title);
+      return i === -1 ? order.length : i;
+    };
+    return [...this.cv.certificates].sort((a, b) => rank(a.title) - rank(b.title));
+  }
+
   private allSkills: Skill[] = [];
+  private allExperiences: Experience[] = [];
   private destroyed$ = new Subject<void>();
 
   constructor(private portfolioService: PortfolioService, private seo: SeoService) {}
@@ -49,12 +59,17 @@ export class ResumeComponent implements OnInit, OnDestroy {
     this.seo.update({
       title: 'Currículum',
       description:
-        'Eleazar Garcia — Desarrollador Full Stack (Java, Spring Boot, Angular). APIs REST, integraciones y reporting. CV y experiencia profesional.',
-      keywords: 'currículum, CV, Java, Spring Boot, Angular, integración, JasperReports, REST',
+        'CV en dos enfoques: programador (Java, Spring Boot, Angular) y analista de datos (SQL, reporting Jasper). Métricas y certificaciones verificables.',
+      keywords:
+        'currículum, CV, desarrollador Java, analista de datos, SQL, Spring Boot, Angular, JasperReports, reporting',
       url: '/resume',
     });
 
     this.experiences$ = this.portfolioService.getExperiences().pipe(
+      map((jobs) => {
+        this.allExperiences = jobs;
+        return this.sortExperiencesForProfile(jobs);
+      }),
       catchError(() => {
         this.loadError = true;
         return of([]);
@@ -84,6 +99,7 @@ export class ResumeComponent implements OnInit, OnDestroy {
   setCvType(type: CvProfile): void {
     this.activeCvType = type;
     this.rebuildSkillGroups();
+    this.refreshExperiencesOrder();
   }
 
   downloadPDF(): void {
@@ -108,6 +124,21 @@ export class ResumeComponent implements OnInit, OnDestroy {
 
   plainSkillsLine(group: SkillGroup): string {
     return group.items.map((s) => s.name).join(', ');
+  }
+
+  /** Reordena experiencias al cambiar de perfil (misma fuente API). */
+  private refreshExperiencesOrder(): void {
+    if (!this.allExperiences.length) return;
+    this.experiences$ = of(this.sortExperiencesForProfile(this.allExperiences));
+  }
+
+  private sortExperiencesForProfile(jobs: Experience[]): Experience[] {
+    const order = CV_PROFILES[this.activeCvType].experienceOrder;
+    const rank = (company: string) => {
+      const i = order.indexOf(company);
+      return i === -1 ? order.length : i;
+    };
+    return [...jobs].sort((a, b) => rank(a.company) - rank(b.company));
   }
 
   private rebuildSkillGroups(): void {

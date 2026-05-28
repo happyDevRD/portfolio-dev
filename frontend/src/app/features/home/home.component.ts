@@ -91,8 +91,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.seo.update({
       title: 'Eleazar Garcia | Desarrollador Full Stack',
-      description: 'Eleazar Garcia — Full Stack (Java, Spring Boot, Angular). Integración, reporting y modernización de sistemas. elgarcia.org',
-      keywords: 'desarrollador full stack, Spring Boot, Quarkus, Angular, Java, integración, JasperReports, trabajo remoto',
+      description:
+        'Desarrollador Full Stack (5 años). Integraciones, reporting Jasper y sistemas Java en sector público y financiero. Proyectos y CV en elgarcia.org',
+      keywords:
+        'desarrollador full stack, Java, Spring Boot, Angular, integraciones bancarias, JasperReports, trabajo remoto, República Dominicana',
       url: '/'
     });
     this.seo.setStructuredData(this.seo.homePageJsonLd());

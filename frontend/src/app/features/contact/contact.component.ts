@@ -88,7 +88,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
     this.seo.update({
       title: 'Contacto y agenda',
       description:
-        'Escríbeme, conecta en LinkedIn o agenda una cita. Full Stack Java / Angular · República Dominicana.',
+        'Contacto y agenda de 60 min. Desarrollador Full Stack · remoto desde República Dominicana.',
       keywords:
         'contacto, agendar reunión, consultoría técnica, desarrollador full stack, freelance, República Dominicana',
       url: '/contact'

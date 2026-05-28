@@ -33,7 +33,7 @@ export class BlogComponent implements OnInit {
   ngOnInit(): void {
     this.seo.update({
       title: 'Blog',
-      description: 'Artículos técnicos: Spring Boot, Angular, Docker, JasperReports y arquitectura limpia. Por Eleazar Garcia.',
+      description: 'Blog técnico: arquitectura, Spring Boot, Angular, Docker y reporting. Por Eleazar Garcia.',
       keywords: 'blog, Spring Boot, Angular, Docker, arquitectura, JasperReports',
       url: '/blog'
     });

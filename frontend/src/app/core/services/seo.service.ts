@@ -96,7 +96,7 @@ export class SeoService {
           url: `${base}/`,
           name: 'Eleazar Garcia',
           description:
-            'Desarrollador Full Stack (Java, Spring Boot, Angular). Integración, reporting y modernización de sistemas.',
+            'Desarrollador Full Stack con experiencia en integraciones, reporting y sistemas empresariales Java.',
           inLanguage: 'es-DO'
         },
         {

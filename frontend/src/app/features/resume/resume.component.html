@@ -129,7 +129,7 @@
                         <div class="edu-badge"><i class="fas fa-certificate"></i></div>
                         <div class="edu-info">
                             <h4>Formación continua</h4>
-                            <p class="school">{{ cv.continuingEducation }}</p>
+                            <p class="school">{{ activeProfile.continuingEducation }}</p>
                             <p class="year cert-tags">
                                 <span class="cert-tag">Online</span>
                                 <span class="cert-tag">Autodidacta</span>
@@ -196,7 +196,7 @@
                 <strong>Titulación:</strong> {{ cv.degreeTitle }} — {{ cv.schoolName }} — {{ cv.graduationYear }}.
             </p>
             <p class="print-edu-line">
-                <strong>Formación complementaria:</strong> {{ cv.continuingEducation }}
+                <strong>Formación complementaria:</strong> {{ activeProfile.continuingEducation }}
             </p>
             <p class="print-edu-line">
                 <strong>Idiomas:</strong> {{ cv.languages }}
@@ -207,7 +207,7 @@
             <h2 id="sec-certs">Certificaciones y cursos</h2>
             <div
                 class="print-cert"
-                *ngFor="let cert of cv.certificates; trackBy: trackByCertificate">
+                *ngFor="let cert of orderedCertificates; trackBy: trackByCertificate">
                 <p class="print-cert-line">
                     <strong>{{ cert.title }}</strong> — {{ cert.issuer }}.
                     {{ cert.issuedOn | date: 'd MMMM yyyy' }}.

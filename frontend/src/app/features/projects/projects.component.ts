@@ -107,7 +107,8 @@ export class ProjectsComponent implements OnInit {
   ngOnInit(): void {
     this.seo.update({
       title: 'Proyectos',
-      description: 'Selección de proyectos: integración, reporting Jasper, API gateway y este portafolio open source (Spring Boot, Angular).',
+      description:
+        'Proyectos reales: reporting gubernamental, integración bancaria, API gateway y portafolio open source. Detalle por caso.',
       keywords: 'proyectos, Spring Boot, Angular, integración, JasperReports, portfolio',
       url: '/projects'
     });

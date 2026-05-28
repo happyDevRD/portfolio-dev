@@ -435,6 +435,15 @@
     margin-bottom: 0.75rem;
 
     strong { color: var(--text-primary); font-weight: 600; }
+
+    a {
+      color: var(--primary-color);
+      font-weight: 500;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+
+      &:hover { color: var(--text-primary); }
+    }
   }
 
   .about-visual {

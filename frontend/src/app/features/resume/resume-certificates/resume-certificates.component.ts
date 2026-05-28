@@ -21,7 +21,7 @@ export class ResumeCertificatesComponent implements OnInit {
     this.seo.update({
       title: 'Certificaciones',
       description:
-        'Credenciales verificables y cursos — HackerRank (SQL avanzado, Software Engineer) y más.',
+        'Certificaciones con enlace de verificación: SQL avanzado y Software Engineer (HackerRank).',
       keywords: 'certificaciones, cursos, HackerRank, SQL, credenciales',
       url: '/resume/certificates'
     });
