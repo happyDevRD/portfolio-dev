@@ -1,162 +1,231 @@
-.terminal-window {
-    background: #0d0d0d;
-    border-radius: 10px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08);
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-    overflow: hidden;
-    position: relative;
+// ── wrapper: float animation isolated from entry transition ──────────────────
+.dev-card-float {
+  animation: devFloat 6s 2s ease-in-out infinite;
+  will-change: transform;
 }
 
-.terminal-header {
-    background: #1a1a1a;
-    padding: 0.65rem 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+// ── card shell ────────────────────────────────────────────────────────────────
+.dev-card {
+  position: relative;
+  padding: 1.5rem;
+  border-radius: 16px;
+  overflow: hidden;
 
-    .buttons {
-        display: flex;
-        gap: 7px;
+  background:
+    linear-gradient(160deg, #0d0d0d 0%, #0f0f12 100%) padding-box,
+    linear-gradient(135deg,
+      rgba(234, 40, 49, 0.45) 0%,
+      rgba(234, 40, 49, 0.08) 40%,
+      rgba(255, 255, 255, 0.06) 100%
+    ) border-box;
+  border: 1px solid transparent;
 
-        span {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            display: inline-block;
-            transition: opacity 0.2s;
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.5),
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 
-            &:nth-child(1) { background-color: #ff5f57; }
-            &:nth-child(2) { background-color: #ffbd2e; }
-            &:nth-child(3) { background-color: #28c840; }
+  opacity: 0;
+  transform: translateY(20px) scale(0.97);
+  transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
 
-            &:hover { opacity: 0.75; }
-        }
-    }
-
-    .title {
-        color: #555;
-        font-size: 0.72rem;
-        font-weight: 500;
-        flex-grow: 1;
-        text-align: center;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-    }
+  &.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-.terminal-body {
-    padding: 1.5rem 1.75rem;
-    color: #e5e5e5;
-    height: 320px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    font-size: 0.85rem;
-    line-height: 1.6;
-
-    @media (max-width: 600px) {
-        height: min(160px, 28vh);
-        padding: 0.75rem 1rem;
-        font-size: 0.78rem;
-    }
-
-    /* Scrollbar Styling */
-    &::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    &::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background: #333;
-        border-radius: 3px;
-
-        &:hover {
-            background: #555;
-        }
-    }
-
-    .prompt {
-        color: #ea2831;
-        margin-right: 0.5rem;
-        font-weight: 700;
-    }
-
-    .input {
-        color: #fff;
-        margin-bottom: 0.5rem;
-    }
-
-    .output {
-        color: #8b949e;
-        margin-bottom: 1rem;
-
-        pre {
-            color: #c9d1d9;
-            font-family: inherit;
-            margin: 0.25rem 0;
-            background: #161b22;
-            padding: 0.75rem 1rem;
-            border-radius: 6px;
-            border: 1px solid #30363d;
-            white-space: pre-wrap;
-        }
-    }
-
-    .success {
-        color: #3fb950;
-        margin-bottom: 0.5rem;
-        font-weight: 500;
-        padding-left: 0.5rem;
-        border-left: 2px solid #3fb950;
-    }
-
-    .info {
-        color: #58a6ff;
-        margin-bottom: 0.5rem;
-        padding-left: 0.5rem;
-        border-left: 2px solid #388bfd;
-        font-size: 0.8rem;
-        opacity: 0.9;
-    }
-
-    .warn {
-        color: #e3b341;
-        margin-bottom: 0.5rem;
-        padding-left: 0.5rem;
-        border-left: 2px solid #e3b341;
-    }
-
-    .typing-area {
-        display: flex;
-        align-items: center;
-    }
-
-    .cursor {
-        animation: blink 1s step-end infinite;
-        color: #ea2831;
-        margin-left: 2px;
-        background: #ea2831;
-        width: 8px;
-        height: 16px;
-        display: inline-block;
-        vertical-align: text-bottom;
-    }
+// ── ambient glow ──────────────────────────────────────────────────────────────
+.card-glow {
+  position: absolute;
+  top: -50px;
+  right: -30px;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(234, 40, 49, 0.1) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-@keyframes blink {
+// ── shimmer sweep ─────────────────────────────────────────────────────────────
+.dev-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.025) 50%,
+    transparent 100%
+  );
+  animation: cardShimmer 6s 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 3;
+}
 
-    0%,
-    100% {
-        opacity: 1;
-    }
+// ── header ────────────────────────────────────────────────────────────────────
+.dev-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.15rem;
+  position: relative;
+  z-index: 1;
+}
 
-    50% {
-        opacity: 0;
-    }
+.dev-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  background: rgba(234, 40, 49, 0.1);
+  border: 1px solid rgba(234, 40, 49, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #ea2831;
+  letter-spacing: -0.05em;
+  animation: iconGlow 3.5s ease-in-out infinite;
+}
+
+.dev-tagline {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.04em;
+}
+
+// ── divider ───────────────────────────────────────────────────────────────────
+.card-rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(234, 40, 49, 0.35) 0%,
+    rgba(255, 255, 255, 0.05) 55%,
+    transparent 100%
+  );
+  margin-bottom: 1.1rem;
+  position: relative;
+  z-index: 1;
+}
+
+// ── spec rows ─────────────────────────────────────────────────────────────────
+.spec-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 1.15rem;
+  position: relative;
+  z-index: 1;
+}
+
+.spec-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  opacity: 0;
+
+  &.shown {
+    animation: rowSlide 0.42s cubic-bezier(0.4, 0, 0.2, 1) calc(var(--i, 0) * 0.1s) both;
+  }
+
+  > i {
+    font-size: 0.78rem;
+    color: #ea2831;
+    opacity: 0.75;
+    margin-top: 0.18rem;
+    flex-shrink: 0;
+    width: 14px;
+    text-align: center;
+  }
+}
+
+.spec-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.spec-primary {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.2;
+}
+
+.spec-secondary {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.3);
+  line-height: 1.3;
+}
+
+// ── status footer ─────────────────────────────────────────────────────────────
+.card-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  position: relative;
+  z-index: 1;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  flex-shrink: 0;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1.5px solid #22c55e;
+    opacity: 0;
+    animation: statusRipple 2.5s ease-out infinite;
+  }
+}
+
+.status-text {
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+// ── keyframes ─────────────────────────────────────────────────────────────────
+@keyframes devFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes rowSlide {
+  from { opacity: 0; transform: translateX(-14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes iconGlow {
+  0%, 100% { box-shadow: 0 0 0   0   rgba(234, 40, 49, 0); }
+  50%       { box-shadow: 0 0 16px 2px rgba(234, 40, 49, 0.18); }
+}
+
+@keyframes statusRipple {
+  0%   { transform: scale(0.8); opacity: 0.75; }
+  100% { transform: scale(3);   opacity: 0; }
+}
+
+@keyframes cardShimmer {
+  0%, 55%, 100% { left: -80%; }
+  30%           { left: 130%; }
 }

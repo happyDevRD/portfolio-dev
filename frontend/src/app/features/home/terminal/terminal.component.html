@@ -1,20 +1,31 @@
-<div class="terminal-window">
-    <div class="terminal-header">
-        <div class="buttons">
-            <span class="close"></span>
-            <span class="minimize"></span>
-            <span class="maximize"></span>
-        </div>
-        <div class="title">user&#64;elgarcia: ~</div>
+<div class="dev-card-float">
+  <div class="dev-card" [class.visible]="visible">
+    <div class="card-glow" aria-hidden="true"></div>
+
+    <div class="dev-header">
+      <div class="dev-icon" aria-hidden="true">&lt;/&gt;</div>
+      <span class="dev-tagline">elgarcia.org</span>
     </div>
-    <div class="terminal-body" #terminalBody>
-        <div *ngFor="let line of lines" [class]="line.type">
-            <span class="prompt" *ngIf="line.type === 'input'">➜ ~</span>
-            <span class="content" [innerHTML]="line.content"></span>
+
+    <div class="card-rule" aria-hidden="true"></div>
+
+    <div class="spec-list">
+      <div
+        class="spec-row"
+        *ngFor="let spec of specs; let i = index"
+        [class.shown]="specsVisible"
+        [style.--i]="i">
+        <i [class]="spec.icon" aria-hidden="true"></i>
+        <div class="spec-text">
+          <span class="spec-primary">{{ spec.primary }}</span>
+          <span class="spec-secondary">{{ spec.secondary }}</span>
         </div>
-        <div class="typing-area" *ngIf="isTyping">
-            <span class="prompt">➜ ~</span>
-            <span class="typing-text">{{ currentText }}</span><span class="cursor">█</span>
-        </div>
+      </div>
     </div>
+
+    <div class="card-footer">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="status-text">Disponible para proyectos</span>
+    </div>
+  </div>
 </div>

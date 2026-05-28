@@ -174,9 +174,7 @@
 
 .hero-terminal-wrap {
   border-radius: var(--radius-xl);
-  overflow: hidden;
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-pop);
+  overflow: visible;
 
   @media (max-width: 900px) {
     max-height: min(36vh, 220px);
