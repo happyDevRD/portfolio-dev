@@ -85,7 +85,7 @@ export const RESUME = {
   schoolName: 'Universidad Dominicana O&M',
   graduationYear: '2021',
 
-  languages: 'Español (nativo); inglés (lectura técnica y documentación profesional).',
+  languages: 'Español (nativo); inglés profesional escrito — documentación, tickets, code review y comunicación asíncrona con equipos internacionales.',
 
   /** Certificaciones y cursos con enlace verificable (web + PDF). */
   certificates: [

@@ -20,8 +20,8 @@
 
 // Hero Section
 .hero-section {
-    height: 60vh;
-    min-height: 400px;
+    height: 46vh;
+    min-height: 340px;
     background-size: cover;
     background-position: center;
     position: relative;
@@ -80,16 +80,22 @@
             backdrop-filter: blur(5px);
         }
 
-        .project-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 2rem;
-            line-height: 1.2;
-            color: #fff;
+        .project-summary {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.8);
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
 
-            @media (max-width: 768px) {
-                font-size: 2.5rem;
-            }
+            @media (max-width: 768px) { font-size: 0.92rem; }
+        }
+
+        .project-title {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            line-height: 1.15;
+            color: #fff;
         }
 
         .project-links {
@@ -162,23 +168,26 @@
     border: 1px solid var(--border-color);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 
-    h2 {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
+    .section-label {
         display: flex;
         align-items: center;
-        gap: 0.8rem;
-        color: var(--text-primary);
+        gap: 0.6rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--text-secondary);
+        font-family: 'JetBrains Mono', monospace;
+        margin-bottom: 1rem;
 
-        i {
-            color: var(--primary-color);
-        }
+        i { font-size: 0.8rem; }
     }
 
     p {
         color: var(--text-secondary);
         line-height: 1.8;
-        font-size: 1.05rem;
+        font-size: 1rem;
+        margin: 0;
     }
 }
 
@@ -239,16 +248,24 @@
     .feature-list {
         list-style: none;
         padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
 
         li {
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
             display: flex;
-            gap: 0.8rem;
+            align-items: flex-start;
+            gap: 0.65rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.45;
 
             i {
                 color: var(--primary-color);
-                margin-top: 4px;
+                margin-top: 0.15rem;
+                flex-shrink: 0;
+                font-size: 0.8rem;
             }
         }
     }

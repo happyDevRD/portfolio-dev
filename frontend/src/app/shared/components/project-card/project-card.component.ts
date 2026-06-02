@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Project } from '../../../core/models/project.model';
-
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -13,4 +12,5 @@ import { RouterModule } from '@angular/router';
 })
 export class ProjectCardComponent {
   @Input() project!: Project;
+  @Input() featured = false;
 }

@@ -4,6 +4,10 @@
     <div class="web-resume">
         <header class="resume-hero">
             <div class="hero-left">
+                <div class="resume-availability">
+                    <span class="avail-dot" aria-hidden="true"></span>
+                    Disponible · Remoto
+                </div>
                 <h1>{{ cv.heroTitle }}</h1>
                 <p class="hero-subtitle">{{ activeProfile.heroSubtitle }}</p>
             </div>
@@ -12,15 +16,8 @@
                     <div class="hero-actions__row">
                         <button type="button" class="btn-download" (click)="downloadPDF()">
                             <i class="fas fa-file-pdf" aria-hidden="true"></i>
-                            Descargar / imprimir PDF
+                            Descargar PDF &mdash; {{ activeProfile.label }}
                         </button>
-                        <a
-                            *ngIf="cv.certificates.length"
-                            routerLink="/resume/certificates"
-                            class="btn-certificates">
-                            <i class="fas fa-award" aria-hidden="true"></i>
-                            Ver certificados
-                        </a>
                     </div>
                 </div>
             </div>
@@ -99,17 +96,12 @@
                     <div class="skill-category" *ngFor="let group of skillGroups; trackBy: trackByCategory">
                         <h3>{{ group.category }}</h3>
                         <div class="skill-bars">
-                            <div class="skill-bar-item" *ngFor="let skill of group.items; trackBy: trackBySkillId">
-                                <div class="skill-bar-header">
-                                    <div class="skill-name">
-                                        <img *ngIf="skill.iconUrl" [src]="skill.iconUrl" alt="" class="skill-icon-sm" onerror="this.style.display='none'">
-                                        <span>{{ skill.name }}</span>
-                                    </div>
-                                    <span class="skill-pct" [attr.aria-label]="'Nivel ' + skill.proficiency + ' por ciento'">{{ skill.proficiency }}%</span>
+                            <div class="skill-row" *ngFor="let skill of group.items; trackBy: trackBySkillId">
+                                <div class="skill-name">
+                                    <img *ngIf="skill.iconUrl" [src]="skill.iconUrl" alt="" class="skill-icon-sm" onerror="this.style.display='none'">
+                                    <span>{{ skill.name }}</span>
                                 </div>
-                                <div class="skill-track" role="presentation">
-                                    <div class="skill-fill" [style.width.%]="skill.proficiency"></div>
-                                </div>
+                                <span class="skill-level-badge" [ngClass]="getLevelClass(skill.proficiency)">{{ getLevelText(skill.proficiency) }}</span>
                             </div>
                         </div>
                     </div>
@@ -139,6 +131,40 @@
                 </section>
             </aside>
         </div>
+
+        <!-- Certificaciones inline -->
+        <section class="resume-certs animate-up" style="--delay: 0.4s" aria-labelledby="resume-certs-heading" *ngIf="cv.certificates.length">
+            <div class="resume-section-title">
+                <h2 id="resume-certs-heading">
+                    <span class="icon" aria-hidden="true"><i class="fas fa-award"></i></span>
+                    Certificaciones y cursos
+                </h2>
+                <a routerLink="/resume/certificates" class="certs-view-all">
+                    Ver página completa <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="resume-certs__grid">
+                <article class="resume-cert-card" *ngFor="let cert of orderedCertificates; trackBy: trackByCertificate">
+                    <div class="resume-cert-card__icon" aria-hidden="true">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div class="resume-cert-card__body">
+                        <p class="resume-cert-card__issuer">{{ cert.issuer }}</p>
+                        <h3 class="resume-cert-card__title">{{ cert.title }}</h3>
+                        <time class="resume-cert-card__date" [attr.datetime]="cert.issuedOn">{{ cert.issuedOn | date: 'MMM y' }}</time>
+                        <p class="resume-cert-card__topics" *ngIf="cert.topics">{{ cert.topics }}</p>
+                    </div>
+                    <a class="resume-cert-card__verify"
+                        [href]="cert.verificationUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        [attr.aria-label]="'Verificar credencial: ' + cert.title">
+                        <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        <span>Verificar</span>
+                    </a>
+                </article>
+            </div>
+        </section>
     </div>
 
     <!--

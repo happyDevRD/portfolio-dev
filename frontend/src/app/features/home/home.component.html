@@ -6,14 +6,17 @@
         <div class="container hero-container">
             <div class="hero-layout">
                 <div class="hero-text animate-fade-up">
-                    <p class="hero-eyebrow">Full Stack · Java · Angular</p>
+                    <div class="hero-availability">
+                        <span class="avail-dot" aria-hidden="true"></span>
+                        Disponible · Remoto
+                    </div>
+                    <p class="hero-eyebrow">Backend Java · Spring Boot · Angular</p>
                     <h1 class="hero-title">
                         Eleazar<br>Garcia
                     </h1>
                     <p class="hero-bio">
-                        5 años en sistemas empresariales (sector público y financiero en RD).
-                        Entrego de extremo a extremo: integraciones, APIs y front con equipos en remoto.
-                        Los casos concretos están en <strong>proyectos</strong> y en el <strong>currículum</strong>.
+                        Desarrollador Full Stack con 5 años en sector público y financiero.
+                        Integraciones bancarias, APIs REST y modernización de sistemas Java legacy — en producción, con métricas reales.
                     </p>
                     <div class="cta-group">
                         <a class="btn btn-primary" routerLink="/projects">Ver proyectos</a>
@@ -34,12 +37,12 @@
                             <span class="stat-label">Años de experiencia</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-number" [appCountUp]="10">0</span>
+                            <span class="stat-number" [appCountUp]="projectCount">0</span>
                             <span class="stat-label">Proyectos en portfolio</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-number" [appCountUp]="200">0</span>
-                            <span class="stat-label">Reportes migrados</span>
+                            <span class="stat-number" [appCountUp]="4">0</span>
+                            <span class="stat-label">Empresas en producción</span>
                         </div>
                     </div>
                 </div>

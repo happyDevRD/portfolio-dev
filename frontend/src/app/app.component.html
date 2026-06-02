@@ -12,7 +12,6 @@
     <ul class="nav-links" [class.open]="isMobileMenuOpen">
       <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" appPrefetch="home" (click)="isMobileMenuOpen=false">Inicio</a></li>
       <li><a routerLink="/projects" routerLinkActive="active" appPrefetch="projects" (click)="isMobileMenuOpen=false">Proyectos</a></li>
-      <li><a routerLink="/blog" routerLinkActive="active" appPrefetch="blog" (click)="isMobileMenuOpen=false">Blog</a></li>
       <li><a routerLink="/resume" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" appPrefetch="resume" (click)="isMobileMenuOpen=false">Currículum</a></li>
       <li><a routerLink="/contact" routerLinkActive="active" appPrefetch="contact" title="Contacto y agenda" (click)="isMobileMenuOpen=false">Contacto</a></li>
     </ul>

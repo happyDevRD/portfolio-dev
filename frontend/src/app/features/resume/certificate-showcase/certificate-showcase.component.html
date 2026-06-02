@@ -1,42 +1,41 @@
-<section
-    class="certificates-showcase"
-    *ngIf="certificates.length"
-    aria-labelledby="certs-showcase-heading">
-    <header class="certificates-showcase__header">
-        <div class="certificates-showcase__title-icon" aria-hidden="true">
-            <i class="fas fa-trophy"></i>
-        </div>
-        <div class="certificates-showcase__head-text">
-            <h2 id="certs-showcase-heading">Certificaciones y cursos</h2>
-            <p class="certificates-showcase__sub">Enlaces de verificación públicos (HackerRank y otros emisores).</p>
-        </div>
+<section class="certs-wall" *ngIf="certificates.length" aria-labelledby="certs-wall-heading">
+    <header class="certs-wall__header">
+        <h2 id="certs-wall-heading">Certificaciones y cursos</h2>
+        <p class="certs-wall__sub">
+            Credenciales con enlace de verificación público. Cada tarjeta lleva directamente al certificado original.
+        </p>
     </header>
-    <div class="cert-showcase-grid" role="list">
+
+    <div class="certs-wall__grid" role="list">
         <article
-            class="cert-trophy-card"
-            *ngFor="let cert of certificates; let i = index; trackBy: trackByCertificate"
-            [class.cert-trophy-card--silver]="i % 2 === 1"
+            class="cert-card"
+            *ngFor="let cert of certificates; trackBy: trackByCertificate"
             role="listitem">
-            <div class="cert-trophy-card__medal" aria-hidden="true">
+
+            <div class="cert-card__accent" aria-hidden="true"></div>
+
+            <div class="cert-card__icon" aria-hidden="true">
                 <i class="fas fa-award"></i>
             </div>
-            <div class="cert-trophy-card__frame">
-                <div class="cert-trophy-card__corners" aria-hidden="true"></div>
-                <p class="cert-trophy-card__issuer">{{ cert.issuer }}</p>
-                <h3 class="cert-trophy-card__title">{{ cert.title }}</h3>
-                <time class="cert-trophy-card__date" [attr.datetime]="cert.issuedOn">
-                    {{ cert.issuedOn | date: 'd MMM y' }}
+
+            <div class="cert-card__body">
+                <p class="cert-card__issuer">{{ cert.issuer }}</p>
+                <h3 class="cert-card__title">{{ cert.title }}</h3>
+                <time class="cert-card__date" [attr.datetime]="cert.issuedOn">
+                    {{ cert.issuedOn | date: 'MMMM y' }}
                 </time>
-                <p class="cert-trophy-card__topics" *ngIf="cert.topics">{{ cert.topics }}</p>
-                <a
-                    class="cert-trophy-card__verify"
-                    [href]="cert.verificationUrl"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    <span>Verificar credencial</span>
-                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                </a>
+                <p class="cert-card__topics" *ngIf="cert.topics">{{ cert.topics }}</p>
             </div>
+
+            <a
+                class="cert-card__verify"
+                [href]="cert.verificationUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                [attr.aria-label]="'Verificar credencial: ' + cert.title">
+                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                <span>Verificar</span>
+            </a>
         </article>
     </div>
 </section>

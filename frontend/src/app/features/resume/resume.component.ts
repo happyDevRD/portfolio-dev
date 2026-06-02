@@ -102,8 +102,25 @@ export class ResumeComponent implements OnInit, OnDestroy {
     this.refreshExperiencesOrder();
   }
 
+  getLevelClass(proficiency: number): string {
+    if (proficiency >= 90) return 'level-expert';
+    if (proficiency >= 75) return 'level-advanced';
+    if (proficiency >= 60) return 'level-mid';
+    return 'level-basic';
+  }
+
+  getLevelText(proficiency: number): string {
+    if (proficiency >= 90) return 'Experto';
+    if (proficiency >= 75) return 'Avanzado';
+    if (proficiency >= 60) return 'Intermedio';
+    return 'Básico';
+  }
+
   downloadPDF(): void {
+    const prev = document.title;
+    document.title = `CV-EleazarGarcia-${this.activeProfile.label}`;
     window.print();
+    document.title = prev;
   }
 
   trackByExperienceId(_index: number, job: Experience): number {

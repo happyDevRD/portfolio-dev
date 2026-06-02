@@ -92,6 +92,33 @@
   }
 }
 
+.hero-availability {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #16a34a;
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.9rem;
+
+  .avail-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #16a34a;
+    box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.25);
+    animation: pulse-green 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.25); }
+  50%       { box-shadow: 0 0 0 5px rgba(22, 163, 74, 0.1); }
+}
+
 .hero-text {
   .hero-eyebrow {
     font-family: var(--font-mono);

@@ -20,18 +20,6 @@ export const routes: Routes = [
         data: { animation: 6 }
     },
     {
-        path: 'blog',
-        loadComponent: () => import('./features/blog/blog/blog.component').then(m => m.BlogComponent),
-        title: 'Blog | Eleazar Garcia',
-        data: { animation: 2 }
-    },
-    {
-        path: 'blog/:slug',
-        loadComponent: () => import('./features/blog/blog-post/blog-post.component').then(m => m.BlogPostComponent),
-        title: 'Artículo | Eleazar Garcia',
-        data: { animation: 3 }
-    },
-    {
         path: 'resume/certificates',
         loadComponent: () =>
             import('./features/resume/resume-certificates/resume-certificates.component').then(

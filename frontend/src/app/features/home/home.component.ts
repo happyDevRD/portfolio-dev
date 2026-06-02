@@ -6,8 +6,8 @@ import { ServicesComponent } from './services/services.component';
 import { PortfolioService } from '../../core/services/portfolio.service';
 import { SkillGroup } from '../../core/models/skill-group.model';
 import { Skill } from '../../core/models/skill.model';
-import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { catchError, map, takeUntil } from 'rxjs/operators';
 import { CountUpDirective } from '../../shared/directives/count-up.directive';
 import { SeoService } from '../../core/services/seo.service';
 
@@ -46,9 +46,10 @@ export interface SnapSection {
 })
 export class HomeComponent implements OnInit, OnDestroy {
   skillGroups$: Observable<SkillGroup[]>;
-  /** Error al cargar skills desde el API (no se oculta como lista vacía). */
   skillsLoadError = false;
   activeSection = 0;
+  projectCount = 0;
+  private destroyed$ = new Subject<void>();
 
   readonly snapSections: SnapSection[] = [
     { id: 'snap-hero',     label: 'Inicio' },
@@ -89,6 +90,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.portfolioService.getProjects().pipe(
+      map(p => p.length),
+      catchError(() => of(0)),
+      takeUntil(this.destroyed$)
+    ).subscribe(count => { this.projectCount = count; });
+
     this.seo.update({
       title: 'Eleazar Garcia | Desarrollador Full Stack',
       description:
@@ -101,6 +108,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
     this.seo.setStructuredData(null);
   }
 

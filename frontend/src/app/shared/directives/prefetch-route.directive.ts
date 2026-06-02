@@ -19,7 +19,6 @@ export class PrefetchRouteDirective {
     const loaders: Record<string, () => Promise<unknown>> = {
       home: () => import('../../features/home/home.component').then((m) => m.HomeComponent),
       projects: () => import('../../features/projects/projects.component').then((m) => m.ProjectsComponent),
-      blog: () => import('../../features/blog/blog/blog.component').then((m) => m.BlogComponent),
       resume: () => import('../../features/resume/resume.component').then((m) => m.ResumeComponent),
       contact: () => import('../../features/contact/contact.component').then((m) => m.ContactComponent)
     };

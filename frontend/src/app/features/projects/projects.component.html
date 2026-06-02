@@ -1,18 +1,20 @@
 <div class="projects-page">
 <section class="projects-section">
 
+  <!-- Header -->
   <div class="section-header">
-    <h1>Proyectos</h1>
-    <p class="section-subtitle">Casos con contexto, reto, solución y stack. Enlaces a demo o código cuando aplica.</p>
+    <p class="section-eyebrow">Portfolio</p>
+    <h1>Proyectos<span class="count-chip" *ngIf="!isLoading && !loadError">{{ resultCount$ | async }}</span></h1>
+    <p class="section-subtitle">Casos reales con reto, solución y stack. Métricas de producción donde aplica.</p>
   </div>
 
   <div class="api-error-banner" *ngIf="loadError" role="alert">
     <i class="fas fa-plug" aria-hidden="true"></i>
-    <span>No se pudieron cargar los proyectos. Revisa la conexión o inténtalo más tarde.</span>
+    <span>No se pudieron cargar los proyectos. Revisa la conexión.</span>
   </div>
 
-  <!-- Filtros por categoría principal -->
-  <div class="filters" *ngIf="!isLoading && !loadError" role="group" aria-label="Filtrar proyectos por categoría">
+  <!-- Filtros -->
+  <div class="filters" *ngIf="!isLoading && !loadError" role="group" aria-label="Filtrar por categoría">
     <button *ngFor="let tab of (availableTabs$ | async)"
         class="filter-btn"
         [class.active]="(filter$ | async) === tab.label"
@@ -23,49 +25,29 @@
     </button>
   </div>
 
-  <!-- Resultado count -->
-  <p class="result-count" *ngIf="!isLoading && !loadError">
-    <span>{{ resultCount$ | async }}</span> proyecto{{ (resultCount$ | async) !== 1 ? 's' : '' }}
-    <span class="filter-label" *ngIf="(filter$ | async) !== 'Todos'">en <em>{{ filter$ | async }}</em></span>
-  </p>
-
+  <!-- Grid -->
   <div class="projects-viewport">
-    <!-- Flecha lateral izquierda -->
-    <button
-      class="side-arrow left"
-      *ngIf="!isLoading && !loadError && (totalPages$ | async)! > 1"
-      (click)="prevPage()"
-      [disabled]="(currentPage$ | async) === 1"
-      aria-label="Página anterior">
-      <i class="fas fa-chevron-left" aria-hidden="true"></i>
-    </button>
 
-    <!-- Skeleton loader -->
+    <!-- Skeleton -->
     <div class="projects-grid" *ngIf="isLoading">
-        <app-project-card-skeleton *ngFor="let i of [1,2,3,4,5,6]"></app-project-card-skeleton>
+        <app-project-card-skeleton class="featured-slot" *ngFor="let i of [1]"></app-project-card-skeleton>
+        <app-project-card-skeleton *ngFor="let i of [2,3,4,5]"></app-project-card-skeleton>
     </div>
 
-    <!-- Grid de proyectos -->
+    <!-- Proyectos -->
     <div class="projects-grid" *ngIf="!isLoading && !loadError">
-        <app-project-card *ngFor="let project of (paginatedProjects$ | async); let i = index"
+        <app-project-card
+            *ngFor="let project of (paginatedProjects$ | async); let i = index"
             [project]="project"
+            [featured]="i === 0"
+            [class.featured-slot]="i === 0"
             class="animate-slide-up"
             [style.animation-delay]="(i * 80) + 'ms'">
         </app-project-card>
     </div>
-
-    <!-- Flecha lateral derecha -->
-    <button
-      class="side-arrow right"
-      *ngIf="!isLoading && !loadError && (totalPages$ | async)! > 1"
-      (click)="nextPage()"
-      [disabled]="(currentPage$ | async) === (totalPages$ | async)"
-      aria-label="Página siguiente">
-      <i class="fas fa-chevron-right" aria-hidden="true"></i>
-    </button>
   </div>
 
-  <!-- Paginación -->
+  <!-- Paginación (solo si hay más de una página) -->
   <div class="pagination-controls" *ngIf="!isLoading && !loadError && (totalPages$ | async)! > 1">
       <button class="page-btn" (click)="prevPage()" [disabled]="(currentPage$ | async) === 1">
           <i class="fas fa-chevron-left" aria-hidden="true"></i> Anterior
@@ -78,7 +60,7 @@
 
   <div *ngIf="!isLoading && !loadError && (filteredProjects$ | async)?.length === 0" class="no-results">
       <i class="fas fa-search" aria-hidden="true"></i>
-      No se encontraron proyectos en esta categoría.
+      No hay proyectos en esta categoría.
   </div>
 
 </section>

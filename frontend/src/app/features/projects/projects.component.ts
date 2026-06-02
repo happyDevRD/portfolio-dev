@@ -39,8 +39,7 @@ export class ProjectsComponent implements OnInit {
   currentPage$ = new BehaviorSubject<number>(1);
   totalPages$ = new BehaviorSubject<number>(1);
 
-  // Solo 3 proyectos por “vista” para que todo quepa en una pantalla
-  readonly itemsPerPage = 3;
+  readonly itemsPerPage = 6;
 
   /** Solo muestra los grupos que tienen al menos un proyecto */
   readonly filterTabs: FilterTab[] = [

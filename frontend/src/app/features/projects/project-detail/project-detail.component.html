@@ -1,35 +1,37 @@
 <div class="page-scroll-wrapper">
-<!-- Skeleton loader -->
+
+<!-- Skeleton -->
 <div class="skeleton-detail" *ngIf="isLoading">
     <div class="skeleton-hero">
-        <app-skeleton height="60vh" radius="0"></app-skeleton>
+        <app-skeleton height="46vh" radius="0"></app-skeleton>
     </div>
     <div class="skeleton-body">
-        <div class="skeleton-main">
-            <app-skeleton height="2rem" width="80%" radius="8px"></app-skeleton>
-            <app-skeleton height="1rem" radius="6px" style="margin-top:1rem"></app-skeleton>
-            <app-skeleton height="1rem" width="90%" radius="6px" style="margin-top:0.5rem"></app-skeleton>
-            <app-skeleton height="1rem" width="70%" radius="6px" style="margin-top:0.5rem"></app-skeleton>
-        </div>
+        <app-skeleton height="2rem" width="70%" radius="8px"></app-skeleton>
+        <app-skeleton height="1rem" radius="6px" style="margin-top:1rem"></app-skeleton>
+        <app-skeleton height="1rem" width="85%" radius="6px" style="margin-top:0.5rem"></app-skeleton>
     </div>
 </div>
 
 <div class="project-detail-container" *ngIf="!isLoading && project() as p">
-    <!-- Hero Section -->
+
+    <!-- Hero -->
     <header class="hero-section"
-        [style.backgroundImage]="'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(' + p.imageUrl + ')'">
+        [style.backgroundImage]="'linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.72)), url(' + p.imageUrl + ')'">
         <div class="hero-content">
             <a routerLink="/projects" class="breadcrumb-link">
-                <i class="fas fa-arrow-left"></i> Proyectos
+                <i class="fas fa-arrow-left" aria-hidden="true"></i> Proyectos
             </a>
-            <div class="tags-row" *ngIf="p.tags">
-                <span class="project-category" *ngFor="let tag of p.tags.slice(0,3)">{{ tag }}</span>
+            <div class="hero-meta">
+                <div class="tags-row" *ngIf="p.tags">
+                    <span class="project-category" *ngFor="let tag of p.tags.slice(0,3)">{{ tag }}</span>
+                </div>
             </div>
             <h1 class="project-title">{{ p.title }}</h1>
-            <div class="project-links">
+            <p class="project-summary">{{ p.description }}</p>
+            <div class="project-links" *ngIf="p.projectUrl || p.githubUrl">
                 <a *ngIf="p.projectUrl"
                    [href]="p.projectUrl" target="_blank" rel="noopener" class="btn primary-btn">
-                    <i class="fas fa-external-link-alt" aria-hidden="true"></i> Ver en Vivo
+                    <i class="fas fa-external-link-alt" aria-hidden="true"></i> Ver en vivo
                 </a>
                 <a *ngIf="p.githubUrl"
                    [href]="p.githubUrl" target="_blank" rel="noopener" class="btn secondary-btn">
@@ -43,60 +45,66 @@
     <div class="content-wrapper">
         <div class="grid-layout">
 
-            <!-- Challenge & Solution -->
+            <!-- Columna principal -->
             <div class="main-column">
+
                 <section class="section-card challenge-section" *ngIf="p.challenge">
-                    <h2><i class="fas fa-exclamation-triangle"></i> Desafío</h2>
+                    <div class="section-label">
+                        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                        Desafío
+                    </div>
                     <p>{{ p.challenge }}</p>
                 </section>
 
                 <section class="section-card solution-section" *ngIf="p.solution">
-                    <h2><i class="fas fa-lightbulb"></i> Solución</h2>
+                    <div class="section-label">
+                        <i class="fas fa-lightbulb" aria-hidden="true"></i>
+                        Solución
+                    </div>
                     <p>{{ p.solution }}</p>
                 </section>
 
-                <section class="section-card description-section">
-                    <h2><i class="fas fa-info-circle"></i> Resumen</h2>
-                    <p>{{ p.description }}</p>
-                </section>
             </div>
 
             <!-- Sidebar -->
             <aside class="sidebar-column">
-                <div class="sidebar-widget">
-                    <h3>Tecnologías</h3>
+
+                <div class="sidebar-widget" *ngIf="p.features?.length">
+                    <h3>Resultados</h3>
+                    <ul class="feature-list">
+                        <li *ngFor="let feature of p.features">
+                            <i class="fas fa-check-circle" aria-hidden="true"></i>
+                            <span>{{ feature }}</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-widget" *ngIf="p.tags?.length">
+                    <h3>Stack</h3>
                     <div class="tags-container">
                         <span class="tag" *ngFor="let tag of p.tags">{{ tag }}</span>
                     </div>
                 </div>
 
-                <div class="sidebar-widget" *ngIf="p.features && p.features.length > 0">
-                    <h3>Características</h3>
-                    <ul class="feature-list">
-                        <li *ngFor="let feature of p.features">
-                            <i class="fas fa-check-circle"></i> {{ feature }}
-                        </li>
-                    </ul>
-                </div>
-
                 <div class="sidebar-widget">
                     <h3>Período</h3>
                     <p class="timeline-date">
-                        <i class="far fa-calendar-alt"></i>
-                        {{ p.startDate | date:'MMM yyyy' }} —
+                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                        {{ p.startDate | date:'MMM yyyy' }}
+                        —
                         <span *ngIf="p.endDate">{{ p.endDate | date:'MMM yyyy' }}</span>
                         <span *ngIf="!p.endDate">Presente</span>
                     </p>
                 </div>
-            </aside>
 
+            </aside>
         </div>
     </div>
 
-    <!-- Prev / Next navigation -->
-    <nav class="project-nav" *ngIf="prevProject || nextProject">
+    <!-- Prev / Next -->
+    <nav class="project-nav" *ngIf="prevProject || nextProject" aria-label="Navegación entre proyectos">
         <a class="nav-card prev" *ngIf="prevProject" [routerLink]="['/projects', prevProject.id]">
-            <i class="fas fa-chevron-left"></i>
+            <i class="fas fa-chevron-left" aria-hidden="true"></i>
             <div class="nav-info">
                 <span class="nav-label">Anterior</span>
                 <span class="nav-title">{{ prevProject.title }}</span>
@@ -108,15 +116,15 @@
                 <span class="nav-label">Siguiente</span>
                 <span class="nav-title">{{ nextProject.title }}</span>
             </div>
-            <i class="fas fa-chevron-right"></i>
+            <i class="fas fa-chevron-right" aria-hidden="true"></i>
         </a>
     </nav>
 
-    <!-- Back link -->
     <div class="navigation-footer">
         <a routerLink="/projects" class="back-link">
-            <i class="fas fa-th-large"></i> Ver todos los proyectos
+            <i class="fas fa-th-large" aria-hidden="true"></i> Ver todos los proyectos
         </a>
     </div>
+
 </div>
 </div>
