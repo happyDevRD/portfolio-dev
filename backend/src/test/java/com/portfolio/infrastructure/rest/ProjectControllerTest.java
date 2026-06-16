@@ -3,8 +3,10 @@ package com.portfolio.infrastructure.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.portfolio.core.domain.model.Project;
 import com.portfolio.core.usecase.ProjectService;
+import com.portfolio.infrastructure.rest.dto.ProjectWriteRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -21,6 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProjectController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class ProjectControllerTest {
 
     @Autowired
@@ -82,13 +85,17 @@ class ProjectControllerTest {
 
     @Test
     void createProject_returns201_withSavedProject() throws Exception {
-        Project input = Project.builder().title("New Project").description("Description").build();
+        ProjectWriteRequest request = ProjectWriteRequest.builder()
+                .title("New Project")
+                .description("Description")
+                .startDate(LocalDate.of(2024, 1, 1))
+                .build();
         Project saved = Project.builder().id(10L).title("New Project").description("Description").build();
         when(projectService.createProject(any(Project.class))).thenReturn(saved);
 
         mockMvc.perform(post("/api/projects")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(input)))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(10))
                 .andExpect(jsonPath("$.title").value("New Project"));
@@ -96,23 +103,33 @@ class ProjectControllerTest {
 
     @Test
     void updateProject_returns200_whenFound() throws Exception {
+        ProjectWriteRequest request = ProjectWriteRequest.builder()
+                .title("Updated Title")
+                .description("Some description")
+                .startDate(LocalDate.of(2024, 1, 1))
+                .build();
         Project updated = Project.builder().id(1L).title("Updated Title").build();
         when(projectService.updateProject(eq(1L), any(Project.class))).thenReturn(Optional.of(updated));
 
         mockMvc.perform(put("/api/projects/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updated)))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Updated Title"));
     }
 
     @Test
     void updateProject_returns404_whenNotFound() throws Exception {
+        ProjectWriteRequest request = ProjectWriteRequest.builder()
+                .title("X")
+                .description("Some description")
+                .startDate(LocalDate.of(2024, 1, 1))
+                .build();
         when(projectService.updateProject(eq(99L), any(Project.class))).thenReturn(Optional.empty());
 
         mockMvc.perform(put("/api/projects/99")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(Project.builder().title("X").build())))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound());
     }
 
