@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Article } from '../models/article.model';
+import { ARTICLES } from './portfolio.data';
 
+// Static content — no backend deployed right now.
+// To reconnect a real backend later, swap the `of(...)` calls below for
+// `this.http.get<T>(this.apiUrl)`, same as before.
 @Injectable({
     providedIn: 'root'
 })
 export class BlogService {
-    private apiUrl = 'https://portfolio-dev-jora.onrender.com/api/v1/articles';
-
-    constructor(private http: HttpClient) { }
 
     getArticles(): Observable<Article[]> {
-        return this.http.get<Article[]>(this.apiUrl);
+        return of(ARTICLES);
     }
 
-    getArticleBySlug(slug: string): Observable<Article> {
-        return this.http.get<Article>(`${this.apiUrl}/${slug}`);
+    getArticleBySlug(slug: string): Observable<Article | undefined> {
+        return of(ARTICLES.find(a => a.slug === slug));
     }
 }

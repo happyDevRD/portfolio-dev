@@ -1,41 +1,41 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Project } from '../models/project.model';
 import { Skill } from '../models/skill.model';
 import { Experience } from '../models/experience.model';
 import { Service } from '../models/service.model';
 import { Testimonial } from '../models/testimonial.model';
+import { PROJECTS, SKILLS, EXPERIENCES, SERVICES, TESTIMONIALS } from './portfolio.data';
 
+// Static content — no backend deployed right now.
+// To reconnect a real backend later, swap the `of(...)` calls below for
+// `this.http.get<T>(`${this.apiUrl}/...`)`, same as before.
 @Injectable({
     providedIn: 'root'
 })
 export class PortfolioService {
-    private apiUrl = 'https://portfolio-dev-jora.onrender.com/api';
-
-    constructor(private http: HttpClient) { }
 
     getProjects(): Observable<Project[]> {
-        return this.http.get<Project[]>(`${this.apiUrl}/projects`);
+        return of(PROJECTS);
     }
 
-    getProjectById(id: number): Observable<Project> {
-        return this.http.get<Project>(`${this.apiUrl}/projects/${id}`);
+    getProjectById(id: number): Observable<Project | undefined> {
+        return of(PROJECTS.find(p => p.id === id));
     }
 
     getSkills(): Observable<Skill[]> {
-        return this.http.get<Skill[]>(`${this.apiUrl}/skills`);
+        return of(SKILLS);
     }
 
     getExperiences(): Observable<Experience[]> {
-        return this.http.get<Experience[]>(`${this.apiUrl}/experiences`);
+        return of(EXPERIENCES);
     }
 
     getServices(): Observable<Service[]> {
-        return this.http.get<Service[]>(`${this.apiUrl}/services`);
+        return of(SERVICES);
     }
 
     getTestimonials(): Observable<Testimonial[]> {
-        return this.http.get<Testimonial[]>(`${this.apiUrl}/testimonials`);
+        return of(TESTIMONIALS);
     }
 }

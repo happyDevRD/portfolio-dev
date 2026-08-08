@@ -37,9 +37,10 @@ export class ContactComponent {
     this.successMessage = '';
     this.errorMessage = '';
 
-    const url = 'http://localhost:8080/api/contact';
+    // TODO: replace with your real Formspree endpoint, e.g. https://formspree.io/f/xxxxxxx
+    const url = 'https://formspree.io/f/REPLACE_ME';
 
-    this.http.post(url, this.contactForm.value).subscribe({
+    this.http.post(url, this.contactForm.value, { headers: { Accept: 'application/json' } }).subscribe({
       next: (response) => {
         console.log('Form submitted:', response);
         this.isSubmitting = false;

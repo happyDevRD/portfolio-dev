@@ -17,7 +17,7 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
   styleUrl: './blog-post.component.scss'
 })
 export class BlogPostComponent implements OnInit {
-  article$: Observable<Article> | undefined;
+  article$: Observable<Article | undefined> | undefined;
 
   constructor(
     private route: ActivatedRoute,
